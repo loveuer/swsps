@@ -1,4 +1,4 @@
-# safetywing
+# test
 
 ## Project setup
 ```
