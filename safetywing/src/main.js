@@ -1,24 +1,19 @@
-import Vue from 'vue'
-import App from './App.vue'
-import VueRouter from "vue-router"
-import axios from "axios"
+import Vue from 'vue';
+import App from './App.vue';
+import VueRouter from "vue-router";
+import axios from "axios";
 
 
-import router from "./router"
-import AntForm from "ant-design-vue/lib/form";
-import "ant-design-vue/dist/antd.css";
+import router from "./router";
 
 Vue.use(VueRouter)
+
 Vue.prototype.$http = axios
 Vue.prototype.$cookies = getCookie
-Vue.prototype.$form = AntForm
 
 
 Vue.config.productionTip = false
 
-
-
-Vue.component(AntForm.name, AntForm);
 
 new Vue({
   router,
