@@ -8,6 +8,7 @@ import router from "./router";
 
 Vue.use(VueRouter)
 
+Vue.prototype.$data = {}
 Vue.prototype.$http = axios
 Vue.prototype.$cookies = getCookie
 
