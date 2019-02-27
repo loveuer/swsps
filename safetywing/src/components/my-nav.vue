@@ -22,12 +22,12 @@
 
 <script>
 import router from "../router"
-import axios from "axios"
 
 export default {
     data() {
         return {
             logined: false,
+            realname: "",
         }
     },
     methods: {
@@ -37,11 +37,12 @@ export default {
     },
     mounted() {
         // check session
-        axios
-            .get("/api/session/" + this.$cookies("usession"))
+        this.$http
+            .get("/api/session/" + this.$getcookie("usession"))
             .then(resp => {
-                if(resp.data["StatusCode"] === 200 && resp.data["Msg"] !== ""){
+                if(resp.data["StatusCode"] === 200 && resp.data["Msg"] !== "wrong session"){
                     this.logined = !this.logined;
+                    this.realname = resp.data["Val"];
                 }
             })
             .catch(error => {console.log(error)})

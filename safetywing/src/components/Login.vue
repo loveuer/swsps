@@ -13,7 +13,9 @@ import loginform from "./LoginForm.vue";
 
 export default {
     data() {
-        
+        return {
+            
+        }
     },
     components: {
         loginform,

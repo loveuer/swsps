@@ -76,27 +76,23 @@ module.exports = {
     // configure webpack-dev-server behavior 
     // Webpack dev server 
     devServer: { 
-        open: true,
-        host: '0.0.0.0',
-        port: 8080,
+        open: false,
+        host: 'localhost',
+        port: 8082,
         https: false,
         hotOnly: false,
-        proxy: 'http://localhost:8000', // 配置跨域处理,只有一个代理
-        // proxy: {
-        //   '/api': {
-        //     target: 'http://localhost:8000',
-        //     // ws: true,
-        //     changeOrigin: true
-        //   },
-        // },
-        //   '/foo': {
-        //     target: '<other_url>'
-        //   }
-        // }, // 配置多个代理
-        before: app => {}
-    }, 
-    // options for 3rd party plugins 
-    pluginOptions: { 
-        // ... 
+        // proxy: 'http://localhost:8000/', // 配置跨域处理,只有一个代理
+        proxy: {
+          '/api/login': {
+            target: 'http://localhost:8000/',
+            // ws: true,
+            changeOrigin: true
+          },
+          '/api/session': {
+            target: 'http://localhost:8000/',
+            changeOrigin: true
+          }
+        }, // 配置多个代理
+        // before: app => {}
     }
 }

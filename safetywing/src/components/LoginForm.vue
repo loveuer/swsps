@@ -1,5 +1,4 @@
 <template>
-import LoginVue from './Login.vue';
     <div id="form">
         <form @keypress.enter="submitForm">
             <div class="input-zone">
@@ -14,9 +13,12 @@ import LoginVue from './Login.vue';
                         @focus="focusInputFlex"
                         @blur="focusInputFlex"
                         v-model="username"
+                        id="username"
                     />
                 </div>
-                <div class="input-warning"></div>
+                <div class="input-warning">
+                    <font></font>
+                </div>
             </div>
             <div class="input-zone">
                 <label for="password">密码:</label><br>
@@ -29,9 +31,12 @@ import LoginVue from './Login.vue';
                         @focus="focusInputFlex"
                         @blur="focusInputFlex"
                         v-model="password"
+                        id="password"
                     />
                 </div>
-                <div class="input-warning"></div>
+                <div class="input-warning">
+                    <font></font>
+                </div>
             </div>
 
             <div class=check-zone>
@@ -49,35 +54,62 @@ import LoginVue from './Login.vue';
 </template>
 
 <script>
+import router from "../router"
+
 export default {
-    props: [
-        "username", "password"
-    ],
-    data: () => {
+    data() {
         return {
             username: "",
             password: "",
         }
-    },
+    },  
     methods: {
         focusInputFlex: event => {
             event.target.parentNode.classList.toggle("inputFlexFocus");
+            event.target.parentNode.classList.remove("shakeDom");
         },
-        submitForm: () => {
-            console.log("entry");
-
-            // if(this.$data.username === "") {
-            //     this.$methods.shake(1, "please input username");
-            //     return
-            // }
-            // if(this.$data.password === "") {
-            //     this.$methods.shake(2, "please input password");
-            //     return 
-            // }
+        submitForm: function() {
+            if(this.username === "") {
+                this.shake(1, "please input username");
+                return
+            }
+            if(this.password === "") {
+                this.shake(2, "please input password");
+                return 
+            }
+            console.log("submit2");
+            this.$http.post("/api/login", {
+                username: this.username,
+                password: this.password
+            }).then(resp => {
+                if(resp.data["Msg"] === "200") {
+                    //login sucess
+                    this.$setcookie("usession", resp.data["Val"], 60);
+                    router.push("/");
+                } else {
+                    this.shake(1, "username or password not right");
+                    this.shake(2, "username or password not right");
+                    this.password = "";
+                    console.log(resp.data["Msg"]);
+                };
+            }).catch(function(error){
+                console.log(error)
+            }).fanally;
+            return
         },
         shake: (pos, msg) => {
-            console.log(pos, msg);
+            let whichDict = {1: "#username", 2: "#password"};
+            let shakeDom = document.querySelector(whichDict[pos]).parentNode;
+            shakeDom.classList.toggle("shakeDom");
+            document.querySelectorAll("font")[pos-1].innerHTML = msg;
+            setTimeout(function() {
+                shakeDom.classList.remove("shakeDom");
+                document.querySelectorAll("font")[pos-1].innerHTML = "";
+            }, 3000);     
         }
+    },
+    mounted() {
+        //
     }
 }
 </script>
@@ -96,7 +128,6 @@ label{
 .input-flex{
     width: 100%;
     margin-top: 5px;
-    margin-bottom: 10px;
     display: inline-flex;
     border-radius: 5px;
     border: 1px solid #afafaf;
@@ -132,15 +163,13 @@ label{
     padding: 3px;
     text-indent: 3px;
     background-color: rgba(0,0,0,0);
+    border-radius: 5px;
 }
 .input-ipt:focus + .input-flex{
     border: 1px solid rgba(24,144,255,1);
     box-shadow: 0 0 5px rgba(24,144,255,1);
 }
-.input-warning{
-    height: 15px;
-    width: 100%;
-}
+
 .check-zone{
     height: 25px;
     width: 100%;
@@ -182,8 +211,22 @@ label{
     color: rgba(24,144,255,1);
 }
 
+.input-warning{
+    height: 15px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.input-warning>font {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ed4337;
+}
 
-
+.shakeDom{
+    animation: shakeInput 0.7s forwards;
+    border: 1px solid#ed4337 !important;
+    box-shadow: 0 0 5px #ed4337 !important;
+}
 @keyframes shakeInput {
     10%, 90% {
         transform: translate3d(-1px, 0, 0);

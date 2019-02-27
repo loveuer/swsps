@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -92,6 +93,7 @@ func init() {
 type RespJSON struct {
 	StatusCode int
 	Msg        string
+	Val        string
 }
 
 func main() {
@@ -99,6 +101,8 @@ func main() {
 
 	m.HandleFunc("/api/session/{id}", chain(sess)).Methods("GET")
 	m.HandleFunc("/api/session/", chain(sess)).Methods("GET")
+
+	m.HandleFunc("/api/login", chain(login)).Methods("POST")
 
 	fmt.Println("listening at http://localhost:8000")
 	http.ListenAndServe("127.0.0.1:8000", m)
@@ -109,12 +113,46 @@ func sess(w http.ResponseWriter, r *http.Request) {
 	sessionid := vars["id"]
 
 	var rs []byte
-	if sessionid == "" {
-		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: ""})
+	if sessionid == "new session" {
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "valid session", Val: "loveuer"})
 	} else {
-		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "loveuer"})
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "wrong session", Val: ""})
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, "%s", rs)
+	return
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	type Params struct {
+		Username string `json: "username"`
+		Password string `json: "password"`
+		Csrf     string `json: "csrf"`
+	}
+	var (
+		err error
+		p   Params
+		rs  []byte
+	)
+
+	body, err := ioutil.ReadAll(r.Body)
+	err = json.Unmarshal(body, &p)
+
+	fmt.Printf("username: %s, password: %s\n", p.Username, p.Password)
+
+	if err != nil {
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "wrong params"})
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprintf(w, "%s", rs)
+		return
+	}
+
+	if p.Username == "loveuer" && p.Password == "1314loveuer" {
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "200", Val: "new session"})
+	} else {
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "auth fail"})
+	}
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, "%s", rs)
 	return

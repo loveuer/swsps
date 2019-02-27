@@ -8,10 +8,9 @@ import router from "./router";
 
 Vue.use(VueRouter)
 
-Vue.prototype.$data = {}
 Vue.prototype.$http = axios
-Vue.prototype.$cookies = getCookie
-
+Vue.prototype.$getcookie = getCookie
+Vue.prototype.$setcookie = setCookie
 
 Vue.config.productionTip = false
 
@@ -21,6 +20,11 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
+const mycookie = {
+  get: getCookie,
+  set: setCookie,
+}
+
 function getCookie(name) {
   var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   if (match) {
@@ -28,4 +32,14 @@ function getCookie(name) {
   } else {
     return "";
   }
+}
+
+function setCookie(name,value,mins) {
+  var expires = "";
+  if (mins) {
+      var date = new Date();
+      date.setTime(date.getTime() + (mins*60*1000));
+      expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
