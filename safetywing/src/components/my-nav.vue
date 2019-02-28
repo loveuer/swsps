@@ -13,26 +13,37 @@
             <div class="menu-img menu-admin"></div>
             <div class="menu-describe">管理后台</div>
         </li>
-        <li class="login" @click="meetUrl('/login');">
-            <div class="login-true" v-show="logined"></div>
-            <div class="login-false" v-show="!logined"></div>
+        
+        <li class="login">
+            <div class="login-menu" v-show="logined">
+                <li>我的信息</li>
+                <li>修改密码</li>
+                <li>退出登录</li>
+            </div>
+            <div class="login-true" v-show="logined" @click="showUserMenu">
+                <profile-icon ref="ProfileIcon"/>
+            </div>
+            <div class="login-false" v-show="!logined" @click="meetUrl('/login');"></div>
         </li>
     </div>
 </template>
 
 <script>
 import router from "../router"
+import ProfileIcon from "./ProfileIcon.vue"
 
 export default {
     data() {
         return {
             logined: false,
-            realname: "",
         }
     },
     methods: {
-        meetUrl: (url) => {
+        meetUrl: function(url) {
             router.push(url);
+        },
+        showUserMenu: function() {
+
         },
     },
     mounted() {
@@ -42,10 +53,16 @@ export default {
             .then(resp => {
                 if(resp.data["StatusCode"] === 200 && resp.data["Msg"] !== "wrong session"){
                     this.logined = !this.logined;
-                    this.realname = resp.data["Val"];
+                    if(this.$user.id !== resp.data["Val"]){
+                        this.$user.id = resp.data["Val"];
+                        this.$refs.ProfileIcon.getProfile();
+                    }
                 }
             })
             .catch(error => {console.log(error)})
+    },
+    components: {
+        ProfileIcon,
     }
 }
 </script>
@@ -109,28 +126,45 @@ export default {
 }
 .login{
     margin-left: auto;
-    width:50px;
+    width:250px;
     height: 50px;
     margin-right: 30px;
+    display: flex;
+    align-items: center;
 }
-.login > div {
-    height: 46px;
-    width: 46px;
-    border-radius: 50%;
-    border: 2px solid #0082E4;
-    cursor: pointer;
-}
-.login > div:hover{
-
+.login-true{
+    height: 50px;
+    width: 50px;
+    margin-left: auto;
 }
 .login-false{
-    width: 100%;
-    height: 100%;
+    margin-left: auto;
+    width: 46px;
+    height: 46px;
+    border: 2px solid #0082E4;
+    border-radius: 50%;
     background-image: url("~@/assets/img/登录.svg");
     background-repeat: no-repeat;
-    /* background-position: 80% top 70% left; */
     background-position: center;
     background-size: contain;
     background-size: 85%;
+}
+.login-false:hover{
+    box-shadow: 0 0 3 #0082E4;
+}
+.login-menu{
+    width: 200px;
+    height: 50px;
+}
+.login-menu > li {
+    display: flex;
+    height: 46px;
+    float: left;
+    border: 1px solid #0082E4;
+    align-items: center;
+}
+.login-menu > li:hover{
+    background-color: #0082E4;
+    color: #fff;
 }
 </style>

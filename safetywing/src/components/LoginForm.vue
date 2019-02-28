@@ -77,7 +77,6 @@ export default {
                 this.shake(2, "please input password");
                 return 
             }
-            console.log("submit2");
             this.$http.post("/api/login", {
                 username: this.username,
                 password: this.password
@@ -85,6 +84,7 @@ export default {
                 if(resp.data["Msg"] === "200") {
                     //login sucess
                     this.$setcookie("usession", resp.data["Val"], 60);
+                    this.$user.username = this.username;
                     router.push("/");
                 } else {
                     this.shake(1, "username or password not right");
@@ -214,7 +214,7 @@ label{
 .input-warning{
     height: 15px;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .input-warning>font {
     font-size: 14px;

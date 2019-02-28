@@ -91,6 +91,10 @@ module.exports = {
           '/api/session': {
             target: 'http://localhost:8000/',
             changeOrigin: true
+          },
+          '/api/user':{
+            target: 'http://localhost:8000/',
+            changeOrigin: true
           }
         }, // 配置多个代理
         // before: app => {}

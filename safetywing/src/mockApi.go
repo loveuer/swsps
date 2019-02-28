@@ -104,6 +104,10 @@ func main() {
 
 	m.HandleFunc("/api/login", chain(login)).Methods("POST")
 
+	m.HandleFunc("/api/user/{id}", chain(user)).Methods("GET")
+
+	m.PathPrefix("/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+
 	fmt.Println("listening at http://localhost:8000")
 	http.ListenAndServe("127.0.0.1:8000", m)
 }
@@ -114,7 +118,7 @@ func sess(w http.ResponseWriter, r *http.Request) {
 
 	var rs []byte
 	if sessionid == "new session" {
-		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "valid session", Val: "loveuer"})
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "valid session", Val: "1"})
 	} else {
 		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "wrong session", Val: ""})
 	}
@@ -155,5 +159,37 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, "%s", rs)
+	return
+}
+
+func user(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	// Uuser no...
+	type Uuser struct {
+		ID       int    `json:"id"`
+		Username string `json:"username"`
+		Realname string `json:"realname"`
+		Img      string `json:"img"`
+	}
+
+	var (
+		rs []byte
+	)
+	w.Header().Set("Content-Type", "application/json")
+	if id == "0" || id == "" {
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "wrong id", Val: ""})
+		fmt.Fprintf(w, "%s", rs)
+		return
+	}
+	if id == "1" {
+		u, _ := json.Marshal(Uuser{ID: 1, Username: "loveuer", Realname: "赵育鹏", Img: "http://localhost:8000/static/头像.jpg"})
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "200", Val: string(u)})
+		fmt.Fprintf(w, "%s", rs)
+	} else {
+		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "wrong id", Val: ""})
+		fmt.Fprintf(w, "%s", rs)
+	}
 	return
 }

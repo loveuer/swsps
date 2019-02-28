@@ -11,6 +11,13 @@ Vue.use(VueRouter)
 Vue.prototype.$http = axios
 Vue.prototype.$getcookie = getCookie
 Vue.prototype.$setcookie = setCookie
+Vue.prototype.$user = {
+  id: "0",
+  username: "",
+  realname: "",
+  profileIcon: "",
+}
+
 
 Vue.config.productionTip = false
 
@@ -19,11 +26,6 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
-
-const mycookie = {
-  get: getCookie,
-  set: setCookie,
-}
 
 function getCookie(name) {
   var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
