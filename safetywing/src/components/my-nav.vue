@@ -15,13 +15,18 @@
         </li>
         
         <li class="login">
-            <div class="login-menu" v-show="logined">
-                <li>我的信息</li>
-                <li>修改密码</li>
-                <li>退出登录</li>
-            </div>
-            <div class="login-true" v-show="logined" @click="showUserMenu">
-                <profile-icon ref="ProfileIcon"/>
+            <div class="login-true" v-show="logined" @mouseenter="getRealname">
+                <div class="logined-profile">
+                    <div>
+                        <profile-icon ref="ProfileIcon" id="profile-img"/>
+                    </div>
+                </div>
+                <div class="logined-dropmenu">
+                    <div class="dropmenu-detail" v-text="'你好, ' + realname"></div>
+                    <div class="dropmenu-detail">我的信息</div>
+                    <div class="dropmenu-detail">修改密码</div>
+                    <div class="dropmenu-detail" @click="logoff">退出登录</div>
+                </div>
             </div>
             <div class="login-false" v-show="!logined" @click="meetUrl('/login');"></div>
         </li>
@@ -36,6 +41,7 @@ export default {
     data() {
         return {
             logined: false,
+            realname: "",
         }
     },
     methods: {
@@ -45,6 +51,13 @@ export default {
         showUserMenu: function() {
 
         },
+        logoff: function() {
+            this.$setcookie("usession", "", 60);
+            window.location.reload(true);
+        },
+        getRealname: function() {
+            this.realname = this.$user.realname;
+        }
     },
     mounted() {
         // check session
@@ -59,7 +72,7 @@ export default {
                     }
                 }
             })
-            .catch(error => {console.log(error)})
+            .catch(error => {console.log(error)});
     },
     components: {
         ProfileIcon,
@@ -126,15 +139,14 @@ export default {
 }
 .login{
     margin-left: auto;
-    width:250px;
+    width:120px;
     height: 50px;
     margin-right: 30px;
     display: flex;
     align-items: center;
 }
 .login-true{
-    height: 50px;
-    width: 50px;
+    width: 120px;
     margin-left: auto;
 }
 .login-false{
@@ -152,19 +164,39 @@ export default {
 .login-false:hover{
     box-shadow: 0 0 3 #0082E4;
 }
-.login-menu{
-    width: 200px;
+.login-true:hover > .logined-dropmenu{
+    display: block;
+}
+.logined-profile{
     height: 50px;
-}
-.login-menu > li {
+    width: 120px;
     display: flex;
-    height: 46px;
-    float: left;
-    border: 1px solid #0082E4;
-    align-items: center;
+    justify-content: center;
 }
-.login-menu > li:hover{
-    background-color: #0082E4;
-    color: #fff;
+.logined-profile > div {
+    height: 50px;
+    width: 50px;
+    display: block;
+}
+.logined-dropmenu{
+    height: 135px;
+    width: 120px;
+    border-radius: 10px;
+    display: none;
+    position: relative;
+}
+.dropmenu-detail{
+    width: 100%;
+    height: 30px;
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+    border-radius: 10px;
+}
+.dropmenu-detail:hover{
+    border: 1px solid #0082E4;
+    color: #0082E4;
 }
 </style>

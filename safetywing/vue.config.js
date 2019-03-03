@@ -77,8 +77,8 @@ module.exports = {
     // Webpack dev server 
     devServer: { 
         open: false,
-        host: 'localhost',
-        port: 8082,
+        host: '0.0.0.0',
+        port: 9119,
         https: false,
         hotOnly: false,
         // proxy: 'http://localhost:8000/', // 配置跨域处理,只有一个代理
