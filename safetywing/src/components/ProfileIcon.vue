@@ -1,9 +1,9 @@
 <template>
-    <div id="profile-icon" v-bind:title="realname">
+    <div id="profile-icon" v-bind:title="this.$user.realname">
         <div v-show="img" id="img">
-            <img src="">
+            <img v-bind:src="this.$user.profileIcon">
         </div>
-        <div v-show="!img" id="font"></div>
+        <div v-show="!img" id="font">{{ this.$user.realname.slice(0,1) }}</div>
     </div>
 </template>
 
@@ -12,8 +12,6 @@ export default {
     data() {
         return {
             img: false,
-            xing: "",
-            realname: "",
             color: ["#0fa2a9", "#949217", "#c1a7b0", "#7d3865", "#d7743b"],
         }
     },
@@ -26,8 +24,6 @@ export default {
                         this.$user.username = user.username;
                         this.$user.realname = user.realname;
                         this.$user.profileIcon = user.img;
-                        this.xing = user.realname.slice(0,1);
-                        this.realname = user.realname;
                         
                         document.querySelector("#img img").src = user.img;
 
@@ -40,7 +36,9 @@ export default {
         },
     },
     mounted() {
-
+        if(this.$user.profileIcon !== "") {
+            this.img = true;
+        }
     },
 }
 </script>

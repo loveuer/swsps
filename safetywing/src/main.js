@@ -17,6 +17,7 @@ Vue.prototype.$user = {
   realname: "",
   profileIcon: "",
 }
+Vue.prototype.$color = "#b090c0"
 
 
 Vue.config.productionTip = false

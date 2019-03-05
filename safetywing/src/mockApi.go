@@ -99,12 +99,15 @@ type RespJSON struct {
 func main() {
 	m := mux.NewRouter()
 
+	// handle session chk if logined
 	m.HandleFunc("/api/session/{id}", chain(sess)).Methods("GET")
 	m.HandleFunc("/api/session/", chain(sess)).Methods("GET")
-
+	// post to login user
 	m.HandleFunc("/api/login", chain(login)).Methods("POST")
-
+	// after logined get user base imf
 	m.HandleFunc("/api/user/{id}", chain(user)).Methods("GET")
+	// user search history
+	m.HandleFunc("/api/history/most/{id}", chain(historyMost)).Methods("GET")
 
 	m.PathPrefix("/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
@@ -191,5 +194,22 @@ func user(w http.ResponseWriter, r *http.Request) {
 		rs, _ = json.Marshal(RespJSON{StatusCode: 200, Msg: "wrong id", Val: ""})
 		fmt.Fprintf(w, "%s", rs)
 	}
+	return
+}
+
+func historyMost(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		http.Error(w, "wrong user id", 400)
+		return
+	}
+
+	mockResp := []string{
+		"pdf", "mcdu", "du", "5v", "test",
+	}
+	w.Header().Set("Content-Type", "application/json")
+	rp, _ := json.Marshal(mockResp)
+	fmt.Fprintf(w, "%s", rp)
 	return
 }

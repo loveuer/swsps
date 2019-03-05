@@ -10,8 +10,10 @@
                         type="text" 
                         placeholder="username" 
                         class="input-ipt" 
-                        @focus="focusInputFlex"
-                        @blur="focusInputFlex"
+                        @focus="focusInputFlex($event)"
+                        @blur="unFocusInputFlex($event)"
+                        @mouseenter="hoverInputFlex($event)"
+                        @mouseleave="unHoverInputFlex($event)"
                         v-model="username"
                         id="username"
                     />
@@ -28,8 +30,10 @@
                         type="password" 
                         placeholder="password" 
                         class="input-ipt" 
-                        @focus="focusInputFlex"
-                        @blur="focusInputFlex"
+                        @focus="focusInputFlex($event)"
+                        @blur="unFocusInputFlex($event)"
+                        @mouseenter="hoverInputFlex($event)"
+                        @mouseleave="unHoverInputFlex($event)"
                         v-model="password"
                         id="password"
                     />
@@ -44,7 +48,7 @@
                 <a href="/forget">Forgot password ?</a>
             </div>
             <div class="submit-zone">
-                <button type="button" @click="submitForm">Log in</button>
+                <button type="button" @click="submitForm" :style="loginBtnStyle" @mouseenter="submitBorder($event)" @mouseleave="submitUnBorder($event)">Log in</button>
             </div>
             <div class="register-zone">
                 or <a href="/register">register</a> now!
@@ -61,12 +65,29 @@ export default {
         return {
             username: "",
             password: "",
+            loginBtnStyle: {
+                backgroundColor: this.$color,
+                border: "1px solid " + this.$color,
+            },
         }
     },  
     methods: {
-        focusInputFlex: event => {
-            event.target.parentNode.classList.toggle("inputFlexFocus");
+        focusInputFlex: function(event) {
+            event.target.parentNode.style.border = "1px solid " + this.$color;
+            event.target.parentNode.style.boxShadow = "0 0 5px " + this.$color;
             event.target.parentNode.classList.remove("shakeDom");
+        },
+        unFocusInputFlex: function(event) {
+            event.target.parentNode.style.border = "1px solid rgba(222,222,222,1)";
+            event.target.parentNode.style.boxShadow = "none";
+        },
+        hoverInputFlex: function(event) {
+            event.target.parentNode.style.border = "1px solid " + this.$color;
+        },
+        unHoverInputFlex: function(event) {
+            if(!(event.target === document.activeElement)){
+                event.target.parentNode.style.border = "1px solid rgba(222,222,222,1)";
+            };
         },
         submitForm: function() {
             if(this.username === "") {
@@ -106,10 +127,16 @@ export default {
                 shakeDom.classList.remove("shakeDom");
                 document.querySelectorAll("font")[pos-1].innerHTML = "";
             }, 3000);     
+        },
+        submitBorder:function(e) {
+            e.target.style.boxShadow = "0 0 5px " + this.$color;
+        },
+        submitUnBorder:function(e){
+            e.target.style.boxShadow = "none";
         }
     },
     mounted() {
-        //
+        document.querySelector("input[type=text]").focus();
     }
 }
 </script>
@@ -130,15 +157,7 @@ label{
     margin-top: 5px;
     display: inline-flex;
     border-radius: 5px;
-    border: 1px solid #afafaf;
     background-color: rgba(255,255,255,.7);
-}
-.input-flex:hover{
-    border: 1px solid rgba(24,144,255,1);
-}
-.inputFlexFocus{
-    border: 1px solid rgba(24,144,255,1);
-    box-shadow: 0 0 5px rgba(24,144,255,1);
 }
 .input-logo {
     height: 25px;
@@ -165,11 +184,6 @@ label{
     background-color: rgba(0,0,0,0);
     border-radius: 5px;
 }
-.input-ipt:focus + .input-flex{
-    border: 1px solid rgba(24,144,255,1);
-    box-shadow: 0 0 5px rgba(24,144,255,1);
-}
-
 .check-zone{
     height: 25px;
     width: 100%;
@@ -192,15 +206,11 @@ label{
 .submit-zone > button {
     width: 100%;
     height: 100%;
-    border: 1px solid rgba(24,144,255,1);
     border-radius: 5px; 
     cursor: pointer;
-    background-color: rgba(24,144,255,1);
     color: white;
     outline: none;
-}
-.submit-zone > button:hover {
-    box-shadow: 0 0 5px rgba(24,144,255,1);
+    font-size: 14px;
 }
 .register-zone{
     width: 100%;
