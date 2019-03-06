@@ -1,13 +1,13 @@
 <template>
     <div id="search">
         <div class="search-div">
-            <div class="search-ipt" :style="{ border:'2px solid '+this.$color }">
+            <div class="search-ipt" :style="{ border:'2px solid '+this.$store.state.customColor }">
                 <div>
                     <input type="text" @focus="showHistorySearch" @keypress.enter="doSearch">
                 </div>
                 <span @click="doSearch">
                     <svg t="1542184264203" style="width:30;height:30;position:relative;left:20%;top:20%;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5023" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <path v-bind:fill="this.$color" d="M1013.245844 961.315332l-225.864336-225.791193a443.170989 443.170989 0 0 0 105.910479-288.913254 443.756129 443.756129 0 0 0-130.778962-315.829729A443.682987 443.682987 0 0 0 446.610154 0.002194a443.682987 443.682987 0 0 0-315.82973 130.778962A443.756129 443.756129 0 0 0 0.001463 446.684028c0 119.368717 46.445548 231.496316 130.778961 315.829729a443.682987 443.682987 0 0 0 315.82973 130.852104 443.536702 443.536702 0 0 0 288.840111-105.910479l225.791193 225.864336a36.425013 36.425013 0 0 0 26.038765 10.678819 36.717583 36.717583 0 0 0 25.965621-62.683205zM182.78481 710.728799a373.61238 373.61238 0 0 1 0-527.943258 371.125532 371.125532 0 0 1 264.044771-109.421323c99.766501 0 193.389024 38.765576 264.044772 109.421323a373.61238 373.61238 0 0 1 0 527.943258 374.051236 374.051236 0 0 1-528.089543 0z"></path>
+                        <path v-bind:fill="this.$store.state.customColor" d="M1013.245844 961.315332l-225.864336-225.791193a443.170989 443.170989 0 0 0 105.910479-288.913254 443.756129 443.756129 0 0 0-130.778962-315.829729A443.682987 443.682987 0 0 0 446.610154 0.002194a443.682987 443.682987 0 0 0-315.82973 130.778962A443.756129 443.756129 0 0 0 0.001463 446.684028c0 119.368717 46.445548 231.496316 130.778961 315.829729a443.682987 443.682987 0 0 0 315.82973 130.852104 443.536702 443.536702 0 0 0 288.840111-105.910479l225.791193 225.864336a36.425013 36.425013 0 0 0 26.038765 10.678819 36.717583 36.717583 0 0 0 25.965621-62.683205zM182.78481 710.728799a373.61238 373.61238 0 0 1 0-527.943258 371.125532 371.125532 0 0 1 264.044771-109.421323c99.766501 0 193.389024 38.765576 264.044772 109.421323a373.61238 373.61238 0 0 1 0 527.943258 374.051236 374.051236 0 0 1-528.089543 0z"></path>
                     </svg>
                 </span>
             </div>
@@ -26,20 +26,20 @@ export default {
         return {
             lastHistory: [],
             dropMenuBorder: {
-                borderRight: "1px solid " + this.$color,
-                borderBottom: "1px solid " + this.$color,
-                borderLeft: "1px solid " + this.$color,
+                borderRight: "1px solid " + this.$store.state.customColor,
+                borderBottom: "1px solid " + this.$store.state.customColor,
+                borderLeft: "1px solid " + this.$store.state.customColor,
             },
         }
     },
     methods: {
         showHistorySearch: function() {
-            this.$http.get("/api/history/most/" + this.$user.id)
+            this.$http.get("/api/history/most/" + this.$store.state.user.id)
                 .then(resp => {
                     this.lastHistory = resp.data;
             });
             for(let ohis of document.querySelectorAll(".drop-oneHis")){
-                ohis.style.color = this.$color;
+                ohis.style.color = this.$store.state.customColor;
             }
             document.querySelector(".search-drop").style.display = "block";
         },
@@ -51,12 +51,12 @@ export default {
             // do search
         },
         hoverOneHis: function(e) {
-            e.target.style.backgroundColor = this.$color;
+            e.target.style.backgroundColor = this.$store.state.customColor;
             e.target.style.color = "#fff";
         },
         unHoverOneHis: function(e) {
             e.target.style.backgroundColor = "#fff";
-            e.target.style.color = this.$color;
+            e.target.style.color = this.$store.state.customColor;
         },
         searchByHis: function(e) {
             document.querySelector("input").value = e.target.innerHTML;
@@ -69,10 +69,11 @@ export default {
                 document.querySelector(".search-drop").style.display = "none";
             };
         });
-        this.$http.get("/api/history/most/" + this.$user.id)
+        this.$http.get("/api/history/most/" + this.$store.state.user.id)
             .then(resp => {
                 this.lastHistory = resp.data;
         });
+        console.log(this.$store.state.user);
     },
     
 };
@@ -118,11 +119,12 @@ function myContains(target, className) {
 }
 .search-ipt > div > input {
     height: 40px;
-    width: 644px;
+    width: 642px;
     outline: none;
     font-size: 1.25em;
     text-indent: 0.5em;
     border: none;
+    margin-left: 2px;
 }
 .search-ipt > span {
     height: 50px;

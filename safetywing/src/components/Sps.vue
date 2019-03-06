@@ -2,7 +2,7 @@
     <div>
         <my-nav />
         <div id="sps-container">
-            <div class="split-line" :style="{ backgroundColor:this.$color }"></div>
+            <div class="split-line" :style="{ backgroundColor:this.$store.state.customColor }"></div>
             <div class="surface">
                 <div>
                     <h1>占位</h1>
@@ -34,7 +34,7 @@ export default {
         mySearch,
     },
     mounted() {
-        this.$http.get("/api/history/most/" + this.$user.id)
+        this.$http.get("/api/history/most/" + this.$store.state.user.id)
             .then(resp => {
                 this.mostHistory = resp.data;
             });

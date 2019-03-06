@@ -66,15 +66,15 @@ export default {
             username: "",
             password: "",
             loginBtnStyle: {
-                backgroundColor: this.$color,
-                border: "1px solid " + this.$color,
+                backgroundColor: this.$store.state.customColor,
+                border: "1px solid " + this.$store.state.customColor,
             },
         }
     },  
     methods: {
         focusInputFlex: function(event) {
-            event.target.parentNode.style.border = "1px solid " + this.$color;
-            event.target.parentNode.style.boxShadow = "0 0 5px " + this.$color;
+            event.target.parentNode.style.border = "1px solid " + this.$store.state.customColor;
+            event.target.parentNode.style.boxShadow = "0 0 5px " + this.$store.state.customColor;
             event.target.parentNode.classList.remove("shakeDom");
         },
         unFocusInputFlex: function(event) {
@@ -82,7 +82,7 @@ export default {
             event.target.parentNode.style.boxShadow = "none";
         },
         hoverInputFlex: function(event) {
-            event.target.parentNode.style.border = "1px solid " + this.$color;
+            event.target.parentNode.style.border = "1px solid " + this.$store.state.customColor;
         },
         unHoverInputFlex: function(event) {
             if(!(event.target === document.activeElement)){
@@ -105,7 +105,6 @@ export default {
                 if(resp.data["Msg"] === "200") {
                     //login sucess
                     this.$setcookie("usession", resp.data["Val"], 60);
-                    this.$user.username = this.username;
                     router.push("/");
                 } else {
                     this.shake(1, "username or password not right");
@@ -129,7 +128,7 @@ export default {
             }, 3000);     
         },
         submitBorder:function(e) {
-            e.target.style.boxShadow = "0 0 5px " + this.$color;
+            e.target.style.boxShadow = "0 0 5px " + this.$store.state.customColor;
         },
         submitUnBorder:function(e){
             e.target.style.boxShadow = "none";
