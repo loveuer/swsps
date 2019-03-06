@@ -1,0 +1,26 @@
+import Vuex from "vuex";
+import Vue from "vue";
+
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+    state: {
+        customColor: "#1890ff",
+        user: {
+            id: "0",
+            username: "",
+            realname: "",
+            profileIcon: "",
+        },
+    },
+    mutations: {
+        chgColor(state, newColor) {
+            state.customColor = newColor;
+        },
+        chgUser(state, newUser) {
+            state.user = newUser;
+        }
+    },
+});
+
+export default store;

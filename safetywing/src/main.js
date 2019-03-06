@@ -5,30 +5,10 @@ import axios from "axios";
 import Vuex from "vuex";
 
 
+import store from "./vuexState";
 import router from "./router";
 
 Vue.use(VueRouter)
-Vue.use(Vuex)
-
-const store = new Vuex.Store({
-    state: {
-        customColor: "#1890ff",
-        user: {
-            id: "0",
-            username: "",
-            realname: "",
-            profileIcon: "",
-        },
-    },
-    mutations: {
-        chgColor(state, newColor) {
-            state.customColor = newColor;
-        },
-        chgUser(state, newUser) {
-            state.user = newUser;
-        }
-    },
-});
 
 Vue.prototype.$http = axios
 Vue.prototype.$getcookie = getCookie

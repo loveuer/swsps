@@ -41,9 +41,6 @@ export default {
         //
     },
     methods: {
-        doSearch: function() {
-
-        },
         showHistorySearch: function() {
             document.querySelector(".search-drop").style.display = "block";
         },
