@@ -26,7 +26,6 @@ import mySearch from "./SearchLine"
 export default {
     data() {
         return {
-            mostHistory: [],
         }
     },
     components: {
@@ -34,10 +33,7 @@ export default {
         mySearch,
     },
     mounted() {
-        this.$http.get("/api/history/search/last/" + this.$store.state.user.id)
-            .then(resp => {
-                this.mostHistory = JSON.parse(resp.data['val']);
-            });
+        
         //
     },
     methods: {

@@ -1,9 +1,9 @@
 <template>
     <div id="profile-icon" v-bind:title="this.$store.state.user.realname">
-        <div v-show="this.$store.state.user.profileIcon !== ''" id="img">
-            <img v-bind:src="this.$store.state.user.profileIcon">
+        <div v-show="this.$store.state.user.profile_icon !== ''" id="img">
+            <img v-bind:src="this.$store.state.user.profile_icon">
         </div>
-        <div v-show="this.$store.state.user.profileIcon === ''" id="font">{{ this.$store.state.user.realname.slice(0,1) }}</div>
+        <div v-show="this.$store.state.user.profile_icon === ''" id="font">{{ this.$store.state.user.realname.slice(0,1) }}</div>
     </div>
 </template>
 
@@ -11,7 +11,6 @@
 export default {
     data() {
         return {
-            color: ["#0fa2a9", "#949217", "#c1a7b0", "#7d3865", "#d7743b"],
         }
     },
     methods: {
@@ -24,9 +23,8 @@ export default {
                             id: user.id,
                             username: user.username,
                             realname: user.realname,
-                            profile_icon: user.profile_icon,
+                            profile_icon: "http://127.0.0.1:8000/static/img/" + user.profile_icon,
                         }
-                        console.log(newUser);
                         this.$store.commit("chgUser", newUser);
                         
                         if(user.img !== "") {

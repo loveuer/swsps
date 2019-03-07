@@ -110,7 +110,7 @@ export default {
             };
             this.$http.post("/api/login", qs.stringify(requestBody), postConfig)
                 .then(resp => {
-                    if(resp.status === 200) {
+                    if(resp.status === 200 && resp.data['msg'] === 'Authenticated') {
                         //login sucess
                         this.$setcookie("usession", resp.data["val"], 60);
                         router.push("/");
