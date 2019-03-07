@@ -34,10 +34,11 @@ export default {
     },
     methods: {
         showHistorySearch: function() {
-            this.$http.get("/api/history/most/" + this.$store.state.user.id)
+            this.$http.get("/api/history/search/last/" + this.$store.state.user.id)
                 .then(resp => {
-                    this.lastHistory = resp.data;
-            });
+                    this.lastHistory = JSON.parse(resp.data['val']);
+                }
+            );
             for(let ohis of document.querySelectorAll(".drop-oneHis")){
                 ohis.style.color = this.$store.state.customColor;
             }

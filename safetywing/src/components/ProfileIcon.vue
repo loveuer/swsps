@@ -16,16 +16,17 @@ export default {
     },
     methods: {
         getProfile: function() {
-            this.$http.get("/api/user/" + this.$store.state.user.id)
+            this.$http.get("/api/user/" + this.$store.state.user.username)
                 .then(resp => {
-                    if(resp.data["Msg"] === "200"){
-                        let user = JSON.parse(resp.data["Val"]);
+                    if(resp.status === 200){
+                        let user = JSON.parse(resp.data["val"]);
                         let newUser = {
                             id: user.id,
                             username: user.username,
                             realname: user.realname,
-                            profileIcon: user.img,
+                            profile_icon: user.profile_icon,
                         }
+                        console.log(newUser);
                         this.$store.commit("chgUser", newUser);
                         
                         if(user.img !== "") {

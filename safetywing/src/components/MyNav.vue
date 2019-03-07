@@ -172,13 +172,17 @@ export default {
     },
     mounted() {
         // check session
+        let sessid = this.$getcookie("usession");
+        if(sessid === "") {
+            sessid = "0";
+        };
         this.$http
-            .get("/api/session/" + this.$getcookie("usession"))
+            .get("/api/session/" + sessid)
             .then(resp => {
-                if(resp.data["StatusCode"] === 200 && resp.data["Msg"] !== "wrong session"){
+                if(resp.status === 200){
                     this.logined = !this.logined;
-                    if(this.$store.state.user.id !== resp.data["Val"]){
-                        this.$store.state.user.id = resp.data["Val"];
+                    if(this.$store.state.user.username !== resp.data["val"]){
+                        this.$store.state.user.username = resp.data["val"];
                         this.$refs.ProfileIcon.getProfile();
                     }
                 } else {
@@ -187,7 +191,12 @@ export default {
                     }
                 }
             })
-            .catch(error => {console.log(error)});
+            .catch(()=>{
+                if(router.currentRoute.path !== "/") {
+                    router.push("/login");
+                }
+            }
+        );
         if (router.currentRoute.path !== "/") {
             this.ishome = false;
         } else {

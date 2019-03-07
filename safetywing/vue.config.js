@@ -81,23 +81,23 @@ module.exports = {
         port: 9119,
         https: false,
         hotOnly: false,
-        // proxy: 'http://localhost:8000/', // 配置跨域处理,只有一个代理
+        // proxy: 'http://127.0.0.1:8000/', // 配置跨域处理,只有一个代理
         proxy: {
           '/api/login': {
-            target: 'http://localhost:8000/',
+            target: 'http://127.0.0.1:8000/',
             // ws: true,
             changeOrigin: true
           },
           '/api/session': {
-            target: 'http://localhost:8000/',
+            target: 'http://127.0.0.1:8000/',
             changeOrigin: true
           },
           '/api/user':{
-            target: 'http://localhost:8000/',
+            target: 'http://127.0.0.1:8000/',
             changeOrigin: true
           },
-          "/api/history/most":{
-            target: 'http://localhost:8000/',
+          "/api/history/search/last":{
+            target: 'http://127.0.0.1:8000/',
             changeOrigin: true
           },
         }, // 配置多个代理

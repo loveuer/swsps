@@ -59,6 +59,7 @@
 
 <script>
 import router from "../router"
+import qs from "qs"
 
 export default {
     data() {
@@ -98,23 +99,28 @@ export default {
                 this.shake(2, "please input password");
                 return 
             }
-            this.$http.post("/api/login", {
-                username: this.username,
-                password: this.password
-            }).then(resp => {
-                if(resp.data["Msg"] === "200") {
-                    //login sucess
-                    this.$setcookie("usession", resp.data["Val"], 60);
-                    router.push("/");
-                } else {
-                    this.shake(1, "username or password not right");
-                    this.shake(2, "username or password not right");
-                    this.password = "";
-                    console.log(resp.data["Msg"]);
-                };
-            }).catch(function(error){
-                console.log(error)
-            }).fanally;
+            const postConfig = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            };
+            const requestBody = {
+                "username": this.username,
+                "password": this.password,
+            };
+            this.$http.post("/api/login", qs.stringify(requestBody), postConfig)
+                .then(resp => {
+                    if(resp.status === 200) {
+                        //login sucess
+                        this.$setcookie("usession", resp.data["val"], 60);
+                        router.push("/");
+                    } else {
+                        this.shake(1, "username or password not right");
+                        this.shake(2, "username or password not right");
+                        this.password = "";
+                    };
+                })
+                .catch(err => { console.log(err) })
             return
         },
         shake: (pos, msg) => {

@@ -10,7 +10,7 @@ const store = new Vuex.Store({
             id: "0",
             username: "",
             realname: "",
-            profileIcon: "",
+            profile_icon: "",
         },
     },
     mutations: {

@@ -12,7 +12,7 @@ var (
 )
 
 type sessVal struct {
-	val    int
+	val    string // username
 	expire time.Time
 }
 
@@ -29,22 +29,22 @@ func uuid() string {
 }
 
 // New generate a new session
-func New() string {
+func New(username string) string {
 	rand.Seed(time.Now().UnixNano())
 	sessKey := uuid()
-	sessMap.Store(sessKey, time.Now().Add(1*time.Hour))
+	sessMap.Store(sessKey, sessVal{val: username, expire: time.Now().Add(1 * time.Hour)})
 	return sessKey
 }
 
 // Check session id if in map and if expired
-func Check(sid string) int {
+func Check(sid string) string {
 	val, ok := sessMap.Load(sid)
 	if !ok {
-		return 0
+		return ""
 	}
 	if val.(sessVal).expire.Before(time.Now()) {
 		sessMap.Delete(sid)
-		return 0
+		return ""
 	}
 	return val.(sessVal).val
 }

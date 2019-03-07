@@ -34,9 +34,9 @@ export default {
         mySearch,
     },
     mounted() {
-        this.$http.get("/api/history/most/" + this.$store.state.user.id)
+        this.$http.get("/api/history/search/last/" + this.$store.state.user.id)
             .then(resp => {
-                this.mostHistory = resp.data;
+                this.mostHistory = JSON.parse(resp.data['val']);
             });
         //
     },
