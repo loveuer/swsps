@@ -25,9 +25,9 @@ func main() {
 	r.GET("/api/user/:uname", chain(user))
 	r.POST("/api/login", chain(login))
 	r.GET("/api/history/search/last/:uid", chain(sps.UserLastSearchHistory))
+	r.GET("/api/sps/:spid", chain(sps.GetOneSps))
 
 	r.ServeFiles("/static/*filepath", http.Dir("./static"))
-
 	fmt.Println("listening at http://127.0.0.1:8000")
 	http.ListenAndServe(":8000", r)
 }
