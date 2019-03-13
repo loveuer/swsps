@@ -4,7 +4,7 @@
             <div class="header-logo" @click="changeContent(0)">SafetyWing</div>
             <div class="header-menu">
                 <li>
-                    <el-button type="text" :style="{fontSize:'16px'}">公司首页</el-button>
+                    <el-button type="text" :style="{fontSize:'16px'}" @click="goBackHome">公司首页</el-button>
                 </li>
                 <li>
                     <el-dropdown>
@@ -62,7 +62,7 @@
                 </el-col>
             </div>
             <div class="u-main">
-                <component :is="workSpace"></component>
+                <component :is="this.workSpace"></component>
             </div>
         </div>
     </div>
@@ -105,6 +105,9 @@ export default {
             };
             this.workSpace = contentMap[index];
         },
+        goBackHome: () => {
+            router.push("/");
+        }
     },
     components: {
         "swSummary": swSummary, 
