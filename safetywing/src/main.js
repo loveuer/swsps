@@ -2,26 +2,27 @@ import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from "vue-router";
 import axios from "axios";
-import Vuex from "vuex";
-
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 import store from "./vuexState";
 import router from "./router";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
+Vue.use(ElementUI);
 
-Vue.prototype.$http = axios
-Vue.prototype.$getcookie = getCookie
-Vue.prototype.$setcookie = setCookie
+Vue.prototype.$http = axios;
+Vue.prototype.$getcookie = getCookie;
+Vue.prototype.$setcookie = setCookie;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 
 new Vue({
   store,
   router,
   render: h => h(App),
-}).$mount('#app')
+}).$mount('#app');
 
 function getCookie(name) {
   var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -30,7 +31,7 @@ function getCookie(name) {
   } else {
     return "";
   }
-}
+};
 
 function setCookie(name,value,mins) {
   var expires = "";
@@ -40,4 +41,4 @@ function setCookie(name,value,mins) {
       expires = "; expires=" + date.toUTCString();
   }
   document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
+};

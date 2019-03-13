@@ -6,6 +6,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         customColor: "#1890ff",
+        logined: false,
         user: {
             id: "0",
             username: "",
