@@ -44,37 +44,31 @@
         </el-row>
 
         <el-dialog title="新增Log" :visible.sync="dialogFormVisible">
-            <el-form label-width="100px" ref="form">
-                <el-row>
-                    <el-col :span="20">
-                        <el-form-item label="模拟机:">
-                            <el-input v-model="newlog.sim" autocomplete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <div style="display:flex;">
-                        <div style="margin-left:auto;">
-                            <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                            <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
-                        </div>
-                    </div>
-                </el-row>
-                
+            <el-form label-position="left" label-width="80px" style="min-width:100%;">
+                <el-form-item label="模拟机:" style="min-width:100%;">
+                    <el-select placeholder="模拟机" v-model="newlog.sim">
+                        <el-option label="5978" value="5978"></el-option>
+                        <el-option label="5989" value="5989"></el-option>
+                        <el-option label="5008" value="5008"></el-option>
+                        <el-option label="5015" value="5015"></el-option>
+                    </el-select>
+                    
+                </el-form-item>
+                <el-form-item label="具体内容:">
+                        <!-- <el-input type="textarea" :rows="4" style="font-size:16px;" v-model="newlog.detail">
+                        </el-input> -->
+                    <tinyMceEditor api-key="API_KEY" :init="{plugins: 'wordcount'}" v-model="newlog.detail"></tinyMceEditor>
+                </el-form-item>
             </el-form>
-            <!-- <span slot="footer">
-                <el-col class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
-                </el-col>
-            </span> -->
-            
+                <el-button @click="dialogFormVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
         </el-dialog>
     </div>
 </template>
 
 <script>
-var dateFormat = require("dateformat");
+import dateFormat from "dateformat";
+import tinyMceEditor from '@tinymce/tinymce-vue';
 
 export default {
     data() {
@@ -91,7 +85,7 @@ export default {
             dialogFormVisible: false,
             newlog: {
                 sim: "",
-                log: "",
+                detail: "",
             },
             justStart: true,
             justStartValue: dateFormat(Date.now(), "yyyy-mm-dd") + " logs:",
@@ -111,6 +105,9 @@ export default {
         searchLogs: function() {
 
         },
+    },
+    components: {
+        "tinyMceEditor": tinyMceEditor,
     },
     mounted() {
         let initOption = {
