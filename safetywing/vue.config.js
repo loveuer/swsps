@@ -28,7 +28,10 @@ module.exports = {
     // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md 
     // webpack 配置~ 
     chainWebpack: () => {}, 
-    configureWebpack: () => {}, 
+    configureWebpack: () => {
+      
+    },
+    
     
     // vue-loader options 
     // https://vue-loader.vuejs.org/en/options.html 
