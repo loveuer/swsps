@@ -13,6 +13,13 @@ const store = new Vuex.Store({
             realname: "",
             profile_icon: "",
         },
+        spsOne: {
+            id: '0',
+            name: 'null',
+            pn: 'null',
+            sn: 'null',
+            sim: 'null',
+        },
     },
     mutations: {
         chgColor(state, newColor) {
@@ -20,7 +27,10 @@ const store = new Vuex.Store({
         },
         chgUser(state, newUser) {
             state.user = newUser;
-        }
+        },
+        updateSpsOne(state, newsp) {
+            state.spsOne = newsp;
+        },
     },
 });
 

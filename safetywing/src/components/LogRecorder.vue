@@ -6,7 +6,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select v-model="this.psim" placeholder="模拟机">
+                <el-select v-model="searchlog.sim" placeholder="模拟机">
                     <el-option :key="5978" :value="5978" :label="5978"></el-option>
                     <el-option :key="5989" :value="5989" :label="5989"></el-option>
                     <el-option :key="5008" :value="5008" :label="5008"></el-option>
@@ -15,15 +15,15 @@
             </el-col>
 
             <el-col :span="6">
-                <el-date-picker v-model="pdate.start" type="date" placeholder="起始日期"></el-date-picker>
+                <el-date-picker v-model="searchlog.start" type="date" placeholder="起始日期"></el-date-picker>
             </el-col>
 
             <el-col :span="6">
-                <el-date-picker v-model="pdate.end" type="date" placeholder="截止日期"></el-date-picker>
+                <el-date-picker v-model="searchlog.end" type="date" placeholder="截止日期"></el-date-picker>
             </el-col>
 
             <el-col :span="4">
-                <el-input placeholder="关键字" v-model="this.pkey"></el-input>
+                <el-input placeholder="关键字" v-model="searchlog.key"></el-input>
             </el-col>
 
             <el-col :span="2">
@@ -33,13 +33,6 @@
         </el-row>
         <el-row style="margin-top:30px;"></el-row>
         <el-row>
-            <!-- <el-table :data="this.logs" height="700">
-                <el-table-column prop="date" label="date" width="120"></el-table-column>
-                <el-table-column prop="time" label="time" width="120"></el-table-column>
-                <el-table-column prop="auth" label="auth" width="120"></el-table-column>
-                <el-table-column prop="sim" label="sim" width="120"></el-table-column>
-                <el-table-column prop="detail" label="log" width="850"></el-table-column>
-            </el-table> -->
             <el-timeline :reverse="false">
                 <el-timeline-item
                     v-for="(onedaylog, index) of this.mockLogs"
@@ -71,10 +64,10 @@
                 </el-form-item>
             </el-form>
                 <div>
-                    <u-textarea></u-textarea>
+                    <u-textarea ref="logDetail"></u-textarea>
                 </div>
-                <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="addNewLog">确认</el-button>
         </el-dialog>
         
     </div>
@@ -88,12 +81,12 @@ export default {
     data() {
         return {
             logs: [],
-            psim: "",
-            pdate: {
+            searchlog: {
+                sim: "",
                 start: "",
                 end: "",
+                key: "",
             },
-            pkey: "",
             dialogFormVisible: false,
             newlog: {
                 sim: "",
@@ -137,10 +130,29 @@ export default {
     },
     methods: {
         getLogs: function(option) {
+            // option just like = {
+            //     sim: "",
+            //     start: "",
+            //     end: "",
+            //     key: "",
+            // }
+
+            // do get staff
+            // then 
             this.logs = this.mockLogs;
         },
         searchLogs: function() {
-
+            console.log(this.searchlog);
+            // do post staff
+            // then
+            // re mount this component
+        },
+        addNewLog: function() {
+            this.newlog.detail = this.$refs.logDetail.contentCode;
+            console.log(this.newlog);
+            // do post staff
+            // then 
+            this.dialogFormVisible = false;
         },
     },
     components: {
@@ -149,9 +161,9 @@ export default {
     mounted() {
         let initOption = {
             sim: "",
-            startDate: dateFormat(Date.now(), "yyyy-mm-dd"),
-            endDate: "",
-            keyWord: "",
+            start: dateFormat(Date.now(), "yyyy-mm-dd"),
+            end: "",
+            key: "",
         }
         this.getLogs(initOption);
     },
