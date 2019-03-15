@@ -25,11 +25,7 @@
         </el-row>
         <el-dialog title="备件详情" :visible.sync="dialogFormVisible">
             <div>
-                <sps-detail ></sps-detail>
-            </div>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <sps-detail></sps-detail>
             </div>
         </el-dialog>
     </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="u-container">
         <div class="u-header">
-            <div class="header-logo" @click="changeContent(0)">SafetyWing</div>
+            <div class="header-logo" @click="changeContent(0)" style="cursor:pointer;">SafetyWing</div>
             <div class="header-menu">
                 <li>
                     <el-button type="text" :style="{fontSize:'16px'}" @click="goBackHome">公司首页</el-button>

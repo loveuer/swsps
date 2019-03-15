@@ -33,7 +33,7 @@
                     </el-form-item>
 
                     <el-form-item label="训练场次:">
-                        <el-select v-model="form.airline" placeholder="" style="width: 100%;">
+                        <el-select v-model="form.session" placeholder="" style="width: 100%;">
                             <el-option label="第 1 场" value="1"></el-option>
                             <el-option label="第 2 场" value="2"></el-option>
                             <el-option label="第 3 场" value="3"></el-option>
@@ -189,6 +189,9 @@ export default {
         return {
             form: {
                 date:　"",
+                sim: "",
+                airline: "",
+                session: '',
                 start: "",
                 end: "",
                 instructorName: "",

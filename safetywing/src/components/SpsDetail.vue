@@ -30,6 +30,7 @@ export default {
             let modeMap = {'1':'sps-d-detail', '2':'sps-d-history', '3':'sps-d-modify'};
             this.spsDetailMode = modeMap[index];
         },
+        
     },
     components: {
         'sps-d-detail': spD_Detail,
@@ -39,7 +40,7 @@ export default {
     mounted() {
         // get sps detail by id: this.$store.state.spsOne.id
         let mock_sps = {
-            id: this.$store.state.spsOne.id, name: '我是一个备件', pn: '我是pn', sn: '你才是sn呢', sim: '5555',
+            id: this.$store.state.spsOne.id, name: '我是一个备件', pn: '我是pn', sn: '我不是sn!', sim: '6666',
         };
         this.$store.commit('updateSpsOne', mock_sps);
     },

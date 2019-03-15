@@ -27,6 +27,12 @@ export default {
             sp: this.$store.state.spsOne,
         };
     },
+    methods: {
+        
+    },
+    mounted() {
+        // get the sp detail by this.$store.state.spsOne.id
+    },
 };
 </script>
 

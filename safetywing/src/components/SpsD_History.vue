@@ -1,5 +1,7 @@
 <template>
-    <div>d-history</div>
+    <div>
+        <el-row>history</el-row>
+    </div>
 </template>
 
 <script>

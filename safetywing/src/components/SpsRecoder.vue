@@ -16,7 +16,15 @@
         </el-row>
         <el-dialog title="新增备件" :visible.sync="dialogFormVisible">
             <el-form>
-
+                <el-form-item label="名称:" label-width="100" label-position="right">
+                    <el-input></el-input>
+                </el-form-item>
+                <el-form-item label="P/N:" label-width="100" label-position="top">
+                    <el-input></el-input>
+                </el-form-item>
+                <el-form-item label="S/N:" label-width="100" label-position="top">
+                    <el-input></el-input>
+                </el-form-item>
             </el-form>
             <el-button @click="dialogFormVisible = false">取消</el-button>
             <el-button type="primary" @click="addNewSps">确认</el-button>
