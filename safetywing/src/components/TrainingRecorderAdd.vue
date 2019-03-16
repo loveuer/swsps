@@ -138,7 +138,16 @@
                     </el-form-item>
 
                     <el-form-item label="训练类型:">
-                        <el-input placeholder="" v-model="form.trainingMode"></el-input>
+                        <el-col :span='12' style="width:100%;">
+                            <el-autocomplete
+                                v-model="form.trainingMode"
+                                :fetch-suggestions='trainingModeSuggestions'
+                                @select="handlerFocusInstructor"
+                                style="width: 100%;"
+                                class="inline-input">
+
+                            </el-autocomplete>
+                        </el-col>
                     </el-form-item>
 
                     <el-form-item label="训练机组号:">
@@ -239,8 +248,14 @@ export default {
             ];
             cb(mockStuendts);
         },
+        trainingModeSuggestions: function(qs, cb) {
+            let tms = [
+                {value:'复训'}, {value:'熟练检查'}, {value:'升级训练'}, {value:'升级检查'}, {value:'补充训练'}
+            ]
+            cb(tms);
+        },
         handlerFocusInstructor: function() {
-            
+            console.log("select func");
         },
         uploadTrainingScanImage: () => {
             document.querySelector("#trainingScanImage").click();
