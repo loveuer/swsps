@@ -24,7 +24,7 @@
                         <div class="login-input-logo">
                             <svg style="width:19px;height:19px;margin-left:8px;margin-top:8px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ><path d="M718.77 960H305.23c-66.51 0-120.62-54.12-120.62-120.62V502.91c0-66.5 54.11-120.62 120.62-120.62h383.52V275.21c0-97.46-79.29-176.75-176.75-176.75-97.45 0-176.74 79.29-176.74 176.75v38.89c0 9.52-7.72 17.23-17.23 17.23s-17.23-7.71-17.23-17.23v-38.89C300.8 158.75 395.54 64 512 64s211.21 94.75 211.21 211.21v107.17c64.46 2.34 116.17 55.51 116.17 120.53v336.47c0 66.5-54.1 120.62-120.61 120.62zM305.23 416.76c-47.5 0-86.15 38.65-86.15 86.15v336.47c0 47.5 38.65 86.15 86.15 86.15h413.54c47.5 0 86.15-38.65 86.15-86.15V502.91c0-47.5-38.65-86.15-86.15-86.15H305.23zM512 853.15c-9.52 0-17.23-7.71-17.23-17.23V722.66c-56.59-8.36-100.15-57.25-100.15-116.11 0-64.73 52.66-117.4 117.38-117.4 64.73 0 117.39 52.67 117.39 117.4 0 58.86-43.56 107.74-100.16 116.11v113.26c0 9.52-7.71 17.23-17.23 17.23z m0-329.54c-45.73 0-82.92 37.2-82.92 82.94 0 45.72 37.2 82.91 82.92 82.91s82.93-37.19 82.93-82.91c0-45.74-37.2-82.94-82.93-82.94z" p-id="1032" fill="#bfbfbf"></path></svg>
                         </div>
-                        <input :type="passwordType" id="password" class="login-input-password" v-model="loginform.password">
+                        <input :type="passwordType" id="password" class="login-input-password" v-model="loginform.password" @keypress.enter="doLogin">
                         <div class="login-input-tool"></div>
                     </div>
                 </el-row>
@@ -59,15 +59,22 @@ export default {
             router.push('/');
         },
         doLogin: function() {
-            this.shakeInput(3, '账号或密码错误!');
-            // this.$http.post('/api/login', qs.stringify(this.loginform))
-            //     .then(res => {
-            //         if (res.status === 200) {
-            //             console.log(res.data);
-            //         } else {
-            //             this.shakeInput('账号或密码不正确');
-            //         };
-            //     });
+            // this.shakeInput(3, '账号或密码错误!');
+            this.$http.post('/api/login', qs.stringify(this.loginform))
+                .then(res => {
+                    if (res.status === 200 && res.data.msg === 'Authenticated') {
+                        let respVal = JSON.parse(res.data.val);
+                        this.$setcookie('usession', respVal.session, 60);
+                        this.$store.commit('chgUser', respVal.user);
+                    };
+                })
+                .catch(err => {
+                    if (err.response.status === 403 ) {
+                        this.shakeInput(3, '账号或密码错误');
+                    } else {
+                        console.log(err.response);
+                    };
+                });
         },
         shakeInput: function(which, msg) {
             let username = this.loginform.username;
@@ -117,9 +124,9 @@ export default {
     /* background-color: #409EFF; */
 }
 .login-form{
-    min-height: 220px;
-    min-width: 400px;
-    width: 400px;
+    min-height: 240px;
+    min-width: 380px;
+    width: 380px;
     margin-top: -30px;
     padding: 10px;
     border-radius: 15px;
@@ -127,7 +134,7 @@ export default {
     background-color: rgba(255,255,255,0.4);
 }
 .login-form > div {
-    margin-top: 10px;
+    margin-top: 15px;
     width: 100%;
 }
 .login-input{
@@ -135,8 +142,8 @@ export default {
     border-radius: 5px;
     height: 35px;
     line-height: 35px;
-    margin-top: 5px;
-    width: 398px;
+    margin-top: 10px;
+    width: 378px;
     display: inline-flex;
     background-color: #fff;
 }

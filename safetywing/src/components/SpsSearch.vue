@@ -13,7 +13,7 @@
         </el-row>
         <el-row style="margin-top:10px;">
             <el-checkbox-group v-model="simsList">
-                <el-checkbox label="5978">5958</el-checkbox>
+                <el-checkbox label="5978">5978</el-checkbox>
                 <el-checkbox label="5989">5989</el-checkbox>
                 <el-checkbox label="5008">5008</el-checkbox>
                 <el-checkbox label="5015">5015</el-checkbox>
