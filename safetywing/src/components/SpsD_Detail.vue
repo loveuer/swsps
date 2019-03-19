@@ -14,7 +14,7 @@
                 <span>{{ this.$store.state.spsOne.sn }}</span>
             </el-form-item>
             <el-form-item label="模拟机:">
-                <span>{{ this.$store.state.spsOne.sim }}</span>
+                <span>{{ this.$store.state.spsOne.nowsim }}</span>
             </el-form-item>
         </el-form>
     </div>
@@ -24,7 +24,7 @@
 export default {
     data() {
         return {
-            sp: this.$store.state.spsOne,
+            
         };
     },
     methods: {

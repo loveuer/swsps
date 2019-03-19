@@ -23,6 +23,7 @@ const store = new Vuex.Store({
             sim: 'null',
         },
         mockhis: mockdata.mockhis,
+        mockSearchSps: mockdata.mockSearchSps,
     },
     mutations: {
         chgColor(state, newColor) {

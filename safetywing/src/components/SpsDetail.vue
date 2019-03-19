@@ -39,10 +39,7 @@ export default {
     },
     mounted() {
         // get sps detail by id: this.$store.state.spsOne.id
-        let mock_sps = {
-            id: this.$store.state.spsOne.id, name: '我是一个备件', pn: '我是pn', sn: '我不是sn!', sim: '6666',
-        };
-        this.$store.commit('updateSpsOne', mock_sps);
+        
     },
 };
 </script>
