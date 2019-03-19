@@ -16,7 +16,7 @@ const store = new Vuex.Store({
             profile_icon: "",
         },
         spsOne: {
-            id: '0',
+            id: 0,
             name: 'null',
             pn: 'null',
             sn: 'null',

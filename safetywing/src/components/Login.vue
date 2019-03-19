@@ -61,12 +61,9 @@ export default {
         doLogin: function() {
             // this.shakeInput(3, '账号或密码错误!');
             this.$http.post('/api/login', qs.stringify(this.loginform))
-                .then(res => {
-                    if (res.status === 200 && res.data.msg === 'Authenticated') {
-                        let respVal = JSON.parse(res.data.val);
-                        this.$setcookie('usession', respVal.session, 60);
-                        this.$store.commit('chgUser', respVal.user);
-                    };
+                .then(resp => {
+                    this.$setcookie('usession', resp.data.session);
+                    this.$store.commit('chgUser', resp.data.user);
                 })
                 .catch(err => {
                     if (err.response.status === 403 ) {

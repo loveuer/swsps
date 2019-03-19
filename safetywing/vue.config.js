@@ -99,10 +99,6 @@ module.exports = {
             target: 'http://127.0.0.1:8000/',
             changeOrigin: true
           },
-          "/api/history/search/last":{
-            target: 'http://127.0.0.1:8000/',
-            changeOrigin: true
-          },
           '/api/sps':{
             target: 'http://127.0.0.1:8000/',
             changeOrigin: true

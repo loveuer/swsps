@@ -13,8 +13,20 @@
             <el-form-item label="S/N:">
                 <span>{{ this.$store.state.spsOne.sn }}</span>
             </el-form-item>
+            <el-form-item label="原模拟机:">
+                <span>{{ this.$store.state.spsOne.orgsim }}</span>
+            </el-form-item>
             <el-form-item label="模拟机:">
                 <span>{{ this.$store.state.spsOne.nowsim }}</span>
+            </el-form-item>
+            <el-form-item label="位置:">
+                <span>{{ this.$store.state.spsOne.pos }}</span>
+            </el-form-item>
+            <el-form-item label="状态:">
+                <span>{{ this.$store.state.spsOne.status }}</span>
+            </el-form-item>
+            <el-form-item label="备注:">
+                <span>{{ this.$store.state.spsOne.comment }}</span>
             </el-form-item>
         </el-form>
     </div>

@@ -19,6 +19,10 @@ export default {
             ]
         },
     },
+    mounted() {
+        let sps = ['1'];
+        console.log(sps || []);
+    },
 }
 </script>
 
