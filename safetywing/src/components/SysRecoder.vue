@@ -1,27 +1,39 @@
 <template>
     <div>
-        <el-row>this is test page now</el-row>
-        <el-row>
-            <div v-for="(v, index) of vs" :key="index">
-                <p>{{ v }}</p>
-            </div>
-
-        </el-row>
+        <el-timeline>
+            <el-timeline-item
+                v-for="(m, index) of mock"
+                :key="index"
+                :timestamp="m.date"
+                >
+                <span v-text="m.name"></span> : <span v-text="m.age"></span>
+            </el-timeline-item>
+        </el-timeline>
     </div>
 </template>
 
 <script>
 export default {
-    computed: {
-        vs: function() {
-            return [
-                1,2,3,3,9,1,1,9,
+    data() {
+        return {
+            mock: [
+                {date:'2019-03-19', name:'zyp', age:27},
+                {date:'2019-03-19', name:'zyp', age:27},
+                {date:'2019-03-19', name:'zyp', age:27},
+                {date:'2019-03-18', name:'zyp', age:27},
+                {date:'2019-03-17', name:'zyp', age:27},
+                {date:'2019-03-17', name:'zyp', age:27},
+                {date:'2019-03-16', name:'zyp', age:27},
+                {date:'2019-03-16', name:'zyp', age:27},
+                {date:'2019-03-16', name:'zyp', age:27},
             ]
-        },
+        }
+    },
+    computed: {
+        
     },
     mounted() {
-        let sps = ['1'];
-        console.log(sps || []);
+        
     },
 }
 </script>

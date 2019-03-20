@@ -1,31 +1,31 @@
 <template>
-    <el-timeline :reverse="false">
+    <el-timeline :reverse="false" style="">
         <el-timeline-item
             v-for="(hs, index) of histories"
             :key="index"
             :timestamp="hs.date"
         >
             <el-table
-                :data="hs.his"
+                :data="hs.vals"
                 style="width: 100%">
                 <el-table-column type="expand">
                     <template slot-scope="props">
                         <el-form label-position="left" class="demo-table-expand">
                             <el-form-item label="模拟机:">
-                                <span>{{ props.row.oldsim + " ->" + props.row.newsim }}</span>
+                                <span>{{ props.row.last_sim + " ->" + props.row.next_sim }}</span>
                             </el-form-item>
                             <el-form-item label="位置:">
-                                <span>{{ props.row.oldpos + " ->" + props.row.newpos }}</span>
+                                <span>{{ props.row.last_pos + " ->" + props.row.next_pos }}</span>
                             </el-form-item>
                             <el-form-item label="状态:">
-                                <span>{{ props.row.oldstatus + " ->" + props.row.newstatus }}</span>
+                                <span>{{ props.row.last_sts + " ->" + props.row.next_sts }}</span>
                             </el-form-item>
                         </el-form>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="时间"
-                    prop="time">
+                    prop="simple_time">
                 </el-table-column>
                 <el-table-column
                     label="人员"

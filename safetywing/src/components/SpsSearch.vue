@@ -74,7 +74,7 @@
             </el-collapse>
         </el-row>
         <!-- 以上是展示sps -->
-        <el-dialog title="备件详情" :visible.sync="dialogFormVisible">
+        <el-dialog title="备件详情" :visible.sync="dialogFormVisible" style="min-width:1100px;">
             <div>
                 <sps-detail></sps-detail>
             </div>
@@ -160,14 +160,8 @@ import SpsDetail from "./SpsDetail.vue";
     watch: {
         "$store.state.spsOne.id": function() {
             this.$http.get('/api/sps/one/' + this.$store.state.spsOne.id)
-                .then(resp => {
-                    let newsp = JSON.parse(resp.data.val);
-                    // console.log(newsp);
-                    this.$store.commit('updateSpsOne', newsp);
-                })
-                .catch(error => {
-                    console.log(error.response);
-                });
+                .then(resp => { this.$store.commit('updateSpsOne', resp.data); })
+                .catch(error => { console.log(error.response); });
         },
     },
 };

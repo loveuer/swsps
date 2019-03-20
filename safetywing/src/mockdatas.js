@@ -1,20 +1,15 @@
 const mockdata = {
     mockhis: [
-        {date:'2019-03-11',his:[
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-        ]},
-        {date:'2019-02-14',his:[
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-        ]},
-        {date:'2019-01-31',his:[
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-            {'time':'12:12:12','auth':'zyp','short':'balabala','oldsim':'5978','newsim':'5989','oldpos':'xxx','newpos':'yyy','oldstatus':'备件','newstatus':'维修'},
-        ]},
+        {spid:105,date:'2019-02-20T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-02-20T00:00:00Z',time:'0000-01-01T12:36:49Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-02-20T00:00:00Z',time:'0000-01-01T12:35:15Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-02-19T00:00:00Z',time:'0000-01-01T00:30:35Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-01-29T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-01-29T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-01-29T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-01-29T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-02-20T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
+        {spid:105,date:'2019-02-20T00:00:00Z',time:'0000-01-01T15:32:36Z',last_sim:'5015',next_sim:'5015',last_pos:'a-3-1',next_pos:'a-3-1',last_sts:'备件',next_sts:'备件',amount_chg:-1,auth:'李跃',comment:'0000-01-01T15:32:36Z',short:null},
     ],
     mockSearchSps: {
         'byname': [

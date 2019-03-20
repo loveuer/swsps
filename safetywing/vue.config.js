@@ -103,6 +103,10 @@ module.exports = {
             target: 'http://127.0.0.1:8000/',
             changeOrigin: true
           },
+          '/api/sphis':{
+            target: 'http://127.0.0.1:8000/',
+            changeOrigin: true
+          },
         }, // 配置多个代理
         // before: app => {}
     }

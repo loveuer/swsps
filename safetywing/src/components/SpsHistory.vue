@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row>
+        <el-row style="margin-left:45px;">
             <el-input 
                 placeholder="搜索历史记录" 
                 prefix-icon="el-icon-search" 
@@ -28,11 +28,16 @@ export default {
     },
     methods: {
         doSearchHis: function() {
-            this.$refs.spshistimeline.histories = this.$store.state.mockhis;
+            // this.$refs.spshistimeline.histories = this.$store.state.mockhis;
         },
     },
     mounted() {
-        
+        this.$http.get('/api/sphis')
+            .then(resp => {
+                console.log(resp.data);
+                this.$refs.spshistimeline.histories = resp.data;
+            })
+            .catch(error => { console.log(error.response) });
     },
     components: {
         'sps-his-timeline': spsHisTimeline,
