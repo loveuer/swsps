@@ -13,24 +13,9 @@ const routes = [
         component: () => import ("./components/Works.vue"),
     },
     {
-        path: "/works/:mode",
-        name: "works",
-        component: () => import ("./components/Works.vue"),
-    },
-    {
-        path: "/works/:mode/:detail",
-        name: "works",
-        component: () => import ("./components/Works.vue"),
-    },
-    {
-        path: "/works:/mode/:detail/:key",
-        name: "works",
-        component: () => import ("./components/Works.vue"),
-    },
-    {
-        path: "/works/:mode/:detail/:key/:other",
-        name: "works",
-        component: () => import ("./components/Works.vue"),
+        path: "/works/trainingRecorder/add",
+        name: "works-training-add",
+        component: () => import ("./components/trainingRecorder/Tadd.vue"),
     },
     {
         path: "/login",
