@@ -14,6 +14,7 @@ Vue.use(ElementUI);
 Vue.prototype.$http = axios;
 Vue.prototype.$getcookie = getCookie;
 Vue.prototype.$setcookie = setCookie;
+// Vue.prototype.$route = router;
 
 Vue.config.productionTip = false;
 

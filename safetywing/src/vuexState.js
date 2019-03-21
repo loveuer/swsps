@@ -1,7 +1,6 @@
 import Vuex from "vuex";
 import Vue from "vue";
 
-import mockdata from "./mockdatas"
 
 Vue.use(Vuex)
 
@@ -22,8 +21,6 @@ const store = new Vuex.Store({
             sn: 'null',
             sim: 'null',
         },
-        mockhis: mockdata.mockhis,
-        mockSearchSps: mockdata.mockSearchSps,
     },
     mutations: {
         chgColor(state, newColor) {

@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import router from "../router"
 
 export default {
     components: {
@@ -30,8 +29,8 @@ export default {
         reloadPage: () => {
             window.location.reload(true);
         },
-        meetUrl: url => {
-            router.push(url);
+        meetUrl: function(url) {
+            this.$router.push(url);
         },
     },
 };

@@ -1,160 +1,90 @@
 <template>
-    <div class="u-container">
-        <div class="u-header">
-            <div class="header-logo" @click="changeContent(0)" style="cursor:pointer;">SafetyWing</div>
-            <div class="header-menu">
-                <li>
-                    <el-button type="text" :style="{fontSize:'16px'}" @click="goBackHome">公司首页</el-button>
-                </li>
-                <li>
-                    <el-dropdown>
-                        <span class="el-dropdown-link">
-                            <el-button type="text" :style="{fontSize:'16px'}">赵育鹏</el-button>
-                            <i class="el-icon-arrow-down el-icon--right"></i>
-                        </span>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>我的信息</el-dropdown-item>
-                            <el-dropdown-item>修改密码</el-dropdown-item>
-                            <el-dropdown-item>退出登录</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </li>
-            </div>
-        </div>
-        <div class="u-content">
-            <div class="u-aside">
-                <el-col>
-                    <el-menu
-                        default-active="0"
-                        class="el-menu-vertical-demo"
-                        @open="handleOpen"
-                        @close="handleClose">
-                        <el-menu-item index="1" @click="changeContent(1)">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">训练管理</span>
-                        </el-menu-item>
-
-                        <el-menu-item index="2" @click="changeContent(2)">
-                            <i class="el-icon-document"></i>
-                            <span slot="title">日志管理</span>
-                        </el-menu-item>
-
-                        <el-menu-item index="3" @click="changeContent(3)">
-                            <i class="el-icon-setting"></i>
-                            <span slot="title">故障管理</span>
-                        </el-menu-item>
-
-                        <el-menu-item index="4" @click="changeContent(4)">
-                            <i class="el-icon-setting"></i>
-                            <span slot="title">备件管理</span>
-                        </el-menu-item>
-
-                        <el-menu-item index="5" @click="changeContent(5)">
-                            <i class="el-icon-setting"></i>
-                            <span slot="title">系统统计</span>
-                        </el-menu-item>
-
-                        <el-menu-item index="6" @click="changeContent(6)">
-                            <i class="el-icon-setting"></i>
-                            <span slot="title">模拟机信息</span>
-                        </el-menu-item>
-                    </el-menu>
-                </el-col>
-            </div>
-            <div class="u-main">
-                <component :is="this.workSpace"></component>
-            </div>
-        </div>
+    <div>
+        <el-row>
+            <el-menu
+                :default-active="workMenuIndex"
+                class="el-menu-demo"
+                mode="horizontal"
+                background-color="#545c64"
+                text-color="#fff"
+                :router="true"
+                active-text-color="#ffd04b">
+                <el-menu-item index="/works">
+                    <font class="font-logo">Safety</font><font class="font-logo">Wing</font>
+                </el-menu-item>
+                <el-submenu index="/works/trainingRecorder">
+                    <template slot="title">训练记录</template>
+                    <el-menu-item index="/works/trainingRecorder/add">添加</el-menu-item>
+                    <el-menu-item index="/works/trainingRecorder/check">查看</el-menu-item>
+                    <el-menu-item index="/works/trainingRecorder/modify">修改</el-menu-item>
+                </el-submenu>
+                <el-submenu index="/works/logRecorder">
+                    <template slot="title">日志记录</template>
+                    <el-menu-item index="/works/logRecorder/add">添加</el-menu-item>
+                    <el-menu-item index="/works/logRecorder/check">查看</el-menu-item>
+                    <el-menu-item index="/works/logRecorder/modify">修改</el-menu-item>
+                </el-submenu>
+                <el-submenu index="/works/malfRecorder">
+                    <template slot="title">故障记录</template>
+                    <el-menu-item index="/works/malfRecorder/add">添加</el-menu-item>
+                    <el-menu-item index="/works/malfRecorder/check">查看</el-menu-item>
+                    <el-menu-item index="/works/malfRecorder/modify">修改</el-menu-item>
+                </el-submenu>
+                <el-submenu index="/works/spsRecorder">
+                    <template slot="title">备件记录</template>
+                    <el-menu-item index="/works/spsRecorder/add">添加</el-menu-item>
+                    <el-menu-item index="/works/spsRecorder/check">查看</el-menu-item>
+                    <el-menu-item index="/works/spsRecorder/modify">修改</el-menu-item>
+                </el-submenu>
+                <el-submenu index="/self" style="float:right;">
+                    <template slot="title">赵育鹏</template>
+                    <el-menu-item index="/self/">我的信息</el-menu-item>
+                    <el-menu-item index="/self/chgpswd">修改密码</el-menu-item>
+                    <el-menu-item index="/logoff">退出登录</el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </el-row>
     </div>
 </template>
 
 <script>
-import router from "../router";
-
-import swSummary from "./Summary.vue"
-import trainingRecorder from "./TrainingRecorder.vue";
-import logRecoder from "./LogRecorder.vue";
-import malfRecoder from "./MalfRecoder.vue";
-import spsRecoder from "./SpsRecoder.vue";
-import sysRecoder from "./SysRecoder.vue";
-import simsImformation from "./SimsImformation.vue";
-
-
 export default {
     data() {
         return {
-            workSpace: "swSummary",
+            workMenuIndex: '0',
         }
+    },
+    mounted() {
+        let workMenuIndexMap = {'traningRecorder':'1', 'logRecorder':'2', 'malfRecorder':'3', 'spsRecorder':'4'};
+        let routePath = this.$route.params;
+        let pathMode = routePath.mode | 0;
+        let pathDetail = routePath.detail | 0;
+        let pathKey = routePath.key | 0;
+        let pathOther = routePath.other | 0;
+        console.log(pathMode, pathDetail, pathKey, pathOther);
     },
     methods: {
-        handleOpen: (key, keyPath) => {
-            console.log(key, keyPath);
+        handleOpen:function() {
+
         },
-        handleClose: (key, keyPath) => {
-            console.log(key, keyPath);
+        handleClose: function() {
+
         },
-        changeContent: function(index) {
-            let contentMap = {
-                0: "swSummary",
-                1: "trainingRecorder",
-                2: "logRecoder",
-                3: "malfRecoder",
-                4: "spsRecoder",
-                5: "sysRecoder",
-                6: "simsImformation",
-            };
-            this.workSpace = contentMap[index];
-        },
-        goBackHome: () => {
-            router.push("/");
-        }
     },
-    components: {
-        "swSummary": swSummary, 
-        "trainingRecorder": trainingRecorder, 
-        "logRecoder": logRecoder, 
-        "malfRecoder": malfRecoder, 
-        "spsRecoder": spsRecoder, 
-        "sysRecoder": sysRecoder, 
-        "simsImformation": simsImformation,
-    },
-    
 };
 </script>
 
 <style scoped>
-.u-container{
-    min-height: 100%;
-    width: 100%;
-}
-.u-header{
-    height: 50px;
-    width: 100%;
-    background-color: #eee;
-    display: flex;
-}
-.header-logo{
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.font-logo{
+    height: 60px;
+    line-height: 60px;
     font-size: 20px;
     font-weight: bold;
-    margin-left: 30px;
 }
-.header-menu{
-    margin-left: auto;
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
+.font-logo:first-child{
+    color: #7ec0d4;
 }
-.header-menu > li{
-    list-style: none;
-    margin-right: 20px;
-}
-.u-content {
-    min-height: 100%;
-    width: 100%;
-    display: flex;
+.font-logo:last-child{
+    color: #85c59a;
 }
 </style>

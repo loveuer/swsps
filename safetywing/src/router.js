@@ -13,6 +13,26 @@ const routes = [
         component: () => import ("./components/Works.vue"),
     },
     {
+        path: "/works/:mode",
+        name: "works",
+        component: () => import ("./components/Works.vue"),
+    },
+    {
+        path: "/works/:mode/:detail",
+        name: "works",
+        component: () => import ("./components/Works.vue"),
+    },
+    {
+        path: "/works:/mode/:detail/:key",
+        name: "works",
+        component: () => import ("./components/Works.vue"),
+    },
+    {
+        path: "/works/:mode/:detail/:key/:other",
+        name: "works",
+        component: () => import ("./components/Works.vue"),
+    },
+    {
         path: "/login",
         name: "login",
         component: () => import ("./components/Login.vue"),
