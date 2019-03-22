@@ -14,13 +14,13 @@
             <el-submenu index="/works/trainingRecorder">
                 <template slot="title">训练记录</template>
                 <el-menu-item index="/works/trainingRecorder/add">添加</el-menu-item>
-                <el-menu-item index="/works/trainingRecorder/check">查看</el-menu-item>
+                <el-menu-item :index="trainingRecorderCheckIndex">查看</el-menu-item>
                 <el-menu-item index="/works/trainingRecorder/modify">修改</el-menu-item>
             </el-submenu>
             <el-submenu index="/works/logRecorder">
                 <template slot="title">日志记录</template>
                 <el-menu-item index="/works/logRecorder/add">添加</el-menu-item>
-                <el-menu-item index="/works/logRecorder/check">查看</el-menu-item>
+                <el-menu-item :index="logRecorderCheckIndex">查看</el-menu-item>
                 <el-menu-item index="/works/logRecorder/modify">修改</el-menu-item>
             </el-submenu>
             <el-submenu index="/works/malfRecorder">
@@ -51,7 +51,20 @@ export default {
         return {
             defaultActive: '/works',
         };
-    }  ,
+    },
+    computed: {
+        trainingRecorderCheckIndex: () => {
+            let dateNow = new Date(Date.now());
+            return "/works/trainingRecorder/check/" + dateNow.toISOString().slice(0,10);
+        },
+        logRecorderCheckIndex: () => {
+            let dateNow = new Date(Date.now());
+            return "/works/logRecorder/check/" + dateNow.toISOString().slice(0,10);
+        },
+    },
+    methods: {
+        
+    },
 };
 </script>
 

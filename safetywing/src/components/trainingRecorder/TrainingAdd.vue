@@ -114,26 +114,25 @@
                         </el-col>
                     </el-form-item>
 
-                    <el-form-item label="教员姓名:">
+                    <el-form-item label="教员:">
                             <el-col :span="12" style="width: 100%;">
                                 <el-autocomplete
                                     class="inline-input"
                                     v-model="form.instructor"
                                     :fetch-suggestions="fetchMostInstructors"
-                                    placeholder=""
+                                    autocomplete="false"
                                     @select="handlerFocusInstructor"
                                     style="width:100%;"
                                 ></el-autocomplete>
                             </el-col>
                     </el-form-item>
 
-                    <el-form-item label="学员姓名:">
+                    <el-form-item label="学员:">
                             <el-col :span="12" style="width: 100%;">
                                 <el-autocomplete
                                     class="inline-input"
                                     v-model="form.studentsNames"
                                     :fetch-suggestions="fetchStudentsNames"
-                                    placeholder=""
                                     @select="handlerFocusInstructor"
                                     style="width:100%;"
                                 ></el-autocomplete>
