@@ -39,6 +39,7 @@ export default {
 <style scoped>
 #u-container{
     min-height: 100%;
+    height: 100%;
     width: 100%;
 }
 .u-header{

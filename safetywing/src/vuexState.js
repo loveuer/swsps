@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         logined: false,
         user: {
             id: "0",
+            is_admin: 0,
             username: "",
             realname: "",
             profile_icon: "",

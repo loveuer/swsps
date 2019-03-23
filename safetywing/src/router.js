@@ -41,6 +41,16 @@ const routes = [
         component: () => import ("./components/spsRecorder/SpsSearch.vue"),
     },
     {
+        path: "/works/spsRecorder/search/:skey",
+        name: "works-sps-search",
+        component: () => import ("./components/spsRecorder/SpsSearch.vue"),
+    },
+    {
+        path: "/works/spsRecorder/detail/:spid",
+        name: "works-sps-detail",
+        component: () => import ("./components/spsRecorder/SpsOne.vue"),
+    },
+    {
         path: "/login",
         name: "login",
         component: () => import ("./components/Login.vue"),
