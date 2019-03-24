@@ -1,5 +1,5 @@
 <template>
-    <div class="container" :style="{display:ifshowStr}" @keydown.esc="quit" tabindex="0">
+    <div class="container" :style="{display:ifshowStr}" @keydown.esc="quit" tabindex="0" @click="quit">
         <img :src="imgSrc" @click="openImg">
     </div>
 </template>
@@ -14,10 +14,9 @@ export default {
     },
     methods: {
         openImg: function() {
-
+            console.log("open img");
         },
         quit: function() {
-            console.log('quit');
             this.ifshow = false;
         },
     },
@@ -45,11 +44,20 @@ export default {
     background-color: rgba(0,0,0,0.8);
     display: flex;
     justify-content: center;
+    align-items: center;
     text-align: center;
+    /* animation-name: lightboxAnimation;
+    animation-fill-mode: forwards;
+    animation-duration: .1s; */
+}
+@keyframes lightboxAnimation{
+    from { width:0%; height:0%; }
+    to { width:100%; height:100%; }
 }
 .container > img {
     max-width: 90%;
     max-height: 80%;
     margin-top: 2%;
+    cursor: pointer;
 }
 </style>

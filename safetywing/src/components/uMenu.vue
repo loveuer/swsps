@@ -35,6 +35,11 @@
                 <el-menu-item index="/works/spsRecorder/history">备件历史</el-menu-item>
                 <el-menu-item index="/works/spsRecorder/stat">备件状态</el-menu-item>
             </el-submenu>
+            <el-submenu index="/works/maintRecorder">
+                <template slot="title">维护记录</template>
+                <el-menu-item index="/works/maintRecorder/add">添加</el-menu-item>
+                <el-menu-item index="/works/maintRecorder/check">查看</el-menu-item>
+            </el-submenu>
             <el-submenu index="/self" style="float:right;">
                 <template slot="title">赵育鹏</template>
                 <el-menu-item index="/self/">我的信息</el-menu-item>

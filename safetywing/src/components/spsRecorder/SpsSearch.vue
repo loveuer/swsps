@@ -77,7 +77,7 @@ export default {
                 .then(resp => {
                     this.sps = resp.data;
                 })
-                .catch(error => { console.log("sps search http error: ", error.response); });
+                .catch(error => { console.log("sps search http error: ", error); });
         },
         meetSpDetail: function(row) {
             this.$router.push("/works/spsRecorder/detail/" + row.id);
