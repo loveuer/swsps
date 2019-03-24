@@ -161,6 +161,9 @@ export default {
 .imgs-frame > div > img {
     border-radius: 10px;
 }
+table {
+    margin-top: 15px;
+}
 table > tr {
     height: 50px;
     border-bottom: 1px solid #ddd;

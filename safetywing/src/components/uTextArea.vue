@@ -1,58 +1,113 @@
 <template>
-    <div class="quill-editor-example" :style="{width:'100%', height:'100%'}">
-        <quill-editor 
-            v-model="content"
-            ref="myQuillEditor"
+  
+    <div>
+        <!-- quill-editor -->
+        <quill-editor v-model="content"
             :options="editorOption"
-            placeholder="'log here'"
-            :style="{height:'250px'}"
-            @change="onEditorChange($event)">
+            style="width:100%;height:250px;zoom:100%;margin-bottom:50px;"
+            v-on:change="quillContentChg"
+            ref="myQuillEditor">
+
+            <div id="toolbar" slot="toolbar">
+                <button class="ql-bold" title="粗体"></button>
+                <button class="ql-italic" title="斜体"></button>
+                <button class="ql-underline" title="下划线"></button>
+                <select class="ql-size" title="字体大小">
+                    <option value="small"></option>
+                    <option selected></option>
+                    <option value="large"></option>
+                    <option value="huge"></option>
+                </select>
+                <!-- <select class="ql-font">
+                    <option selected="selected"></option>
+                    <option value="serif"></option>
+                    <option value="monospace"></option>
+                </select> -->
+                <button class="ql-list" value="ordered" title="列表"></button>
+                <select class="ql-color" title="字体颜色"></select>
+                <select class="ql-background" title="背景颜色"></select>
+                <select class="ql-align" title="对齐">
+                    <option selected></option>
+                    <option value="center"></option>
+                    <option value="right"></option>
+                    <option value="justify"></option>
+                </select>
+            <!-- You can also add your own -->
+                <button @click="customButtonClick" style="width:80px;">插入备件</button>
+            </div>
         </quill-editor>
     </div>
 </template>
 
 <script>
+import { quillEditor } from './Quill/index.js';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
-import { quillEditor } from 'vue-quill-editor';
+
+import _Quill from 'quill';
 
 export default {
     data() {
         return {
+            content: "",
             editorOption: {
+                modules: {
+                    toolbar: '#toolbar'
+                },
                 theme: 'snow',
                 placeholder: 'log here',
                 rows: '10',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'size': [false, 'large', 'huge'] }],
-                        [{ 'list': 'ordered'}],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'align': [] }],
-                    ],
-                },
             },
-            content: '',
+            textIndex: 0,
         };
     },
     components: {
-        quillEditor,
+        "quill-editor": quillEditor,
     },
     methods: {
-        onEditorChange({ editor, html, text }) {
-            this.content = html;
-            if (this.content.includes('pn') || this.content.includes('PN')) {
-                this.$emit('findpn', {content: html});
+        updateIndex: function() {
+            this.textIndex = this.$refs.myQuillEditor.quill.getLength();
+        },
+        customButtonClick() {
+            this.$emit("findpn", '');
+        },
+        quillContentChg({editor, html, text}) {
+            if (text.includes('pn:')) {
+                this.$emit('findpn', 'pn:');
+            } else if (text.includes('PN:')) {
+                this.$emit('findpn', 'PN:');
             };
         },
-    }
+        setCursorEnd: function() {
+            this.updateIndex();
+            this.$refs.myQuillEditor.quill.setSelection(this.textIndex-1);
+            this.updateIndex();
+        },
+        insertSps: function(row, findkey) {
+            let val = {href: `/works/spsRecorder/detail/${row.id}`, pn: row.pn, sn: row.sn,};
+            console.log(findkey);
+            if (findkey !== "") {
+                let regex = /pn:/gi;
+                let text = this.content;
+                // this.content = text.replace(regex, '');
+                this.content = `<mmp>mmp</mmp>`;
+            };
+            this.setCursorEnd();
+            this.$refs.myQuillEditor.quill.insertEmbed(this.textIndex-1, 'link', val);
+            this.setCursorEnd();
+        },
+    },
+    mounted() {
+        // let Inline = this.$refs.myQuillEditor.Quill.import('blots/inline');
+        // let Inline = _Quill.import('blots/inline');
+        // class ua extends Inline {};
+        // ua.blotName = "atag";
+        // ua.tagName = "a";
+        // this.$refs.myQuillEditor.quill.register(ua);
+    },
 };
 </script>
 
 <style scoped>
-.quill-editor-example {
-    min-height: 300px;
-}
-</style>
 
+</style>

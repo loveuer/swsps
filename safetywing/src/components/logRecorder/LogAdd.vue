@@ -63,7 +63,12 @@
                                 </el-table>
                             </el-row>
                         </div>
-                        <loveuer-textarea slot="reference" ref="uTextArea" style="width:500px;" v-on:findpn="popoverShow=true"></loveuer-textarea>
+                        <loveuer-textarea 
+                            slot="reference" 
+                            ref="uTextArea" 
+                            style="width:500px;" 
+                            v-on:findpn="readytoInsert">
+                        </loveuer-textarea>
                     </el-popover>
                 </div>
                 <div class="submit-zone">
@@ -99,6 +104,7 @@ export default {
             popoverShow: false,
             searchSpsKey: '',
             searchedSps: [],
+            findkey: '',
         };
     },
     components: {
@@ -109,19 +115,17 @@ export default {
         submitNewlog: function() {
             console.log(this.$refs.uTextArea.content);
         },
+        readytoInsert: function(find) {
+            this.findkey = find;
+            this.popoverShow = true;
+        },
         insertSps: function(index, row) {
             this.popoverShow = false;
-            console.log(row);
             this.searchedSps = [];
             this.searchSpsKey = '';
             // replace pn with row
-            let log = this.$refs.uTextArea.content;
-            let insertContent = `<a href="/works/spsRecorder/detail/${row.id}">( P/N: ${row.pn}, S/N: ${row.sn} )</a>`;
-            if (this.$refs.uTextArea.content.includes('pn')) {
-                this.$refs.uTextArea.content = log.replace('pn', insertContent);
-            } else if (this.$refs.uTextArea.content.includes('PN')) {
-                this.$refs.uTextArea.content = log.replace('PN', insertContent);
-            };
+            
+            this.$refs.uTextArea.insertSps(row, this.findkey);
         },
         cancelInsert: function() {
             this.popoverShow = false;
@@ -132,7 +136,7 @@ export default {
         doSearchSps: function() {
             this.$http.get("/api/sps/search/" + this.searchSpsKey)
                 .then(resp => { this.searchedSps = resp.data; })
-                .catch(error => { console.log('log add search sps error: ', error.response) })
+                .catch(error => { console.log('log add search sps error: ', error.response) });
         },
     },
     mounted() {
