@@ -168,8 +168,6 @@ table > tr {
     height: 50px;
     border-bottom: 1px solid #ddd;
 }
-table > tr:hover {
-}
 table > tr > th {
     width:165px;
     text-align: left;

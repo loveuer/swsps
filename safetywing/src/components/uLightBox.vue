@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         openImg: function() {
-            console.log("open img");
+            window.open(this.imgSrc, "_blank");
         },
         quit: function() {
             this.ifshow = false;
@@ -58,6 +58,6 @@ export default {
     max-width: 90%;
     max-height: 80%;
     margin-top: 2%;
-    cursor: pointer;
+    cursor: zoom-in;
 }
 </style>

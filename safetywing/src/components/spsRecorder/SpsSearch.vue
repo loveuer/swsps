@@ -7,10 +7,13 @@
         <div style="margin-top:30px;">
             <el-row style="width:100%;">
                 <!-- @keypress.enter.native="doSearch" -->
+                <span style="margin-left:30px;">
+                    <el-button circle type="success" icon="el-icon-plus" @click="ifshowAdd=true"></el-button>
+                </span>
                 <span>
                     <el-input
                         placeholder="请输入内容"
-                        style="width:300px;margin-left:30px;"
+                        style="width:300px;margin-left:10px;"
                         @keypress.enter.native="doSearch"
                         clearable
                         v-model="searchKey">
@@ -54,6 +57,45 @@
                 <el-table-column label="位置" prop="pos" width="150"></el-table-column>
             </el-table>
         </div>
+        <div>
+            <el-dialog title="新增备件" :visible.sync="ifshowAdd">
+                <el-form label-position="left" label-width="100px">
+                    <el-form-item label="名称" style="width:400px;">
+                        <el-input v-model="newsp.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="P/N" style="width:400px;">
+                        <el-input v-model="newsp.pn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="S/N" style="width:400px;">
+                        <el-input v-model="newsp.sn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="原模拟机" style="width:400px;">
+                        <el-select v-model="newsp.orgsim" style="width:100%;">
+                            <el-option label="5978" value="5978"></el-option>
+                            <el-option label="5989" value="5989"></el-option>
+                            <el-option label="5008" value="5008"></el-option>
+                            <el-option label="5015" value="5015"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="现模拟机" style="width:400px;">
+                        <el-select v-model="newsp.nowsim" style="width:100%;">
+                            <el-option label="5978" value="5978"></el-option>
+                            <el-option label="5989" value="5989"></el-option>
+                            <el-option label="5008" value="5008"></el-option>
+                            <el-option label="5015" value="5015"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="是否耗材" style="width:400px;">
+                        <el-radio v-model="newsp.is_consumable" label="0">不是耗材</el-radio>
+                        <el-radio v-model="newsp.is_consumable" label="1">是耗材</el-radio>
+                    </el-form-item>
+                </el-form>
+                <el-row>
+                    <el-button type="primary" @click="postNewSp">确 定</el-button>
+                    <el-button @click="ifshowAdd = false">取 消</el-button>
+                </el-row>
+            </el-dialog>
+        </div>
         <div style="width:100%;height:120px;zoom:100%"></div>
     </div>
 </template>
@@ -67,6 +109,10 @@ export default {
             searchKey: "", 
             simsList: ['5978', '5989', '5008', '5015'],
             sps: [],
+            ifshowAdd: false,
+            newsp: {
+                name: '', pn: '', sn: '', orgsim: '', nowsim: '', is_consumable: '0',
+            },
         };
     },
     methods: {
@@ -81,6 +127,25 @@ export default {
         },
         meetSpDetail: function(row) {
             this.$router.push("/works/spsRecorder/detail/" + row.id);
+        },
+        postNewSp: function() {
+            console.log(this.newsp);
+            this.ifshowAdd = false;
+
+            // mock success
+            this.$confirm('上传成功, 是否继续上传?', '提示', {
+                confirmButtonText: '继续',
+                cancelButtonText: '取消',
+                type: 'info',
+            }).then(() => {
+                console.log("yes");
+                this.ifshowAdd = true;
+                this.newsp.sn = '';
+                // this.newsp.img1 = '';
+                // this.newsp.img2 = '';
+            }).catch(() => {
+                console.log('no');
+            });
         },
     },
     computed: {

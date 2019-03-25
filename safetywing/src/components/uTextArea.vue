@@ -60,12 +60,14 @@ export default {
         "quill-editor": quillEditor,
     },
     methods: {
+        // 更新 quill 的 index
         updateIndex: function() {
             this.textIndex = this.$refs.myQuillEditor.quill.getLength();
         },
         customButtonClick() {
             this.$emit("findpn", '');
         },
+        // 通知 上级 文中 含有 插入 备件的 关键字
         quillContentChg({editor, html, text}) {
             if (text.includes('pn:')) {
                 this.$emit('findpn', 'pn:');
@@ -73,11 +75,13 @@ export default {
                 this.$emit('findpn', 'PN:');
             };
         },
+        // 将 quill editor 中的光标放到文末
         setCursorEnd: function() {
             this.updateIndex();
             this.$refs.myQuillEditor.quill.setSelection(this.textIndex-1);
             this.updateIndex();
         },
+        // 插入pn, findpn为 pn:, PN: 或者是按键插入则为空
         insertSps: function(row, findkey) {
             let val = {href: `/works/spsRecorder/detail/${row.id}`, pn: row.pn, sn: row.sn,};
             if (findkey !== "") {
