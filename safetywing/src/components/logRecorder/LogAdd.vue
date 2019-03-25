@@ -48,14 +48,6 @@
                                     <el-table-column width="120" label="S/N" prop="sn"></el-table-column>
                                     <el-table-column width="70" label="模拟机" prop="nowsim"></el-table-column>
                                     <el-table-column align="right">
-                                        <!-- <template slot="header" slot-scope="scope">
-                                            <el-input 
-                                                size="mini" 
-                                                placeholder="搜索备件用以插入log"
-                                                @keypress.enter.native="doSearchSps"
-                                                v-model="searchSpsKey">
-                                            </el-input>
-                                        </template> -->
                                         <template slot-scope="scope">
                                             <el-button size="mini" @click="insertSps(scope.$index, scope.row)">插入</el-button>
                                         </template>
