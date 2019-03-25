@@ -105,7 +105,7 @@ export default {
                         let node = undefined;
                         node = super.create(val.href);
                         node.setAttribute('target', '_blank');
-                        node.innerText = ` ( P/N: ${val.pn}, S/N: ${val.sn} ) `;
+                        node.innerText = `( P/N: ${val.pn}, S/N: ${val.sn} )`;
                         return node;
                     };
                 };
@@ -178,10 +178,5 @@ export default {
             }
         }
     }
-};
-function extend(target, base) {
-  for (var prop in base) {
-    target[prop] = base[prop];
-  }
 };
 </script>

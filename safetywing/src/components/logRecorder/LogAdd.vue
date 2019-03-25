@@ -81,6 +81,9 @@
                 </div>
             </div>
         </div>
+        <div class="showLog" v-html="showInputedLog">
+
+        </div>
     </div>
 </template>
 
@@ -105,6 +108,7 @@ export default {
             searchSpsKey: '',
             searchedSps: [],
             findkey: '',
+            showInputedLog: '',
         };
     },
     components: {
@@ -113,7 +117,8 @@ export default {
     },
     methods: {
         submitNewlog: function() {
-            console.log(this.$refs.uTextArea.content);
+            this.showInputedLog = this.$refs.uTextArea.content;
+            console.log(this.showInputedLog);
         },
         readytoInsert: function(find) {
             this.findkey = find;
@@ -170,5 +175,14 @@ export default {
 .submit-zone > div:first-child{
     margin-left:100px;
     margin-right: 30px;
+}
+
+.showLog{
+    height:200px;
+    width:50%;
+    zoom:100%;
+    background-color:#eee;
+    margin-top:30px;
+    margin-left:30px;
 }
 </style>

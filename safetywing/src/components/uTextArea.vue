@@ -18,11 +18,6 @@
                     <option value="large"></option>
                     <option value="huge"></option>
                 </select>
-                <!-- <select class="ql-font">
-                    <option selected="selected"></option>
-                    <option value="serif"></option>
-                    <option value="monospace"></option>
-                </select> -->
                 <button class="ql-list" value="ordered" title="列表"></button>
                 <select class="ql-color" title="字体颜色"></select>
                 <select class="ql-background" title="背景颜色"></select>
@@ -85,25 +80,22 @@ export default {
         },
         insertSps: function(row, findkey) {
             let val = {href: `/works/spsRecorder/detail/${row.id}`, pn: row.pn, sn: row.sn,};
-            console.log(findkey);
             if (findkey !== "") {
+                console.log('findkey 不等于 空');
                 let regex = /pn:/gi;
                 let text = this.content;
-                // this.content = text.replace(regex, '');
-                this.content = `<mmp>mmp</mmp>`;
+                this.content = text.replace(regex, '');
             };
-            this.setCursorEnd();
-            this.$refs.myQuillEditor.quill.insertEmbed(this.textIndex-1, 'link', val);
-            this.setCursorEnd();
+            // 没办法,,,不设置一个延时, 老是替换不掉pn:
+            setTimeout(() => {
+                this.setCursorEnd();
+                this.$refs.myQuillEditor.quill.insertEmbed(this.textIndex-1, 'link', val);
+                this.setCursorEnd();
+            }, 300);
         },
     },
     mounted() {
-        // let Inline = this.$refs.myQuillEditor.Quill.import('blots/inline');
-        // let Inline = _Quill.import('blots/inline');
-        // class ua extends Inline {};
-        // ua.blotName = "atag";
-        // ua.tagName = "a";
-        // this.$refs.myQuillEditor.quill.register(ua);
+        
     },
 };
 </script>
