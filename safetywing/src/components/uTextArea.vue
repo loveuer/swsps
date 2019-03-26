@@ -27,7 +27,8 @@
                     <option value="right"></option>
                     <option value="justify"></option>
                 </select>
-            <!-- You can also add your own -->
+                <!-- 自定义的按键 -->
+                <button @click="preflightok" style="width:80px;" title="preflight is ok">Pre...OK</button>
                 <button @click="customButtonClick" style="width:80px;">插入备件</button>
             </div>
         </quill-editor>
@@ -96,6 +97,12 @@ export default {
                 this.$refs.myQuillEditor.quill.insertEmbed(this.textIndex-1, 'link', val);
                 this.setCursorEnd();
             }, 300);
+        },
+        preflightok: function() {
+            this.content = 'Preflight is OK';
+            setTimeout(() => {
+                this.setCursorEnd();
+            }, 200);
         },
     },
     mounted() {

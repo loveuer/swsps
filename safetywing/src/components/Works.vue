@@ -1,6 +1,14 @@
 <template>
     <div>
-        <loveuer-menu />
+        <div>
+            <loveuer-menu />
+        </div>
+        <div>
+            <el-badge :is-dot="true" style="margin-top:10px;margin-right:40px;">
+                <font>Safety</font>
+                <font>Wing</font>
+            </el-badge>
+        </div>
     </div>
 </template>
 

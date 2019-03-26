@@ -9,7 +9,11 @@
             :router="true"
             active-text-color="#ffd04b">
             <el-menu-item index="/works">
-                <font class="font-logo">Safety</font><font class="font-logo">Wing</font>
+                <el-button type="text" @click="updateOverView">
+                    <el-badge :is-dot="this.$store.state.getNew">
+                        <font class="font-logo">Safety</font><font class="font-logo">Wing</font>
+                    </el-badge>
+                </el-button>
             </el-menu-item>
             <el-submenu index="/works/trainingRecorder">
                 <template slot="title">训练记录</template>
@@ -68,7 +72,9 @@ export default {
         },
     },
     methods: {
-        
+        updateOverView: function() {
+            console.log('menu overview clicked');
+        },
     },
 };
 </script>
@@ -76,9 +82,7 @@ export default {
 
 <style scoped>
 .font-logo{
-    height: 60px;
-    line-height: 60px;
-    font-size: 20px;
+    font-size: 1.5em;
     font-weight: bold;
 }
 .font-logo:first-child{
