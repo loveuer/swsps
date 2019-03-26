@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="showLog" v-html="showInputedLog">
+        <div class="showLog" v-html="newlog.logs">
 
         </div>
     </div>
@@ -109,8 +109,17 @@ export default {
     },
     methods: {
         submitNewlog: function() {
-            this.showInputedLog = this.$refs.uTextArea.content;
-            console.log(this.showInputedLog);
+            this.newlog.logs = this.$refs.uTextArea.content;
+            console.log(this.newlog);
+            if (this.newlog.sim === '' || this.newlog.logs === '') {
+                this.$notify.error({
+                    title: '警告',
+                    message: '内容不完整!',
+                    position:'top-left',
+                });
+                return
+            };
+            this.$http.post('/api/log/add')
         },
         readytoInsert: function(find) {
             this.findkey = find;
