@@ -23,6 +23,9 @@ const store = new Vuex.Store({
             sn: 'null',
             sim: 'null',
         },
+        ws: {
+            id: '',
+        },
     },
     mutations: {
         chgColor(state, newColor) {
@@ -33,6 +36,12 @@ const store = new Vuex.Store({
         },
         updateSpsOne(state, newsp) {
             state.spsOne = newsp;
+        },
+        setwsid(state, newid) {
+            state.ws.id = newid; 
+        },
+        gotSomeNew(state) {
+            state.getNew = true;
         },
     },
 });
