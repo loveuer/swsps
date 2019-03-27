@@ -18,7 +18,30 @@ import loveuerMenu from "./uMenu.vue";
 export default {
     components: {
         "loveuer-menu": loveuerMenu,
-    }
+    },
+    created() {
+        const self = this;
+        const socket = new WebSocket("/api/ws");
+        socket.addEventListener("open", function(event) {
+            let result = JSON.parse(event.data);
+            self.$store.commit("setnewid", result.id);
+            console.log("opened ws");
+        });
+        socket.addEventListener("close", function() {
+            console.log("ws closed");
+        });
+        socket.addEventListener("message", function(event) {
+            let result = JSON.parse(event.data);
+            switch (result.type) {
+                case "newlog":
+                    console.log("new log add");
+                    that.$store.commit("gotSomeNew");
+                case "modifylog":
+                    console.log("modified log");
+                    that.$store.commit("gotSomeNew");
+            }
+        });
+    },
 };
 </script>
 

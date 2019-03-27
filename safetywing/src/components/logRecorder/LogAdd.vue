@@ -117,9 +117,11 @@ export default {
                     message: '内容不完整!',
                     position:'top-left',
                 });
-                return
+                return;
             };
             this.$http.post('/api/log/add')
+                .then(resp => {console.log(resp)})
+                .catch(error => {console.log("err: "), err});
         },
         readytoInsert: function(find) {
             this.findkey = find;
