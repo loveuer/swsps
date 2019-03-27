@@ -9,6 +9,7 @@ import (
 
 	"./ops"
 	"./session"
+
 	"./socket"
 	"./sps"
 	"./swuser"
@@ -20,7 +21,6 @@ var (
 )
 
 func main() {
-	socket.Manager.Start()
 
 	r := httprouter.New()
 
@@ -40,6 +40,7 @@ func main() {
 	r.POST("/api/log/add", chain(NewLog))
 
 	// about websocket
+	go socket.Manager.Start()
 	r.GET("/api/ws", chain(socket.Upgrade2WS))
 	r.POST("/api/ws/mockPost", chain(socket.MockPostSome))
 	// r.Handler()
@@ -127,6 +128,8 @@ func login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	return
 }
 
+// NewLog ...
+// test 一下 websocket
 func NewLog(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err = r.ParseForm()
 	if err != nil {
@@ -137,8 +140,27 @@ func NewLog(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	sim := r.Form.Get("sim")
 	log := r.Form.Get("log")
+	wsid := r.Form.Get("wsid")
+
+	fmt.Printf("sim: %s\nlog: %s\nid: %s\n", sim, log, wsid)
+
+	if wsid == "" {
+		http.Error(w, "未认证的 ws id", 400)
+		return
+	}
 	if sim == "" || log == "" {
 		http.Error(w, "sim or log empty", 400)
 	}
 
+	// add log to db
+
+	// send add message by wbsocket
+	wbMess, _ := json.Marshal(map[string]string{"sim": sim, "log": log})
+	wbResp := map[string]string{
+		"id":      wsid,
+		"type":    "newlog",
+		"message": string(wbMess),
+	}
+	socket.Manager.Send(wbResp)
+	return
 }

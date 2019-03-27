@@ -7,24 +7,19 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         getNew: false,
-        customColor: "#1890ff",
         logined: false,
-        user: {
-            id: "0",
-            is_admin: 0,
-            username: "",
-            realname: "",
-            profile_icon: "",
-        },
-        spsOne: {
-            id: 0,
-            name: 'null',
-            pn: 'null',
-            sn: 'null',
-            sim: 'null',
-        },
-        ws: {
-            id: '',
+        user: {id: "0"},
+        ws: {id: ''},
+        todayMessage: {
+            log: {
+                new: false,
+                type: "info",
+                logs: [
+                    {time:"06:32:21", auth:"李永翔", sim: "5978", log: "Preflight is OK"},
+                    {time:"06:49:07", auth:"袁超", sim: "5008", log: "Preflight is OK"},
+                    {time:"07:32:43", auth:"宋继朋", sim: "5015", log: "Preflight is OK"},
+                ],
+            },
         },
     },
     mutations: {
@@ -40,8 +35,19 @@ const store = new Vuex.Store({
         setwsid(state, newid) {
             state.ws.id = newid; 
         },
-        gotSomeNew(state) {
+        getSomeNew(state, which) {
             state.getNew = true;
+            switch (which) {
+                case "log":
+                    state.todayMessage.log.new = true;
+                    state.todayMessage.log.type = "success";
+                    break;
+            };
+        },
+        refreshedLog(state, logs) {
+            state.todayMessage.log.logs = logs;
+            state.todayMessage.log.new = false;
+            state.todayMessage.log.type = "info";
         },
     },
 });

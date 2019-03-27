@@ -82,6 +82,7 @@
 <script>
 import loveuerMenu from "../uMenu.vue";
 import quillTextArea from "../uTextArea.vue";
+import qs from "qs";
 
 export default {
     data() {
@@ -110,7 +111,6 @@ export default {
     methods: {
         submitNewlog: function() {
             this.newlog.logs = this.$refs.uTextArea.content;
-            console.log(this.newlog);
             if (this.newlog.sim === '' || this.newlog.logs === '') {
                 this.$notify.error({
                     title: '警告',
@@ -119,9 +119,14 @@ export default {
                 });
                 return;
             };
-            this.$http.post('/api/log/add')
-                .then(resp => {console.log(resp)})
-                .catch(error => {console.log("err: "), err});
+            let postData = {
+                wsid: this.$store.state.ws.id,
+                sim: this.newlog.sim,
+                log: this.newlog.logs,
+            };
+            this.$http.post('/api/log/add', qs.stringify(postData))
+                .then(resp => {console.log("post new log resp: ", resp)})
+                .catch(error => {console.log("err: "), error});
         },
         readytoInsert: function(find) {
             this.findkey = find;

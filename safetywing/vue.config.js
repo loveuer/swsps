@@ -86,25 +86,9 @@ module.exports = {
         hotOnly: false,
         // proxy: 'http://127.0.0.1:8000/', // 配置跨域处理,只有一个代理
         proxy: {
-          '/api/login': {
+          '/api/*': {
             target: 'http://127.0.0.1:8000/',
             // ws: true,
-            changeOrigin: true
-          },
-          '/api/session': {
-            target: 'http://127.0.0.1:8000/',
-            changeOrigin: true
-          },
-          '/api/user':{
-            target: 'http://127.0.0.1:8000/',
-            changeOrigin: true
-          },
-          '/api/sps':{
-            target: 'http://127.0.0.1:8000/',
-            changeOrigin: true
-          },
-          '/api/sphis':{
-            target: 'http://127.0.0.1:8000/',
             changeOrigin: true
           },
         }, // 配置多个代理

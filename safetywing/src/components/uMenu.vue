@@ -76,6 +76,7 @@ export default {
             console.log('menu overview clicked');
         },
     },
+    
 };
 </script>
 

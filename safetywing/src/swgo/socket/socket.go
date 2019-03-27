@@ -108,6 +108,7 @@ func (c *Client) read() {
 	}
 }
 
+// Upgrade2WS ...
 func Upgrade2WS(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	conn, err := (&websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}).Upgrade(w, r, nil)
 	if err != nil {
@@ -124,6 +125,7 @@ func Upgrade2WS(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	go client.write()
 }
 
+// MockPostSome ...
 func MockPostSome(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := r.ParseForm()
 	if err != nil {
