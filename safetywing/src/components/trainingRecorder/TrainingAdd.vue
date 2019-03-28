@@ -131,7 +131,7 @@
                             <el-col :span="12" style="width: 100%;">
                                 <el-autocomplete
                                     class="inline-input"
-                                    v-model="form.studentsNames"
+                                    v-model="form.students"
                                     :fetch-suggestions="fetchStudentsNames"
                                     @select="handlerFocusInstructor"
                                     style="width:100%;"
@@ -142,7 +142,7 @@
                     <el-form-item label="训练类型:">
                         <el-col :span='12' style="width:100%;">
                             <el-autocomplete
-                                v-model="form.trainingMode"
+                                v-model="form.mode"
                                 :fetch-suggestions='trainingModeSuggestions'
                                 @select="handlerFocusInstructor"
                                 style="width: 100%;"
@@ -153,7 +153,7 @@
                     </el-form-item>
 
                     <el-form-item label="训练机组号:">
-                        <el-input placeholder="" v-model="form.trainingNum"></el-input>
+                        <el-input placeholder="" v-model="form.crew"></el-input>
                     </el-form-item>
                     </el-col>
 
@@ -205,12 +205,13 @@ export default {
                 sim: "",
                 airline: "",
                 session: '',
-                start: "",
-                end: "",
-                instructorName: "",
-                studentsNames: "",
-                trainingMode: "",
-                trainingNum: "",
+                ts: "",
+                te: "",
+                instructor: "",
+                students: "",
+                mode: "",
+                crew: "",
+                img: null,
             },
             imgUploaded: false,
             totalTime: 0 + "Hs",

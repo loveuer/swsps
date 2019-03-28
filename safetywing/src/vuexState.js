@@ -13,22 +13,23 @@ const store = new Vuex.Store({
             log: {
                 new: false,
                 type: "info",
-                logs: [
-                    {time:"06:32:21", auth:"李永翔", sim: "5978", log: "Preflight is OK"},
-                    {time:"06:49:07", auth:"袁超", sim: "5008", log: "Preflight is OK"},
-                    {time:"07:32:43", auth:"宋继朋", sim: "5015", log: "Preflight is OK"},
-                ],
+                logs: [],
             },
             malf: {
                 new: false,
                 type: "info",
                 malfs: [],
+            },
+            trainingList: {
+                new: false,
+                type: "info",
+                list: [],
             }
         },
     },
     getters: {
         getNew: state => {
-            return state.todayMessage.log.new || state.todayMessage.malf.new;
+            return state.todayMessage.log.new || state.todayMessage.malf.new || state.todayMessage.trainingList.new;
         },
     },
     mutations: {
@@ -44,19 +45,33 @@ const store = new Vuex.Store({
         setwsid(state, newid) {
             state.ws.id = newid; 
         },
-        getSomeNew(state, which, content) {
+        getSomeNew(state, which) {
             state.getNew = true;
             switch (which) {
                 case "log":
                     state.todayMessage.log.new = true;
                     state.todayMessage.log.type = "success";
                     break;
+                case "malf":
+                    state.todayMessage.malf.new = true;
+                    state.todayMessage.malf.type = "success";
+                    break;
             };
         },
-        refreshedLog(state, logs) {
-            state.todayMessage.log.logs = logs;
+        refreshedLog(state, newlogs) {
+            state.todayMessage.log.logs = newlogs;
             state.todayMessage.log.new = false;
             state.todayMessage.log.type = "info";
+        },
+        refreshedMalf(state, newMalfs) {
+            state.todayMessage.malf.malfs = newMalfs;
+            state.todayMessage.malf.new = false;
+            state.todayMessage.malf.type = "info";
+        },
+        refreshedTrainingList(state, newtlist) {
+            state.todayMessage.trainingList.list = newtlist;
+            state.todayMessage.trainingList.new = false;
+            state.todayMessage.trainingList.type = "info";
         },
     },
 });

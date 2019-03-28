@@ -102,7 +102,6 @@ func (c *Client) read() {
 			c.socket.Close()
 			break
 		}
-		// broadcastMess, _ := json.Marshal(&Message{Sender: c.id, Content: string(message)})
 		broadCastMess := map[string]string{"id": c.id, "type": "message", "message": string(message)}
 		Manager.broadcast <- broadCastMess
 	}
