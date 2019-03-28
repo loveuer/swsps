@@ -6,7 +6,6 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        getNew: false,
         logined: false,
         user: {id: "0"},
         ws: {id: ''},
@@ -20,6 +19,16 @@ const store = new Vuex.Store({
                     {time:"07:32:43", auth:"宋继朋", sim: "5015", log: "Preflight is OK"},
                 ],
             },
+            malf: {
+                new: false,
+                type: "info",
+                malfs: [],
+            }
+        },
+    },
+    getters: {
+        getNew: state => {
+            return state.todayMessage.log.new || state.todayMessage.malf.new;
         },
     },
     mutations: {
@@ -35,7 +44,7 @@ const store = new Vuex.Store({
         setwsid(state, newid) {
             state.ws.id = newid; 
         },
-        getSomeNew(state, which) {
+        getSomeNew(state, which, content) {
             state.getNew = true;
             switch (which) {
                 case "log":

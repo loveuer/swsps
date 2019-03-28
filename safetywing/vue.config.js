@@ -86,7 +86,7 @@ module.exports = {
         hotOnly: false,
         // proxy: 'http://127.0.0.1:8000/', // 配置跨域处理,只有一个代理
         proxy: {
-          '/api/*': {
+          '/api/': {
             target: 'http://127.0.0.1:8000/',
             // ws: true,
             changeOrigin: true

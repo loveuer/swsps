@@ -23,8 +23,7 @@ export default {
                     this.$store.commit("setwsid", result.id);
                     break;
                 case "newlog":
-                    this.$store.commit("getSomeNew", "log");
-                    console.log("new log: ", result.message);
+                    this.$store.commit("getSomeNew", "log", JSON.parse(result.message));
                     break;
                 case "modifylog":
                     this.$store.commit("getSomeNew");

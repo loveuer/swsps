@@ -10,7 +10,7 @@
             active-text-color="#ffd04b">
             <el-menu-item index="/works">
                 <el-button type="text" @click="updateOverView">
-                    <el-badge :is-dot="this.$store.state.getNew">
+                    <el-badge :is-dot="this.$store.getters.getNew">
                         <font class="font-logo">Safety</font><font class="font-logo">Wing</font>
                     </el-badge>
                 </el-button>

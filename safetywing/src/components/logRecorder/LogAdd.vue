@@ -36,7 +36,10 @@
                                     style="width:300px;"
                                     v-model="searchSpsKey">
                                 </el-input>
-                                <el-button size="small" style="margin-left:30px;" @click="cancelInsert">取消</el-button>
+                                <span style="margin-left:20px;">
+                                    <font>搜索到 "</font><font style="color:#F06560;">{{ searchedSpsAmount }}</font><font>" 个备件</font>
+                                </span>
+                                <el-button size="small" style="margin-left:30px;float:right;" @click="cancelInsert">取消</el-button>
                             </el-row>
                             <el-row>
                                 <el-table
@@ -148,7 +151,7 @@ export default {
         },
         doSearchSps: function() {
             this.$http.get("/api/sps/search/" + this.searchSpsKey)
-                .then(resp => { this.searchedSps = resp.data; })
+                .then(resp => { this.searchedSps = resp.data || []; })
                 .catch(error => { console.log('log add search sps error: ', error.response) });
         },
     },
@@ -156,7 +159,9 @@ export default {
         this.$refs.uMenu.defaultActive = "/works/logRecorder/add";
     },
     computed: {
-        
+        searchedSpsAmount: function() {
+            return this.searchedSps.length;
+        },
     },
 };
 </script>

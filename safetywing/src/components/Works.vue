@@ -15,7 +15,7 @@
                             </el-badge>
                         </div>
                         <div class="cards-content">
-                            <el-table :data="this.$store.state.todayMessage.log.logs" style="width:100%;" >
+                            <el-table :data="this.$store.state.todayMessage.log.logs" style="width:100%;cursor:pointer;" @row-click="openTodayLog">
                                 <el-table-column prop="time" label="时间" width="100"></el-table-column>
                                 <el-table-column prop="auth" label="人员" width="100"></el-table-column>
                                 <el-table-column prop="sim" label="模拟机" width="80"></el-table-column>
@@ -27,9 +27,9 @@
                 <div class="cards-single">
                     <el-card style="width:80%;">
                         <div slot="header" class="clearfix">
-                            <span><b>今日log:</b></span>
-                            <el-badge :is-dot="this.$store.state.todayMessage.log.new" class="cards-dot">
-                                <el-button circle :type="this.$store.state.todayMessage.log.type" icon="el-icon-refresh"></el-button>
+                            <span><b>Open故障:</b></span>
+                            <el-badge :is-dot="this.$store.state.todayMessage.malf.new" class="cards-dot">
+                                <el-button circle :type="this.$store.state.todayMessage.malf.type" icon="el-icon-refresh"></el-button>
                             </el-badge>
                         </div>
                     </el-card>
@@ -45,6 +45,7 @@
 
 <script>
 import loveuerMenu from "./uMenu.vue";
+import dateformat from "dateformat";
 
 export default {
     components: {
@@ -59,6 +60,10 @@ export default {
                 {time:"07:52:35", auth:"赵育鹏", sim: "5989", log: "我来测试一下,这是一条很长的log,甚至还有什么什么插入备件在里面什么的,反正就是很多很多"},
             ];
             this.$store.commit("refreshedLog", logs);
+        },
+        openTodayLog: function() {
+            let today = dateformat(Date.now(), "yyyy-mm-dd");
+            this.$router.push("/works/logRecorder/check/" + today);
         },
     },
     
@@ -87,7 +92,7 @@ export default {
     width: 50%;
     display:flex;
     justify-content: center;
-    /* align-items: center; */
+    min-width: 600px;
 }
 .cards-dot {
     float: right;
