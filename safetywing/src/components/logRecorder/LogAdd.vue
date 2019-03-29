@@ -20,51 +20,13 @@
                 </el-form>
                 <div style="height:100%;width:100%;display:flex;">
                     <div class="textarea-label">描述</div>
-                    <el-popover
-                        width="700"
-                        trigger="manual"
-                        v-model="popoverShow"
-                        placement="right">
-                        <div>
-                            <el-row>
-                                <el-input 
-                                    @keypress.enter.native="doSearchSps"
-                                    size="small"
-                                    prefix-icon="el-icon-search"
-                                    clearable
-                                    placeholder="搜索备件用以插入log"
-                                    style="width:300px;"
-                                    v-model="searchSpsKey">
-                                </el-input>
-                                <span style="margin-left:20px;">
-                                    <font>搜索到 "</font><font style="color:#F06560;">{{ searchedSpsAmount }}</font><font>" 个备件</font>
-                                </span>
-                                <el-button size="small" style="margin-left:30px;float:right;" @click="cancelInsert">取消</el-button>
-                            </el-row>
-                            <el-row>
-                                <el-table
-                                    height="300"
-                                    style="width:100%;"
-                                    :data="searchedSps">
-                                    <el-table-column width="200" label="名称" prop="name"></el-table-column>
-                                    <el-table-column width="180" label="P/N" prop="pn"></el-table-column>
-                                    <el-table-column width="120" label="S/N" prop="sn"></el-table-column>
-                                    <el-table-column width="70" label="模拟机" prop="nowsim"></el-table-column>
-                                    <el-table-column align="right">
-                                        <template slot-scope="scope">
-                                            <el-button size="mini" @click="insertSps(scope.$index, scope.row)">插入</el-button>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </el-row>
-                        </div>
+                    <div style="margin-left:-30px;">
                         <loveuer-textarea 
-                            slot="reference" 
-                            ref="uTextArea" 
-                            style="width:500px;" 
-                            v-on:findpn="readytoInsert">
+                            :width="500"
+                            :preok="true"
+                            @change="updateContent">
                         </loveuer-textarea>
-                    </el-popover>
+                    </div>
                 </div>
                 <div class="submit-zone">
                     <div>
@@ -76,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="showLog" v-html="newlog.logs">
+        <div class="showLog" v-html="newlog.logs.html">
 
         </div>
     </div>
@@ -84,7 +46,7 @@
 
 <script>
 import loveuerMenu from "../uMenu.vue";
-import quillTextArea from "../uTextArea.vue";
+import uTextArea from "../uTextArea.vue";
 import qs from "qs";
 
 export default {
@@ -92,7 +54,7 @@ export default {
         return {
             newlog: {
                 sim: '',
-                logs: '',
+                logs: {},
             },
             selsims: [
                 {value:'5978',label:'5978'},
@@ -109,7 +71,7 @@ export default {
     },
     components: {
         "loveuer-menu": loveuerMenu,
-        "loveuer-textarea": quillTextArea,
+        "loveuer-textarea": uTextArea,
     },
     methods: {
         submitNewlog: function() {
@@ -131,28 +93,9 @@ export default {
                 .then(resp => {console.log("post new log resp: ", resp)})
                 .catch(error => {console.log("err: "), error});
         },
-        readytoInsert: function(find) {
-            this.findkey = find;
-            this.popoverShow = true;
-        },
-        insertSps: function(index, row) {
-            this.popoverShow = false;
-            this.searchedSps = [];
-            this.searchSpsKey = '';
-            // replace pn with row
-            
-            this.$refs.uTextArea.insertSps(row, this.findkey);
-        },
-        cancelInsert: function() {
-            this.popoverShow = false;
-            this.searchedSps = [];
-            this.searchSpsKey = '';
-            // replace pn
-        },
-        doSearchSps: function() {
-            this.$http.get("/api/sps/search/" + this.searchSpsKey)
-                .then(resp => { this.searchedSps = resp.data || []; })
-                .catch(error => { console.log('log add search sps error: ', error.response) });
+        updateContent: function(content) {
+            this.newlog.logs = content;
+            console.log(content);
         },
     },
     mounted() {

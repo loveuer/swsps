@@ -50,6 +50,12 @@ const routes = [
         name: "works-sps-detail",
         component: () => import ("./components/spsRecorder/SpsOne.vue"),
     },
+    // malf recorder
+    {
+        path: "/works/malfRecorder/add",
+        name: "works-malf-detail",
+        component: () => import ("./components/malfRecorder/MalfAdd.vue"),
+    },
     {
         path: "/login",
         name: "login",
