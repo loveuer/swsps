@@ -56,6 +56,12 @@ const routes = [
         name: "works-malf-detail",
         component: () => import ("./components/malfRecorder/MalfAdd.vue"),
     },
+    // 工作安排 ...
+    {
+        path: "/works/workRecorder/duty",
+        name: "works-work-duty",
+        component: () => import ("./components/workRecorder/WorkDuty.vue"),
+    },
     {
         path: "/login",
         name: "login",

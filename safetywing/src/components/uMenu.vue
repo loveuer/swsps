@@ -41,8 +41,14 @@
             </el-submenu>
             <el-submenu index="/works/maintRecorder">
                 <template slot="title">维护记录</template>
-                <el-menu-item index="/works/maintRecorder/add">添加</el-menu-item>
-                <el-menu-item index="/works/maintRecorder/check">查看</el-menu-item>
+                <el-menu-item index="/works/maintRecorder/day">日检</el-menu-item>
+                <el-menu-item index="/works/maintRecorder/week">周检</el-menu-item>
+                <el-menu-item index="/works/maintRecorder/month">月检</el-menu-item>
+            </el-submenu>
+            <el-submenu index="/works/workRecorder">
+                <template slot="title">工作安排</template>
+                <el-menu-item index="/works/workRecorder/duty">排班计划</el-menu-item>
+                <el-menu-item index="/works/workRecorder/...">...</el-menu-item>
             </el-submenu>
             <el-submenu index="/self" style="float:right;">
                 <template slot="title">赵育鹏</template>

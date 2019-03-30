@@ -50,12 +50,12 @@
                                     </el-select>
                                 </div>
                                 <div style="margin-top:12px;">
-                                    <el-button type="success">添加</el-button>
+                                    <el-button type="success" @click="addCoWorkers">添加</el-button>
                                     <el-button @click="showAddCoworkers=false">取消</el-button>
                                 </div>
                             </div>
                             <div slot="reference">
-                                <el-input v-model="newmalf.coworkers"></el-input>
+                                <el-input v-model="coworkers2Str"></el-input>
                             </div>
                         </el-popover>
                     </el-form-item>
@@ -82,7 +82,7 @@
                     <div class="content-label">问题描述</div>
                     <div style="margin-top:22px;">
                         <loveuer-textarea
-                            :width="400"
+                            :width="600"
                             :preok="false"
                             @change="updateContent"
                             >
@@ -108,7 +108,7 @@ export default {
         return {
             newmalf: {
                 sim: '',
-                coworkers: '',
+                coworkers: [],
                 bt: '', // break time
                 class: '',
                 content: '',
@@ -121,32 +121,21 @@ export default {
             searchedSpsAmount: 0,
         };
     },
+    computed: {
+        coworkers2Str: function() {
+            return this.newmalf.coworkers.join(", ");
+        },
+    },
     methods: {
-        readytoInsert: function() {
-            this.findkey = find;
-            this.popoverShow = true;
-        },
-        doSearchSps: function() {
-            this.$http.get("/api/sps/search/" + this.searchSpsKey)
-                .then(resp => { this.searchedSps = resp.data || []; })
-                .catch(error => { console.log('log add search sps error: ', error.response) });
-        },
-        cancelInsert: function() {
-            this.popoverShow = false;
-            this.searchedSps = [];
-            this.searchSpsKey = '';
-        },
-        insertSps: function(index, row) {
-            this.popoverShow = false;
-            this.searchedSps = [];
-            this.searchSpsKey = '';
-            // replace pn with row
-            
-            this.$refs.uTextArea.insertSps(row, this.findkey);
-        },
         updateContent: function(content) {
             //
-        }
+        },
+        addCoWorkers: function() {
+            if (!this.prepareCoworkers) {
+                return;
+            };
+            this.newmalf.coworkers.push(this.prepareCoworkers);
+        },
     },
     mounted() {
         this.$refs.uMenu.defaultActive = "/works/malfRecorder/add";
