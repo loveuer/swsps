@@ -54,26 +54,31 @@ export default {
             if (!this.dutiesSelected) {
                 return;
             };
-            // 需要先计算 日期 和 星期
-            this.dutiesSelected.forEach(d => {
-                let newd = {
-                    date: "需要先计算",
-                    week: d.week + 1,
-                    acday: d.acday,
-                    suday: d.suday,
-                    acnight: d.acnight,
-                    sunight: d.sunight,
-                };
-                this.duties.push(newd);
+            let newd = this.dutiesSelected.sort((a,b) => {
+                return a.index - b.index;
             });
+            for (let d of newd) {
+                
+                this.duties.push(this.duties[d.index]);
+            };
+            
         },
     },
     computed: {
         dutiesWeeked: function() {
             let wmap = {1:'星期一',2:'星期二',3:'星期三',4:'星期四',5:'星期五',6:'星期六',7:'星期天'};
-            return this.duties.map(d => {
-                return {date:d.date, week:wmap[d.week], acday:d.acday, suday:d.suday, acnight:d.acnight, sunight:d.sunight};
-            });
+            let dw = [];
+            let count = 0;
+            for (let d of this.duties) {
+                dw.push(
+                    {index:count, date:d.date, week:wmap[d.week], acday:d.acday, suday:d.suday, acnight:d.acnight, sunight:d.sunight}
+                );
+                count++;
+            };
+            return dw;
+            // return this.duties.map(d => {
+            //     return {date:d.date, week:wmap[d.week], acday:d.acday, suday:d.suday, acnight:d.acnight, sunight:d.sunight};
+            // });
         },
     },
     mounted() {
