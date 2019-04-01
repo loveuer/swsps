@@ -38,6 +38,7 @@ export default {
 #app {
     width: 100%;
     min-height: 100%;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 .ql-size-small {
     font-size: 0.75em;

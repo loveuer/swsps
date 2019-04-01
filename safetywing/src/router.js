@@ -89,6 +89,11 @@ const routes = [
         component: () => import ("./components/Login.vue"),
     },
     {
+        path: "/test",
+        name: "test",
+        component: () => import ("./components/Test.vue"),
+    },
+    {
         path: "*",
         name: "404",
         component: () => import ("./components/PageNotFound.vue"),
