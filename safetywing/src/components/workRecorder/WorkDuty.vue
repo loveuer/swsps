@@ -30,6 +30,7 @@
 
 <script>
 import loveuerMenu from "../uMenu.vue";
+import dateformat from "dateformat";
 
 export default {
     data() {
@@ -41,7 +42,7 @@ export default {
     methods: {
         getDutyByYM: function(ym) {
             this.duties = [
-                {date:'2019/03/01',week:3,acday:'陈俊峰，李津',suday:'凌华南，江富强(年假),郑卿',acnight:'陈本志，李永翔',sunight:'付东明，宋继朋，黄一林'},
+                {date:'2019/03/01',week:3,acday:'陈俊峰，李津',suday:`凌华南，<font style="color:red">江富强(年假)</font>,郑卿`,acnight:'陈本志，李永翔',sunight:'付东明，宋继朋，黄一林'},
                 {date:'2019/03/02',week:4,acday:'张伟，郭建',suday:'李跃，赵育鹏',acnight:'陈俊峰，李津',sunight:'凌华南，江富强,郑卿'},
                 {date:'2019/03/03',week:5,acday:'胡彬彬,魏宇东',suday:'鲁书贤，张显刚',acnight:'张伟，郭建',sunight:'刘博强（白班换夜班），李跃，赵育鹏'},
                 {date:'2019/03/04',week:6,acday:'陈本志，李永翔',suday:'付东明，宋继朋，黄一林',acnight:'胡彬彬，魏宇东',sunight:'刘博强，鲁书贤，张显刚'},
@@ -58,8 +59,12 @@ export default {
                 return a.index - b.index;
             });
             for (let d of newd) {
-                
-                this.duties.push(this.duties[d.index]);
+                let lastDuty = this.duties[this.duties.length-1];
+                let lastDate = new Date(lastDuty.date.replace(/\//gi, "-"));
+                let newDate = dateformat(lastDate.setHours(lastDate.getHours() + 24), "yyyy/mm/dd");
+                let newWeek = lastDuty.week + 1 > 7 ? lastDuty.week + 1 - 7 : lastDuty.week + 1;
+                let newDuty = {date:newDate, week:newWeek, acday:d.acday, suday:d.suday, acnight:d.acnight, sunight:d.sunight};
+                this.duties.push(newDuty);
             };
             
         },

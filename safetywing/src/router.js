@@ -50,11 +50,32 @@ const routes = [
         name: "works-sps-detail",
         component: () => import ("./components/spsRecorder/SpsOne.vue"),
     },
+    {
+        path: "/works/spsRecorder/history",
+        name: "works-sps-history",
+        component: () => import ("./components/spsRecorder/SpsHistory.vue"),
+    },
     // malf recorder
     {
         path: "/works/malfRecorder/add",
         name: "works-malf-detail",
         component: () => import ("./components/malfRecorder/MalfAdd.vue"),
+    },
+    // 维护记录
+    {
+        path: "/works/maintRecorder/day",
+        name: "works-maint-day",
+        component: () => import ("./components/maintRecorder/MaintDay.vue"),
+    },
+    {
+        path: "/works/maintRecorder/week",
+        name: "works-maint-week",
+        component: () => import ("./components/maintRecorder/MaintWeek.vue"),
+    },
+    {
+        path: "/works/maintRecorder/month",
+        name: "works-maint-month",
+        component: () => import ("./components/maintRecorder/MaintMonth.vue"),
     },
     // 工作安排 ...
     {

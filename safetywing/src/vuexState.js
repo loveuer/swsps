@@ -56,7 +56,7 @@ const store = new Vuex.Store({
                     state.todayMessage.malf.new = true;
                     state.todayMessage.malf.type = "success";
                     break;
-            };
+            }
         },
         refreshedLog(state, newlogs) {
             state.todayMessage.log.logs = newlogs;
