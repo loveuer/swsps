@@ -43,11 +43,40 @@
                 :visible.sync="dialogVisible"
                 title="修改人员">
                 <div>
-                    <div></div>
+                    <div v-for="(p, index) of pendingWorkers" :key="index" class="one-worker">
+                        <div class="edit-workers">
+                            <div style="display:flex;">
+                                <div>
+                                    <el-button @click="p.bold=!p.bold">B</el-button>
+                                </div>
+                                <div>
+                                    <el-button @click="p.italic=!p.italic">I</el-button>
+                                </div>
+                                <div>
+                                    <el-button @click="p.decoration=!p.decoration">U</el-button>
+                                </div>
+                                <div>
+                                    <el-color-picker
+                                        v-model="p.color"
+                                        :predefine="predefineColors">
+                                    </el-color-picker>
+                                </div>
+                            </div>
+                            <div
+                                class="everyWorker"
+                                contenteditable="true"
+                                tabindex="-1"
+                                @input="workerinputChange($event, index)"
+                                v-html="pendingWorkersHtml[index]"
+                                >
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="changeWorkers">确 定</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -66,10 +95,34 @@ export default {
             checkAll: false,
             duties: [],
             dialogVisible: false,
-            pendingWorkersStyled: [],
+            pendingWorkers: [],
+            pendingWorkerNames: [],
+            pendingWorkerPos: {row:null, col:null},
+            predefineColors: [
+                '#ff4500',
+                '#ff8c00',
+                '#ffd700',
+                '#90ee90',
+                '#00ced1',
+                '#1e90ff',
+                '#c71585',
+            ],
+            selColor: "#000000",
         };
     },
     methods: {
+        changeWorkers: function() {
+            this.dialogVisible = false;
+            for (let i=0;i<this.pendingWorkerNames.length;i++) {
+                this.pendingWorkers[i].inner = this.pendingWorkerNames[i];
+            };
+
+            let str = this.pendingWorkersHtml.join(" | ");
+            this.duties[this.pendingWorkerPos.row][this.pendingWorkerPos.col] = str;
+        },
+        workerinputChange: function(e, i) {
+            this.pendingWorkerNames[i] = e.target.children[0].innerHTML;
+        },
         handleCheckAllChange: function(val) {
             if (val) {
                 for (let d of this.duties) {
@@ -88,7 +141,7 @@ export default {
         },
         getDutyByYM: function(ym) {
             this.duties = [
-                {checked:false,date:'2019/03/01',week:3,acday:'<font style="font-weight:bold;">陈俊峰</font> | <font>李津</font>',suday:`<font style="font-style:italic;">凌华南</font> | <font style="color:#ff4500">江富强(年假)</font> | <font>郑卿</font>`,acnight:'<font>陈本志</font> | <font>李永翔</font>',sunight:'<font>付东明</font> | <font>宋继朋</font> | <font>黄一林</font>'},
+                {checked:false,date:'2019/03/01',week:3,acday:'<font style="font-weight:bold;">陈俊峰</font> | <font>李津</font>',suday:`<font style="font-style:italic;">凌华南</font> | <font style="color:#ff4500;font-weight:bold;">江富强(年假)</font> | <font>郑卿</font>`,acnight:'<font>陈本志</font> | <font>李永翔</font>',sunight:'<font>付东明</font> | <font>宋继朋</font> | <font>黄一林</font>'},
                 {checked:false,date:'2019/03/02',week:4,acday:'<font>张伟</font> | <font>郭建</font>',suday:'<font>李跃</font> | <font>赵育鹏</font>',acnight:'<font>陈俊峰</font> | <font>李津</font>',sunight:'<font>凌华南</font> | <font>江富强</font> | <font>郑卿</font>'},
                 {checked:false,date:'2019/03/03',week:5,acday:'<font>胡彬彬</font> | <font>魏宇东</font>',suday:'<font>鲁书贤</font> | <font>张显刚</font>',acnight:'<font>张伟</font> | <font>郭建</font>',sunight:'<font>刘博强（白班换夜班）</font> | <font>李跃</font> | <font>赵育鹏</font>'},
                 {checked:false,date:'2019/03/04',week:6,acday:'<font>陈本志</font> | <font>李永翔</font>',suday:'<font>付东明</font> | <font>宋继朋</font> | <font>黄一林</font>',acnight:'<font>胡彬彬</font> | <font>魏宇东</font>',sunight:'<font>刘博强</font> | <font>鲁书贤</font> | <font>张显刚</font>'},
@@ -118,44 +171,14 @@ export default {
             
         },
         handleDoubleClick: function(row, col) {
-            this.pendingWorkersStyled = this.duties[row][col].split(" | ");
             this.dialogVisible = true;
-            console.log(this.pendingWorkers);
-        },
-    },
-    computed: {
-        dutiesWeeked: function() {
-            let wmap = {1:'星期一',2:'星期二',3:'星期三',4:'星期四',5:'星期五',6:'星期六',7:'星期天'};
-            let dw = [];
-            let count = 0;
-            for (let d of this.duties) {
-                dw.push({
-                    index:count, 
-                    date:d.date, 
-                    week:wmap[d.week], 
-                    acday:d.acday.replace(/ \| /gi, ", "), 
-                    suday:d.suday.replace(/ \| /gi, ", "), 
-                    acnight:d.acnight.replace(/ \| /gi, ", "), 
-                    sunight:d.sunight.replace(/ \| /gi, ", "), 
-                });
-                count++;
-            };
-            return dw;
-        },
-        dutiesCheckedIndexs: function() {
+            this.pendingWorkerPos.row = row;
+            this.pendingWorkerPos.col = col;
+            // 
+            let workers= this.duties[row][col].split(" | ");
             let list = [];
-            let count = 0;
-            for (let d of this.duties) {
-                if (d.checked) {
-                    list.push(count);
-                };
-                count++;
-            };
-            return list;
-        },
-        pendingWorkers: function() {
-            let list = [];
-            for (let w of this.pendingWorkersStyled) {
+            let namelist = [];
+            for (let w of workers) {
                 if (!w.match(/^<font.*>.+<\/font>$/)) {
                     this.$notify.error({
                         title:'错误',
@@ -192,9 +215,68 @@ export default {
                 list.push({
                     inner:inner, color:color, bold:bold, decoration:decoration, italic:italic,
                 });
+                namelist.push('');
+            };
+            this.pendingWorkers = list;
+            this.pendingWorkerNames = namelist;
+        },
+    },
+    computed: {
+        dutiesWeeked: function() {
+            let wmap = {1:'星期一',2:'星期二',3:'星期三',4:'星期四',5:'星期五',6:'星期六',7:'星期天'};
+            let dw = [];
+            let count = 0;
+            for (let d of this.duties) {
+                dw.push({
+                    index:count, 
+                    date:d.date, 
+                    week:wmap[d.week], 
+                    acday:d.acday.replace(/ \| /gi, ", "), 
+                    suday:d.suday.replace(/ \| /gi, ", "), 
+                    acnight:d.acnight.replace(/ \| /gi, ", "), 
+                    sunight:d.sunight.replace(/ \| /gi, ", "), 
+                });
+                count++;
+            };
+            return dw;
+        },
+        dutiesCheckedIndexs: function() {
+            let list = [];
+            let count = 0;
+            for (let d of this.duties) {
+                if (d.checked) {
+                    list.push(count);
+                };
+                count++;
             };
             return list;
         },
+        pendingWorkersHtml: function() {
+            let list = [];
+            for (let w of this.pendingWorkers) {
+                let html = `<font`;
+                if (w.bold || w.decoration || w.italic || w.color) {
+                    let stylelist = [];
+                    if (w.bold) {
+                        stylelist.push("font-weight:bold");
+                    };
+                    if (w.decoration) {
+                        stylelist.push("text-decoration:underline;");
+                    };
+                    if (w.italic) {
+                        stylelist.push("font-style:italic");
+                    };
+                    if (w.color) {
+                        stylelist.push("color:"+w.color);
+                    };
+                    html = html + ` style="` + stylelist.join(";") + `"`;
+                };
+                html = html + `>` + w.inner + `</font>`;
+                list.push(html);
+            };  
+            return list;
+        },
+        // pendingWorkersHtml
     },
     mounted() {
         this.$refs.uMenu.defaultActive = "/works/workRecorder/duty";
@@ -263,5 +345,24 @@ table td {
     font-size: 14px;
     color: rgb(72,72,72);
     cursor: pointer;
+}
+.one-worker {
+    padding: 20px 0 20px 0;
+}
+.everyWorker {
+    height: 35px;
+    line-height: 35px;
+    padding: 2px 0 0 2px; 
+    text-indent: 10px;
+    border: 1px solid rgb(200,200,200);
+    border-radius: 5px;
+    outline: none;
+}
+.everyWorker:hover {
+    border: 1px solid #409EFF;
+}
+.everyWorker:focus {
+    border: 1px solid #409EFF;
+    box-shadow: 0 0 5px #409EFF;
 }
 </style>
