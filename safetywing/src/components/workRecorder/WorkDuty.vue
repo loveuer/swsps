@@ -45,39 +45,48 @@
                 <div>
                     <div v-for="(p, index) of pendingWorkers" :key="index" class="one-worker">
                         <div class="edit-workers">
-                            <div style="display:flex;">
+                            <div style="display:flex;margin-bottom:5px;">
                                 <div>
-                                    <el-button @click="p.bold=!p.bold">B</el-button>
+                                    <el-button @click="p.bold=!p.bold" size="mini" round>B</el-button>
                                 </div>
-                                <div>
-                                    <el-button @click="p.italic=!p.italic">I</el-button>
+                                <div style="margin-left:10px;">
+                                    <el-button @click="p.italic=!p.italic" size="mini" round>I</el-button>
                                 </div>
-                                <div>
-                                    <el-button @click="p.decoration=!p.decoration">U</el-button>
+                                <div style="margin-left:10px;">
+                                    <el-button @click="p.decoration=!p.decoration" size="mini" round>U</el-button>
                                 </div>
-                                <div>
+                                <div style="margin-left:10px;">
                                     <el-color-picker
                                         v-model="p.color"
+                                        size="mini"
                                         :predefine="predefineColors">
                                     </el-color-picker>
                                 </div>
                             </div>
-                            <div
-                                class="everyWorker"
-                                contenteditable="true"
-                                tabindex="-1"
-                                @input="workerinputChange($event, index)"
-                                v-html="pendingWorkersHtml[index]"
-                                >
-
+                            <div style="height:35px;width:100%;display:flex;align-items: center;">
+                                <div
+                                    class="everyWorker"
+                                    contenteditable="true"
+                                    tabindex="-1"
+                                    @input="workerinputChange($event, index)"
+                                    v-html="pendingWorkersHtml[index]"
+                                    >
+                                </div>
+                                <div style="height:35px;display:flex;align-items: center;margin-left:10px;">
+                                    <el-button type="danger" icon="el-icon-delete" circle size="small" @click="deleteWorker(index)"></el-button>
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
+                    <div>
+                        <el-button icon="el-icon-plus" type="success" @click="appendWorker"></el-button>
+                    </div>
                 </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
+                <div style="margin-top:20px;">
                     <el-button type="primary" @click="changeWorkers">确 定</el-button>
-                </span>
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                </div>
             </el-dialog>
         </div>
         <div style="height:100px;width:100%;zoom:100%;"></div>
@@ -111,6 +120,16 @@ export default {
         };
     },
     methods: {
+        appendWorker: function() {
+            this.pendingWorkers.push({
+                inner: " ", color: "#484848", bold: false, italic: false, decoration: false,
+            });
+            this.pendingWorkerNames.push("");
+            console.log(this.pendingWorkersHtml);
+        },
+        deleteWorker: function(index) {
+
+        },
         changeWorkers: function() {
             this.dialogVisible = false;
             for (let i=0;i<this.pendingWorkerNames.length;i++) {
@@ -190,7 +209,7 @@ export default {
                     return;
                 };
                 let inner = w.replace(/^<font.*?>/, "").replace("</font>", "");
-                let color = null;
+                let color = "#484848";
                 let bold = false;
                 let decoration = false;
                 let italic = false;
@@ -215,7 +234,7 @@ export default {
                 list.push({
                     inner:inner, color:color, bold:bold, decoration:decoration, italic:italic,
                 });
-                namelist.push('');
+                namelist.push(inner);
             };
             this.pendingWorkers = list;
             this.pendingWorkerNames = namelist;
@@ -295,6 +314,7 @@ table {
     height: 100%;
     display: flex;
     flex-flow: column;
+    
 }
 table thead {
     flex: 0 0 auto;
@@ -349,6 +369,9 @@ table td {
 .one-worker {
     padding: 20px 0 20px 0;
 }
+.one-worker:first-child {
+    margin-top: -20px;
+}
 .everyWorker {
     height: 35px;
     line-height: 35px;
@@ -357,6 +380,7 @@ table td {
     border: 1px solid rgb(200,200,200);
     border-radius: 5px;
     outline: none;
+    width: 50%;
 }
 .everyWorker:hover {
     border: 1px solid #409EFF;
