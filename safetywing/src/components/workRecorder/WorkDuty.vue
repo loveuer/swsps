@@ -69,7 +69,9 @@
                                     contenteditable="true"
                                     tabindex="-1"
                                     @input="workerinputChange($event, index)"
-                                    v-html="pendingWorkersHtml[index]"
+                                    v-text="p.name"
+                                    :style="{color:p.color}"
+                                    v-bind:class="{pwisBold:p.bold, pwisItalic:p.italic, pwisDecoration:p.decoration}"
                                     >
                                 </div>
                                 <div style="height:35px;display:flex;align-items: center;margin-left:10px;">
@@ -105,7 +107,6 @@ export default {
             duties: [],
             dialogVisible: false,
             pendingWorkers: [],
-            pendingWorkerNames: [],
             pendingWorkerPos: {row:null, col:null},
             predefineColors: [
                 '#ff4500',
@@ -122,25 +123,24 @@ export default {
     methods: {
         appendWorker: function() {
             this.pendingWorkers.push({
-                inner: " ", color: "#484848", bold: false, italic: false, decoration: false,
+                name:'', color: '#484848', bold: false, italic: false, decoration: false
             });
-            this.pendingWorkerNames.push("");
-            console.log(this.pendingWorkersHtml);
         },
         deleteWorker: function(index) {
-
+            this.pendingWorkers.splice(index, 1);
         },
         changeWorkers: function() {
             this.dialogVisible = false;
-            for (let i=0;i<this.pendingWorkerNames.length;i++) {
-                this.pendingWorkers[i].inner = this.pendingWorkerNames[i];
+            let list = [];
+            for (let w of this.pendingWorkers) {
+                list.push({
+                    name:w.newname, color:w.color, bold:w.bold, italic:w.italic, decoration:w.decoration
+                });
             };
-
-            let str = this.pendingWorkersHtml.join(" | ");
-            this.duties[this.pendingWorkerPos.row][this.pendingWorkerPos.col] = str;
+            this.duties[this.pendingWorkerPos.row][this.pendingWorkerPos.col] = list;
         },
         workerinputChange: function(e, i) {
-            this.pendingWorkerNames[i] = e.target.children[0].innerHTML;
+            this.pendingWorkers[i].newname = e.target.innerHTML;
         },
         handleCheckAllChange: function(val) {
             if (val) {
@@ -160,10 +160,34 @@ export default {
         },
         getDutyByYM: function(ym) {
             this.duties = [
-                {checked:false,date:'2019/03/01',week:3,acday:'<font style="font-weight:bold;">陈俊峰</font> | <font>李津</font>',suday:`<font style="font-style:italic;">凌华南</font> | <font style="color:#ff4500;font-weight:bold;">江富强(年假)</font> | <font>郑卿</font>`,acnight:'<font>陈本志</font> | <font>李永翔</font>',sunight:'<font>付东明</font> | <font>宋继朋</font> | <font>黄一林</font>'},
-                {checked:false,date:'2019/03/02',week:4,acday:'<font>张伟</font> | <font>郭建</font>',suday:'<font>李跃</font> | <font>赵育鹏</font>',acnight:'<font>陈俊峰</font> | <font>李津</font>',sunight:'<font>凌华南</font> | <font>江富强</font> | <font>郑卿</font>'},
-                {checked:false,date:'2019/03/03',week:5,acday:'<font>胡彬彬</font> | <font>魏宇东</font>',suday:'<font>鲁书贤</font> | <font>张显刚</font>',acnight:'<font>张伟</font> | <font>郭建</font>',sunight:'<font>刘博强（白班换夜班）</font> | <font>李跃</font> | <font>赵育鹏</font>'},
-                {checked:false,date:'2019/03/04',week:6,acday:'<font>陈本志</font> | <font>李永翔</font>',suday:'<font>付东明</font> | <font>宋继朋</font> | <font>黄一林</font>',acnight:'<font>胡彬彬</font> | <font>魏宇东</font>',sunight:'<font>刘博强</font> | <font>鲁书贤</font> | <font>张显刚</font>'},
+                {
+                    checked:false,date:'2019/03/01',week:3,
+                    acday:[{name:'陈俊峰',color:'#484848',bold:false,italic:false,decoration:false},{name:'李津',color:'#484848'}],
+                    suday:[{name:'凌华南',color:'#484848',bold:true,italic:true,decoration:false},{name:'江富强',color:'#ff4500',bold:true,italic:false,decoration:false},{name:'郑卿',color:'#484848',bold:false,italic:false,decoration:false}],
+                    acnight:[{name:'陈本志',color:'#484848',bold:false,italic:false,decoration:false},{name:'李永翔',color:'#484848',bold:false,italic:false,decoration:false}],
+                    sunight:[{name:'付东明',color:'#484848',bold:false,italic:false,decoration:false},{name:'宋继朋',color:'#484848',bold:false,italic:false,decoration:false},{name:'黄一林',color:'#484848',bold:false,italic:false,decoration:false}],
+                },
+                {
+                    checked:false,date:'2019/03/02',week:4,
+                    acday:[{name:'张伟',color:'#484848',bold:false,italic:false,decoration:false},{name:'郭建',color:'#484848',bold:false,italic:false,decoration:false}],
+                    suday:[{name:'李跃',color:'#484848',bold:false,italic:false,decoration:false},{name:'赵育鹏',color:'#484848',bold:false,italic:false,decoration:false}],
+                    acnight:[{name:'陈俊峰',color:'#484848',bold:false,italic:false,decoration:false},{name:'李津',color:'#484848',bold:false,italic:false,decoration:false}],
+                    sunight:[{name:'凌华南',color:'#484848',bold:false,italic:false,decoration:false},{name:'江富强',color:'#484848',bold:false,italic:false,decoration:false},{name:'郑卿',bold:false,italic:false,decoration:false}],
+                },
+                {
+                    checked:false,date:'2019/03/03',week:5,
+                    acday:[{name:'胡彬彬',color:'#484848',bold:false,italic:false,decoration:false},{name:'魏宇东',color:'#484848',bold:false,italic:false,decoration:false}],
+                    suday:[{name:'鲁书贤',color:'#484848',bold:false,italic:false,decoration:false},{name:'张显刚',color:'#484848',bold:false,italic:false,decoration:false}],
+                    acnight:[{name:'张伟',color:'#484848',bold:false,italic:false,decoration:false},{name:'郭建',color:'#484848',bold:false,italic:false,decoration:false}],
+                    sunight:[{name:'刘博强（白班换夜班）',color:'#484848',bold:false,italic:false,decoration:false},{name:'李跃',color:'#484848',bold:false,italic:false,decoration:false},{name:'赵育鹏',color:'#484848',bold:false,italic:false,decoration:false}],
+                },
+                {
+                    checked:false,date:'2019/03/04',week:6,
+                    acday:[{name:'陈本志',color:'#484848',bold:false,italic:false,decoration:false},{name:'李永翔',color:'#484848',bold:false,italic:false,decoration:false}],
+                    suday:[{name:'付东明',color:'#484848',bold:false,italic:false,decoration:false},{name:'宋继朋',color:'#484848',bold:false,italic:false,decoration:false},{name:'黄一林',color:'#484848',bold:false,italic:false,decoration:false}],
+                    acnight:[{name:'胡彬彬',color:'#484848',bold:false,italic:false,decoration:false},{name:'魏宇东',color:'#484848',bold:false,italic:false,decoration:false}],
+                    sunight:[{name:'刘博强',color:'#484848',bold:false,italic:false,decoration:false},{name:'鲁书贤',color:'#484848',bold:false,italic:false,decoration:false},{name:'张显刚',color:'#484848',bold:false,italic:false,decoration:false}],
+                },
             ];
         },
         copyDuties: function() {
@@ -194,50 +218,18 @@ export default {
             this.pendingWorkerPos.row = row;
             this.pendingWorkerPos.col = col;
             // 
-            let workers= this.duties[row][col].split(" | ");
-            let list = [];
-            let namelist = [];
-            for (let w of workers) {
-                if (!w.match(/^<font.*>.+<\/font>$/)) {
-                    this.$notify.error({
-                        title:'错误',
-                        message:'发生了未知错误, 请联系管理员',
-                        position:'top-left',
-                    });
-                    this.dialogVisible = false;
-                    console.log(`人员格式不对, match font 失败`);
-                    return;
-                };
-                let inner = w.replace(/^<font.*?>/, "").replace("</font>", "");
-                let color = "#484848";
-                let bold = false;
-                let decoration = false;
-                let italic = false;
-                // find color
-                let colorIndex = w.search("color");
-                if (colorIndex !== -1) {
-                    color = w.slice(colorIndex+6, colorIndex+13);
-                };
-                // find bold
-                if (w.match("font-weight")) {
-                    bold = true;
-                };
-                // find decoration
-                if (w.match("text-decoration")) {
-                    decoration = true;
-                };
-                // find italic
-                if (w.match("font-style")) {
-                    italic = true;
-                };
-
-                list.push({
-                    inner:inner, color:color, bold:bold, decoration:decoration, italic:italic,
-                });
-                namelist.push(inner);
+            this.pendingWorkers = this.duties[row][col];
+            for (let w of this.pendingWorkers) {
+                w.newname = w.name;
             };
-            this.pendingWorkers = list;
-            this.pendingWorkerNames = namelist;
+        },
+        styler: function(ws) {
+            let wl = [];
+            for (let w of ws) {
+                let str = `<font style="color:${w.color};font-weight:${w.bold?'bold':'normal'};font-style:${w.italic?'italic':'normal'};text-decoration:${w.decoration?'underline':'none'}">${w.name}</font>`;
+                wl.push(str);
+            };
+            return wl.join(", ");
         },
     },
     computed: {
@@ -250,10 +242,10 @@ export default {
                     index:count, 
                     date:d.date, 
                     week:wmap[d.week], 
-                    acday:d.acday.replace(/ \| /gi, ", "), 
-                    suday:d.suday.replace(/ \| /gi, ", "), 
-                    acnight:d.acnight.replace(/ \| /gi, ", "), 
-                    sunight:d.sunight.replace(/ \| /gi, ", "), 
+                    acday:this.styler(d.acday),
+                    suday:this.styler(d.suday),
+                    acnight:this.styler(d.acnight),
+                    sunight:this.styler(d.sunight),
                 });
                 count++;
             };
@@ -270,32 +262,6 @@ export default {
             };
             return list;
         },
-        pendingWorkersHtml: function() {
-            let list = [];
-            for (let w of this.pendingWorkers) {
-                let html = `<font`;
-                if (w.bold || w.decoration || w.italic || w.color) {
-                    let stylelist = [];
-                    if (w.bold) {
-                        stylelist.push("font-weight:bold");
-                    };
-                    if (w.decoration) {
-                        stylelist.push("text-decoration:underline;");
-                    };
-                    if (w.italic) {
-                        stylelist.push("font-style:italic");
-                    };
-                    if (w.color) {
-                        stylelist.push("color:"+w.color);
-                    };
-                    html = html + ` style="` + stylelist.join(";") + `"`;
-                };
-                html = html + `>` + w.inner + `</font>`;
-                list.push(html);
-            };  
-            return list;
-        },
-        // pendingWorkersHtml
     },
     mounted() {
         this.$refs.uMenu.defaultActive = "/works/workRecorder/duty";
@@ -388,5 +354,14 @@ table td {
 .everyWorker:focus {
     border: 1px solid #409EFF;
     box-shadow: 0 0 5px #409EFF;
+}
+.pwisBold {
+    font-weight: bold;
+}
+.pwisItalic {
+    font-style: italic;
+}
+.pwisDecoration {
+    text-decoration: underline;
 }
 </style>
