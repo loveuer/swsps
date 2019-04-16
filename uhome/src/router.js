@@ -8,6 +8,11 @@ const routes = [
         component: () => import ("./components/Home.vue"),
     },
     {
+        path: "/ydd/salary",
+        name: "salary",
+        component: () => import ("./components/ydd-tools/salary.vue"),
+    },
+    {
         path: "*",
         name: "404",
         component: () => import ("./components/u-cmpnts/404.vue"),
