@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="platform">
-                <component :is="platform"></component>
+                <component :is="platform" v-on:update="handleUpdate"></component>
             </div>
         </div>
     </div>
@@ -35,6 +35,7 @@ export default {
             skinterval: null,
             step: 1,
             platform: 'upload-excel',
+            filename: "",
         };
     },
     methods: {
@@ -64,6 +65,16 @@ export default {
                     };
                 };
             };
+        },
+        handleUpdate: function(kws) {
+            switch (kws.event) {
+                case "upload":
+                    if (kws.status === "success") {
+                        this.step = 2;
+                        this.filename = kws.argv;
+                    };
+                    break;
+            }
         },
     },
     mounted() {
