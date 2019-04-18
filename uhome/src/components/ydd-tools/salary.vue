@@ -33,6 +33,8 @@ export default {
             socket: null,
             step: 1,
             filename: "",
+            skinterval: null,
+            skalive: false,
         };
     },
     computed: {
@@ -43,18 +45,18 @@ export default {
     },
     methods: {
         // 每10秒 ping 通过socket ping一次服务器, 暂时取消,想通过服务器主动来ping的方式
-        // doskInterval: function() {
-        //     if (!this.skinterval) {
-        //         this.skinterval = setInterval(() => {
-        //             if(this.skalive) {
-        //                 this.skalive = false;
-        //                 this.socket.send(JSON.stringify({event:"salary",type:"ping",msg:""}));
-        //             } else {
-        //                 this.socket = new WebSocket("ws://localhost:8000/api/socket");
-        //             };
-        //         }, 10000);
-        //     };
-        // },
+        doskInterval: function() {
+            if (!this.skinterval) {
+                this.skinterval = window.setInterval(() => {
+                    if(this.skalive) {
+                        this.skalive = false;
+                        this.socket.send(JSON.stringify({Event:"ping",Type:"",Data:""}));
+                    } else {
+                        this.socket = new WebSocket("ws://localhost:8000/api/socket");
+                    };
+                }, 10000);
+            };
+        },
         initSK: function() {
             this.socket = new WebSocket("ws://localhost:8000/api/socket");
             this.socket.onopen = () => { this.skalive = true; };
@@ -62,8 +64,8 @@ export default {
             this.socket.onmessage = (event) => {
                 let message = JSON.parse(event.data);
                 switch (message.event) {
-                    case "ping":
-                        this.socket.send(JSON.stringify({event:"pong", data:""}));
+                    case "pong":
+                        this.skalive = true;
                         break;
                     case "salary":
                         let data = JSON.parse(message.data);
@@ -83,6 +85,7 @@ export default {
     },
     mounted() {
         this.initSK();
+        this.doskInterval();
     },
     beforeDestroy() {
         this.socket.close();
