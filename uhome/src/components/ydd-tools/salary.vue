@@ -31,38 +31,42 @@ export default {
     data() {
         return {
             socket: null,
-            skalive: false,
-            skinterval: null,
             step: 1,
-            platform: 'upload-excel',
             filename: "",
         };
     },
-    methods: {
-        doskInterval: function() {
-            if (!this.skinterval) {
-                this.skinterval = setInterval(() => {
-                    if(this.skalive) {
-                        this.skalive = false;
-                        this.socket.send(JSON.stringify({event:"salary",type:"ping",msg:""}));
-                    } else {
-                        this.socket = new WebSocket("ws://localhost:8000/socket");
-                    };
-                }, 10000);
-            };
+    computed: {
+        platform: function() {
+            let pltfmMap = {1:'upload-excel', 2:'', 3:''};
+            return pltfmMap[this.step];
         },
+    },
+    methods: {
+        // 每10秒 ping 通过socket ping一次服务器, 暂时取消,想通过服务器主动来ping的方式
+        // doskInterval: function() {
+        //     if (!this.skinterval) {
+        //         this.skinterval = setInterval(() => {
+        //             if(this.skalive) {
+        //                 this.skalive = false;
+        //                 this.socket.send(JSON.stringify({event:"salary",type:"ping",msg:""}));
+        //             } else {
+        //                 this.socket = new WebSocket("ws://localhost:8000/api/socket");
+        //             };
+        //         }, 10000);
+        //     };
+        // },
         initSK: function() {
-            this.socket = new WebSocket("ws://localhost:8000/socket");
+            this.socket = new WebSocket("ws://localhost:8000/api/socket");
             this.socket.onopen = () => { this.skalive = true; };
             this.socket.onclose = () => { this.socket=null; };
             this.socket.onmessage = (event) => {
                 let message = JSON.parse(event.data);
-                if (message.event === "salary") {
-                    switch (message.type) {
-                        case "pong":
-                            this.skalive = true;
-                            break;
-                    };
+                switch (message.event) {
+                    case "ping":
+                        this.socket.send(JSON.stringify({event:"pong", data:""}));
+                        break;
+                    case "salary":
+                        let data = JSON.parse(message.data);
                 };
             };
         },
@@ -79,16 +83,10 @@ export default {
     },
     mounted() {
         this.initSK();
-        // ping web socket per 10s
-        this.doskInterval();
     },
     beforeDestroy() {
-        console.log("before destroy");
-        console.log("interval id: ", this.skinterval);
         this.socket.close();
         this.socket = null;
-        clearInterval(this.skinterval);
-        this.skinterval = null;
     },
     components: {
         "upload-excel": uploadExcel,

@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 
 module.exports = { 
     // Project deployment base 
@@ -92,8 +92,8 @@ module.exports = {
         hotOnly: false,
         // proxy: 'http://127.0.0.1:8000/', // 配置跨域处理,只有一个代理
         proxy: {
-          '/api/': {
-            target: 'http://127.0.0.1:8000/',
+          '/api/salary': {
+            target: 'http://127.0.0.1:8000/salary',
             // ws: true,
             changeOrigin: true
           },
