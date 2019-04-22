@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="platform">
-                <component :is="platform" v-on:update="handleUpdate"></component>
+                <component :is="platform" v-on:update="handleUpdate" v-on:error="handleError" :filename="filename"></component>
             </div>
         </div>
     </div>
@@ -26,49 +26,60 @@
 
 <script>
 import uploadExcel from "./upload_excel.vue";
+import runScript from "./run_script.vue";
 
 export default {
     data() {
         return {
             socket: null,
             step: 1,
-            filename: "",
-            skinterval: null,
-            skalive: false,
+            filename: '',
+            run_script: '',
+            // skinterval: null,
+            // skalive: false,
         };
     },
     computed: {
         platform: function() {
-            let pltfmMap = {1:'upload-excel', 2:'', 3:''};
+            let pltfmMap = {1:'upload-excel', 2:'run-script', 3:''};
             return pltfmMap[this.step];
         },
     },
     methods: {
         // 每10秒 ping 通过socket ping一次服务器, 暂时取消,想通过服务器主动来ping的方式
-        doskInterval: function() {
-            if (!this.skinterval) {
-                this.skinterval = window.setInterval(() => {
-                    if(this.skalive) {
-                        this.skalive = false;
-                        this.socket.send(JSON.stringify({Event:"ping",Type:"",Data:""}));
-                    } else {
-                        this.socket = new WebSocket("ws://localhost:8000/api/socket");
-                    };
-                }, 10000);
-            };
-        },
+        // doskInterval: function() {
+        //     if (!this.skinterval) {
+        //         this.skinterval = window.setInterval(() => {
+        //             if(this.skalive) {
+        //                 this.skalive = false;
+        //                 this.socket.send(JSON.stringify({Event:"ping",Type:"",Data:""}));
+        //             } else {
+        //                 this.socket = new WebSocket("ws://localhost:8000/api/socket");
+        //             };
+        //         }, 10000);
+        //     };
+        // },
         initSK: function() {
             this.socket = new WebSocket("ws://localhost:8000/api/socket");
-            this.socket.onopen = () => { this.skalive = true; };
-            this.socket.onclose = () => { this.socket=null; };
+            this.socket.onopen = () => { console.log("web socket opened") };
+            // this.socket.onclose = () => { this.socket=null; };
+            this.socket.onclose = () => {
+                console.log("web socket closed, reconnecting...");
+                setTimeout(() => {
+                    this.initSK();
+                }, 2000);
+            };
+            this.socket.onerror = () => {
+                console.log("web socket err");
+                this.socket.close();
+            };
             this.socket.onmessage = (event) => {
                 let message = JSON.parse(event.data);
                 switch (message.event) {
-                    case "pong":
-                        this.skalive = true;
-                        break;
                     case "salary":
-                        let data = JSON.parse(message.data);
+                        console.log("web_socket msg: ", message);
+                        // let data = JSON.parse(message.data);
+                        break;
                 };
             };
         },
@@ -80,12 +91,23 @@ export default {
                         this.filename = kws.argv;
                     };
                     break;
+                case 'run_script':
+                    this.run_script = kws.filename;
+                    this.step = 3;
+            }
+        },
+        handleError: function(errCode) {
+            switch (errCode) {
+                case 201:
+                    this.step = 1;
+                    this.filename = "";
+                    break;
             }
         },
     },
     mounted() {
         this.initSK();
-        this.doskInterval();
+        // this.doskInterval();
     },
     beforeDestroy() {
         this.socket.close();
@@ -93,20 +115,23 @@ export default {
     },
     components: {
         "upload-excel": uploadExcel,
+        "run-script": runScript,
     },
 };
 </script>
 
 <style scoped>
+.container {
+    width: 100%;
+}
 .breadcrumb {
     height: 50px;
-    width: 100%;
+    width: 95%;
     margin-top: 10px;
     margin-left: 20px;
 }
 .content {
     width: 100%;
-    
 }
 .content > .process-step {
     width: 100%;

@@ -13,6 +13,12 @@ type SocketClient struct {
 	socket *websocket.Conn
 }
 
+type ReceivedMSG struct {
+	Event string
+	Type  string
+	Data  string
+}
+
 var UhomeSocket *SocketClient
 
 func (s *SocketClient) send() {
@@ -25,7 +31,7 @@ func (s *SocketClient) send() {
 		case msg := <-s.Sender:
 			err := s.socket.WriteMessage(websocket.TextMessage, []byte(msg))
 			if err != nil {
-				log.Println(" **  socket send err")
+				log.Println(" **  socket send err: ", err)
 			}
 		}
 	}
@@ -36,24 +42,29 @@ func (s *SocketClient) read() {
 		s.socket.Close()
 	}()
 
-	var receiveMSG struct {
-		Event string
-		Type  string
-		Data  string
-	}
+	var resp []byte
 
 	for {
-		err := s.socket.ReadJSON(&receiveMSG)
+		_, received, err := s.socket.ReadMessage()
 		if err != nil {
-			resp, _ := json.Marshal(map[string]string{
-				"event": "error",
-				"type":  "server",
-				"data":  "receive msg err",
-			})
-			s.Sender <- string(resp)
+			log.Println(" **  socket receive msg err: ", err)
+			s.socket.Close()
+			break
 		}
 
-		if receiveMSG.Event == "ping" {
+		var parsedMSG ReceivedMSG
+		err = json.Unmarshal(received, &parsedMSG)
+		if err != nil {
+			resp, _ = json.Marshal(map[string]string{
+				"event": "error",
+				"type":  "serve",
+				"data":  "parse received msg err",
+			})
+			s.Sender <- string(resp)
+			continue
+		}
+
+		if parsedMSG.Event == "ping" {
 			resp, _ := json.Marshal(map[string]string{"event": "pong"})
 			s.Sender <- string(resp)
 		}

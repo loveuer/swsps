@@ -1,5 +1,6 @@
 package salary
 
 var (
-	err error
+	err     error
+	reading = false
 )

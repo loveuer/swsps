@@ -76,7 +76,7 @@ export default {
             this.uploading = true;
             // 模拟上传
             var upload_interval = window.setInterval(() => {
-                this.upload_percentage++;
+                this.upload_percentage += 5;
                 if (this.upload_percentage === 100) {
                     console.log("arrive 100");
                     window.clearInterval(upload_interval);
@@ -84,27 +84,29 @@ export default {
                 }
             }, 100);
             // 真的上传
-            var xlsx = new FormData();
-            xlsx.append('xlsx', this.upload_file);
-            this.$http.post("/api/salary/upload", xlsx, {
-                headers: {'Content-Type':'multipart/form-data'}, 
-                onUploadProgress: e => {
-                    if (e.loaded >= e.total) {
-                        this.uploading = false;
-                        this.uploaded = true;
-                    };
-                },
-            }).then(resp => {
-                console.log(resp.data);
-            }).catch(err => { console.log(err.response)} );
+            // var xlsx = new FormData();
+            // xlsx.append('xlsx', this.upload_file);
+            // this.$http.post("/api/salary/upload", xlsx, {
+            //     headers: {'Content-Type':'multipart/form-data'}, 
+            //     onUploadProgress: e => {
+            //         if (e.loaded >= e.total) {
+            //             this.uploading = false;
+            //             this.uploaded = true;
+            //         };
+            //     },
+            // }).then(resp => {
+            //     console.log(resp.data);
+            // }).catch(err => { console.log(err.response)} );
         },
         selectedFileChanged: function() {
             let filename = document.querySelector("#upload-file").files[0].name;
-            if (filename.split(".") !== 2 || !filename.split(".")[0].match(/20\d{2}年(0[1-9]|1[0-2])月工资条/)) {
+            console.log(!filename.split(".")[0].match(/20\d{2}年(0[1-9]|1[0-2])月工资条/));
+            if (filename.split(".").length !== 2 || !filename.split(".")[0].match(/20\d{2}年(0[1-9]|1[0-2])月工资条/)) {
                 this.$alert("文件名称不匹配", "警告", {
                     confirmButtonText: '确定',
                     type: 'warning ',
                 });
+                document.querySelector("#upload-file").files = null;
                 return;
             };
 

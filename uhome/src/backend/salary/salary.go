@@ -6,9 +6,14 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
+
+	"../socket"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -75,4 +80,93 @@ func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	})
 	fmt.Fprintf(w, "%s", resp)
 	return
+}
+
+func RunScript(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "salary -> RunScript: parse form err", 400)
+		return
+	}
+
+	yearmonth := r.Form.Get("yearmonth")
+	line := r.Form.Get("line")
+	if yearmonth == "" {
+		http.Error(w, "salary -> RunScript: year and month are empty", 400)
+		return
+	}
+	if line == "" {
+		line = "2"
+	}
+
+	ok, _ := regexp.Match(`20\d{2}(0[1-9]|1[0-2])`, []byte(yearmonth))
+	if !ok {
+		http.Error(w, "salary -> RunScript: argv(year and month not match regex)", 400)
+		return
+	}
+
+	folderName := yearmonth[0:4] + "年" + yearmonth[4:6] + "月"
+	cmd := exec.Command("./salary/xlsx/testCmd.py", folderName, line)
+	err = cmd.Start()
+	if err != nil {
+		http.Error(w, "salary -> RunScript: cmd start err", 500)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	resp, _ := json.Marshal(map[string]string{
+		"event":      "salary",
+		"type":       "run script",
+		"status":     "success",
+		"process_id": strconv.Itoa(cmd.Process.Pid),
+	})
+	fmt.Fprintf(w, "%s", resp)
+	return
+}
+
+func CheckScript(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "salary -> CheckScript: parse form err", 400)
+		return
+	}
+
+	yearmonth := r.Form.Get("yearmonth")
+	if yearmonth == "" {
+		http.Error(w, "salary -> CheckScript: year and month are empty", 400)
+		return
+	}
+
+	ok, _ := regexp.Match(`20\d{2}(0[1-9]|1[0-2])`, []byte(yearmonth))
+	if !ok {
+		http.Error(w, "salary -> CheckScript: argv(year and month not match regex)", 400)
+		return
+	}
+
+	go sendRuningResult(yearmonth)
+
+	w.Header().Set("Content-Type", "application/json")
+	resp, _ := json.Marshal(map[string]string{
+		"event":  "salary",
+		"type":   "check script",
+		"status": "success",
+	})
+	fmt.Fprintf(w, "%s", resp)
+	return
+}
+
+func sendRuningResult(ym string) {
+	for {
+		if !reading {
+			socket.UhomeSocket.Sender <- "close reading"
+			break
+		}
+		resp, _ := json.Marshal(map[string]string{
+			"event": "salary",
+			"type":  "update check log",
+			"data":  fmt.Sprintf("%s: line xx done", ym),
+		})
+		socket.UhomeSocket.Sender <- string(resp)
+		time.Sleep(5 * time.Second)
+	}
 }
