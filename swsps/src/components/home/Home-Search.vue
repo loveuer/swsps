@@ -42,13 +42,12 @@ export default {
         searchSps() {
             console.log("search sps: ", this.search_key);
             if (this.search_key === "") {
-                this.$notify({
-                    title: '警告',
+                this.$message({
+                    showClose: true,
                     message: '搜索关键字不能为空', 
                     type: 'warning',
-                    position: 'top-left',
-                    duration: 2000,
                 });
+                return;
             };
         },
         searchSelectEvent() {
