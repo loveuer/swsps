@@ -49,17 +49,23 @@ export default {
                 });
                 return;
             };
+            this.$router.push(`/search/${this.search_key}`);
         },
         searchSelectEvent() {
             this.searchSps();
         },
         getSearchSuggestions(str, cb) {
-            let mock = [
-                {value:'suggestion 1'},
-                {value:'suggestion 2'},
-                {value:'suggestion 3'},
-            ];
-            cb(mock);
+            let suggestions = [];
+            this.$http.get(`/api/user/searchhis/${this.$store.state.user.id}`)
+                .then(resp => {
+                    for (let s of resp.data) {
+                        suggestions.push({value:s.searchkey});
+                    };
+                })
+                .catch(err => {
+                    console.log(err.response);
+                });
+            cb(suggestions);            
             return;
         },
     },

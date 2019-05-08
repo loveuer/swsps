@@ -92,9 +92,10 @@ module.exports = {
         hotOnly: false,
         // proxy: 'http://127.0.0.1:8000/', // 配置跨域处理,只有一个代理
         proxy: {
-          '/api/salary': {
-            target: 'http://127.0.0.1:8000/salary',
-            // ws: true,
+          '/api': {
+            target: 'http://127.0.0.1:8000',
+            // target: '<url>',
+            ws: true,
             changeOrigin: true
           },
         }, // 配置多个代理

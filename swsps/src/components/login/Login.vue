@@ -49,14 +49,27 @@ export default {
         },
         dologin() {
             if (!this.username || !this.password) {
-                this.$message({
-                    showClose: true,
-                    message: '用户名和密码不能为空',
-                    type: 'warning',
-                });
                 this.password = '';
+                this.$message({showClose: true, message: '用户名和密码不能为空', type: 'warning',});
                 return;
-            }
+            };
+            this.$http.post("/api/user/login", `username=${this.username}&password=${this.password}`)
+                .then(resp => {
+                    if (resp.data.id !== 0) {
+                        this.$store.commit("setUser", resp.data);
+                        this.$router.push("/");
+                    } else {
+                        this.password = '';
+                        this.$message({showClose: true, message: '用户名和密码不匹配', type: 'warning',});
+                        return;
+                    }
+                })
+                .catch(err => {
+                    this.password = '';
+                    this.$message({showClose: true, message: '发生未知错误', type: 'warning',});
+                    console.log(err.response);
+                    return
+                });
         },
     },
 };

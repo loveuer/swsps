@@ -18,7 +18,13 @@
             <el-menu-item index="/addsp">新增备件</el-menu-item>
             <el-menu-item index="/history">备件历史</el-menu-item>
             <el-menu-item index="/status">备件状态</el-menu-item>
-            <el-menu-item style="float:right;" index="/login">　登 录　</el-menu-item>
+            <el-menu-item style="float:right;" index="/login" v-if="this.$store.state.user.id === 0">　登 录　</el-menu-item>
+            <el-submenu v-if="this.$store.state.user.id !== 0" style="float:right;" index="/user">
+                <template slot="title">　{{ this.$store.state.user.realname }}　</template>
+                <el-menu-item index="/user/imf">我的信息</el-menu-item>
+                <el-menu-item index="/user/chgpswd">修改密码</el-menu-item>
+                <el-menu-item index="/user/logout">退出登录</el-menu-item>
+            </el-submenu>
         </el-menu>
     </div>
 </template>
@@ -37,6 +43,11 @@ export default {
             return;
         },
     },
+    created() {
+        if (this.$store.state.user.id === 0) {
+            this.$router.push("/login");
+        };
+    }
 };
 </script>
 

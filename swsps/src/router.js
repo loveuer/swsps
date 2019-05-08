@@ -18,6 +18,11 @@ const routes = [
         component: () => import ("./components/search/Search.vue"),
     },
     {
+        path: "/search/:key",
+        name: "search",
+        component: () => import ("./components/search/Search.vue"),
+    },
+    {
         path: "/addsp",
         name: "addsp",
         component: () => import ("./components/addsp/AddSP.vue"),
