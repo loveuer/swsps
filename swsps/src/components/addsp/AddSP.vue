@@ -54,7 +54,7 @@
                                 <el-button type="primary" size="small">点击上传</el-button>
                                 <div class="upload-img">
                                     <div class="place-img">
-                                        <img src="~@/assets/test.jpg" alt="">
+                                        <img src="~@/assets/imgs/test.jpg" alt="">
                                     </div>
                                     <div class="place-describe">
                                         <div>IMG 1</div>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="upload-img">
                                     <div class="place-img">
-                                        <img src="~@/assets/test.jpg" alt="">
+                                        <img src="~@/assets/imgs/test.jpg" alt="">
                                     </div>
                                     <div class="place-describe">
                                         <div>IMG 2</div>

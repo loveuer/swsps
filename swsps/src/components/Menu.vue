@@ -44,9 +44,9 @@ export default {
         },
     },
     created() {
-        if (this.$store.state.user.id === 0) {
-            this.$router.push("/login");
-        };
+        // if (this.$store.state.user.id === 0) {
+        //     this.$router.push("/login");
+        // };
     }
 };
 </script>

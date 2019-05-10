@@ -13,20 +13,21 @@
                         :key="index"
                         :name="index">
                         <template slot="title" class="his-title">
-                            <div style="width:120px;">{{ his.date }}</div>
-                            <div style="width:100px;">{{ his.detail.time }}</div>
-                            <div style="width:100px;">{{ his.detail.auth }}</div>
-                            <div style="width:100px;">{{ his.detail.short }}</div>
+                            <div style="width:120px;text-indent:5px;">{{ his.date }}</div>
+                            <div style="width:100px;">{{ his.time }}</div>
+                            <div style="width:100px;">{{ his.auth }}</div>
+                            <div style="width:100px;">{{ his.short }}</div>
                         </template>
-                        <div>
-                            <div>数　量 变化:　　{{ his.detail.amount }}
+                        <div style="text-indent:5px;">
+                            <div>数　量 变化:　　{{ his.amount_chg }}
                                 <el-tooltip class="item" effect="dark" content="点击查看备件" placement="top">
-                                    <i class="el-icon-more" style="float:right;padding:0 8px 0 10px;cursor:pointer;" @click="meetSps(his.detail.id)"></i>
+                                    <i class="el-icon-more" style="float:right;padding:0 8px 0 10px;cursor:pointer;" @click="meetSps(his.id)"></i>
                                 </el-tooltip>
                             </div>
-                            <div>模拟机 变化:　　{{ his.detail.oldsim }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.detail.newsim }}</div>
-                            <div>状　态 变化:　　{{ his.detail.oldsts }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.detail.newsts }}</div>
-                            <div>位　置 变化:　　{{ his.detail.oldpos }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.detail.newpos }}</div>
+                            <div>模拟机 变化:　　{{ his.last_sim }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.next_sim }}</div>
+                            <div>状　态 变化:　　{{ his.last_sts }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.next_sts }}</div>
+                            <div>位　置 变化:　　{{ his.last_pos }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.next_pos }}</div>
+                            <div>备　注 　　:　　{{ his.comment }}</div>
                         </div>
                     </el-collapse-item>
                 </el-collapse>
@@ -48,17 +49,22 @@ export default {
         },
     },
     mounted() {
-        let mockhis = {date: '2019/04/28', detail: {
-                time: "12:33:21", auth: '赵育鹏', short: '更换备件 出库',
-                amount: 0, oldsim: '5978', newsim: '5978',
-                oldsts: '备件', newsts: '使用',
-                oldpos: 'b-01-1', newpos: '用于5978 SR2500备件服务器',
-                recorder: '用于5978 SR2500备件服务器',
-                id: '2233',
-            }};
-        for (let i=0;i<10;i++) {
-            this.last10histories.push(mockhis);
-        };
+        this.$http.get("/api/sphis/0")
+            .then(resp => {
+                let count = 1;
+                for(let h of resp.data) {
+                    if (count > 10) {
+                        break;
+                    };
+                    h.date = h.time.split("T")[0];
+                    h.time = h.time.split("T")[1].split("+")[0];
+                    this.last10histories.push(h);
+                    count++;
+                };
+            })
+            .catch(err => {
+                console.log(err.response);
+            });
     },
 };
 </script>

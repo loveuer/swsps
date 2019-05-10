@@ -23,6 +23,11 @@ const routes = [
         component: () => import ("./components/search/Search.vue"),
     },
     {
+        path: '/onesp/:spid',
+        name: 'onesp',
+        component: () => import ('./components/onesp/OneSP.vue'),
+    },
+    {
         path: "/addsp",
         name: "addsp",
         component: () => import ("./components/addsp/AddSP.vue"),

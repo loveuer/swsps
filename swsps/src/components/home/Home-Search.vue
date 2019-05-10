@@ -9,6 +9,7 @@
                         @keypress.enter.native="searchSps"
                         :fetch-suggestions="getSearchSuggestions"
                         @select="searchSelectEvent"
+                        clearable
                         style="width:300px;">
                         <i slot="prefix" class="el-input__icon el-icon-search"></i>
                     </el-autocomplete>
@@ -20,7 +21,7 @@
             <div>
                 <!-- 经常搜索的10个备件信息 -->
                 <div class="mostsearch-notify">搜索次数最多:</div>
-                <el-table :data="mostSearchedSps" style="font-size:12px;width:100%;">
+                <el-table :data="mostSearchedSps" style="font-size:12px;width:100%;cursor:pointer;" @row-click="handleRowClick">
                     <el-table-column prop="name" label="Name" width="300"></el-table-column>
                     <el-table-column prop="pn" label="P/N" width="300"></el-table-column>
                     <el-table-column prop="amount" label="数量" width="50"></el-table-column>
@@ -68,19 +69,22 @@ export default {
             cb(suggestions);            
             return;
         },
+        handleRowClick: function(row) {
+            this.$router.push(`/onesp/${row.id}`);
+        },
     },
     mounted() {
         this.mostSearchedSps = [
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MCDU - MULTI FUNCTION CTRL DISP UNIT', pn:'F4023-ASM0CDU-000', amount:'3'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:199, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:121, name:'MCDU - MULTI FUNCTION CTRL DISP UNIT', pn:'F4023-ASM0CDU-000', amount:'3'},
+            {id:122, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:123, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:124, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:125, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:126, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:127, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:128, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
+            {id:129, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
         ];
     },
 };
