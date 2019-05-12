@@ -33,6 +33,11 @@ const routes = [
         component: () => import ("./components/addsp/AddSP.vue"),
     },
     {
+        path: '/test',
+        name: 'test',
+        component: () => import ('./components/LightBox.vue'),
+    },
+    {
         path: "*",
         name: "404",
         component: () => import ("./components/404.vue"),

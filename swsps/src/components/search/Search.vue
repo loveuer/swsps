@@ -86,15 +86,18 @@ export default {
         },
         doSearch: function() {
             this.$refs.searchkey_input.close();
-                if (this.search_key === "") {
-                    this.$message({
-                        showClose: true,
-                        message: "搜索关键字不能为空",
-                        type: "warning"
-                    });
-                    return;
-                }
-
+            if (this.search_key === "") {
+                this.$message({
+                    showClose: true,
+                    message: "搜索关键字不能为空",
+                    type: "warning"
+                });
+                return;
+            };
+            this.get_sps_by_key();
+            this.$router.replace("/search/" + this.search_key);
+        },
+        get_sps_by_key: function() {
             this.$http.get(`/api/search/${this.search_key}`)
                 .then(resp => {
                     this.searchedSps = resp.data;
@@ -107,14 +110,14 @@ export default {
             this.doSearch();
         },
         handleRowClick: function(row) {
-            console.log("clicked sp id: ", row.id);
-        }
+            this.$router.push(`/onesp/${row.id}`);
+        },
     },
     mounted() {
         if (this.$route.params.key !== "") {
             this.search_key = this.$route.params.key;
-            this.doSearch();
-        }
+            this.get_sps_by_key();
+        };
     },
     components: {
         "sps-menu": SpsMenu
