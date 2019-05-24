@@ -8,7 +8,7 @@
                     <div slot="header" class="clearfix">
                         <span>新增备件</span>
                         <el-tooltip content="重置表单" placement="top">
-                            <el-button icon="el-icon-refresh" circle style="float:right;margin-top:-8px;"></el-button>
+                            <el-button icon="el-icon-refresh" circle style="float:right;margin-top:-8px;" @click="resetForm"></el-button>
                         </el-tooltip>
                     </div>
                     <div>
@@ -18,6 +18,7 @@
                                     style="width:400px;"
                                     class="inline-input"
                                     v-model="newsp.name"
+                                    required
                                     :fetch-suggestions="nameSuggestion"
                                 >
                                 </el-autocomplete>
@@ -32,7 +33,7 @@
                                 </el-autocomplete>
                             </el-form-item>
                             <el-form-item label="S/N">
-                                <el-input style="width:400px;"></el-input>
+                                <el-input style="width:400px;" v-model="newsp.sn"></el-input>
                             </el-form-item>
                             <el-form-item label="原模拟机">
                                 <el-select v-model="newsp.orgsim" style="width:400px;">
@@ -40,21 +41,34 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="模拟机">
-                                <el-select v-model="newsp.sim" style="width:400px;">
+                                <el-select v-model="newsp.nowsim" style="width:400px;">
                                     <el-option v-for="item of sims" :key="item.index" :value="item.sim"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="位置">
                                 <el-input v-model="newsp.pos" style="width:400px;"></el-input>
                             </el-form-item>
+                            <el-form-item label="状态">
+                                <el-select v-model="newsp.status" style="width:400px;">
+                                    <el-option value="备件"></el-option>
+                                    <el-option value="使用"></el-option>
+                                    <el-option value="维修"></el-option>
+                                    <el-option value="废弃" style="color:#F56C6C;"></el-option>
+                                </el-select>
+                            </el-form-item>
                             <el-form-item label="数量">
                                 <el-input-number v-model="newsp.num" :min="0"></el-input-number>
                             </el-form-item>
+                            <el-form-item label="备注">
+                                <el-input type="textarea" style="width:400px;" :rows="3"></el-input>
+                            </el-form-item>
                             <el-form-item label="图片(最多两张)">
-                                <el-button type="primary" size="small">点击上传</el-button>
-                                <div class="upload-img">
+                                <el-button type="primary" size="small" @click="handleUploadImg">点击上传</el-button>
+                                <input type="file" accept="image/jpeg,image/jpg" style="display:none;" id="newsp-img1" @change="img1Uploaded">
+                                <input type="file" accept="image/jpeg,image/jpg" style="display:none;" id="newsp-img2" @change="img2Uploaded">
+                                <div class="upload-img" v-show="newsp.img1">
                                     <div class="place-img">
-                                        <img src="~@/assets/imgs/test.jpg" alt="">
+                                        <img :src="newsp.img1" alt="">
                                     </div>
                                     <div class="place-describe">
                                         <div>IMG 1</div>
@@ -68,9 +82,9 @@
                                         </div>
                                     </label>
                                 </div>
-                                <div class="upload-img">
+                                <div class="upload-img" v-show="newsp.img2">
                                     <div class="place-img">
-                                        <img src="~@/assets/imgs/test.jpg" alt="">
+                                        <img :src="newsp.img2" alt="">
                                     </div>
                                     <div class="place-describe">
                                         <div>IMG 2</div>
@@ -86,7 +100,7 @@
                                 </div>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="success">新增备件</el-button>
+                                <el-button type="success" @click="doUpload">新增备件</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -103,7 +117,7 @@ import spsMenu from "../Menu.vue";
 export default {
     data() {
         return {
-            newsp: { name: '', pn: '', sn: '', orgsim: '', sim: '', pos: '', num: 0, img1: null, img2: null, },
+            newsp: { name: '', pn: '', sn: '', orgsim: '', nowsim: '', pos: '', status: '', num: 0, comment: '', img1: null, img2: null, },
             sims: [{index:1, sim:'5978'}, {index:2, sim:'5989'}, {index:3, sim:'5008'}, {index:4, sim:'5015'}],
         };
     },
@@ -116,8 +130,80 @@ export default {
             let mock_pnSuggestions = [{value:'pn_123'},{value:'pn_234'},{value:'pn_345'},{value:'pn_456'}];
             cb(mock_pnSuggestions);
         },
+        handleUploadImg: function() {
+            if (this.newsp.img1 && this.newsp.img2) {
+                this.$message({showClose: true, message: "已经选择了2张图片", type: "warning"});
+                return;
+            };
+            if (this.newsp.img1) {
+                document.querySelector('#newsp-img2').click();
+            } else {
+                document.querySelector('#newsp-img1').click();
+            };
+        },
+        img1Uploaded: function() {
+            let img1file = document.querySelector('#newsp-img1').files[0];
+            let imgReader = new FileReader();
+            imgReader.onload = (event) => {
+                this.newsp.img1 = event.target.result;
+            };
+            imgReader.readAsDataURL(img1file);
+        },
+        img2Uploaded: function() {
+            let img2file = document.querySelector('#newsp-img2').files[0];
+            let imgReader = new FileReader();
+            imgReader.onload = (event) => {
+                this.newsp.img2 = event.target.result;
+            };
+            imgReader.readAsDataURL(img2file);
+        },
         deleteUpload: function(which) {
-            console.log("delete upload ", which);
+            this.newsp[which] = null;
+            document.querySelector(`#newsp-${which}`).value = '';
+        },
+        resetForm: function() {
+            this.$confirm('此操作将重置你已经输入的表单, 是否继续?', '提示', {confirmButtonText: '确认', cancleButtonText: '取消', type: 'warning'})
+                .then(() => {
+                    let emptysp = { name: '', pn: '', sn: '', orgsim: '', nowsim: '', pos: '', status: '', num: 0, comment: '', img1: null, img2: null, };
+                    this.newsp = emptysp;
+                    document.querySelector('#newsp-img1').value = '';
+                    document.querySelector('#newsp-img2').value = '';
+                })
+        },
+        doUpload: function() {
+            let uploadData = new FormData();
+            uploadData.append('name', this.newsp.name);
+            uploadData.append('pn', this.newsp.pn);
+            uploadData.append('sn', this.newsp.sn);
+            uploadData.append('orgsim', this.newsp.orgsim);
+            uploadData.append('nowsim', this.newsp.nowsim);
+            uploadData.append('pos', this.newsp.pos);
+            uploadData.append('status', this.newsp.status);
+            uploadData.append('amount', this.newsp.num);
+            uploadData.append('comment', this.newsp.comment);
+            if (this.newsp.img1) {
+                uploadData.append('img1', document.querySelector('#newsp-img1').files[0]);
+            };
+            if (this.newsp.img2) {
+                uploadData.append('img2', document.querySelector('#newsp-img2').files[0]);
+            };
+            this.$http.post('/api/sps/add', uploadData, {
+                method: 'post',
+                headers: {'Content-Type': 'multipart/form-data'},
+                onUploadProgress: function(event) {
+                    // console.log(event.loaded / event.total);
+                },
+            }).then( resp => {
+                if (!parseInt(resp.data) || parseInt(resp.data) === 0) {
+                    this.$message({showClose: true, message: "发生未知错误, 请联系管理员", type: "warning"});
+                    let emptysp = { name: '', pn: '', sn: '', orgsim: '', nowsim: '', pos: '', status: '', num: 0, comment: '', img1: null, img2: null, };
+                    this.newsp = emptysp;
+                    document.querySelector('#newsp-img1').value = '';
+                    document.querySelector('#newsp-img2').value = '';
+                    return;
+                };
+                this.$router.push(`/onesp/${resp.data}`);
+            }).catch(err => { console.log(err.response) });
         },
     },
     computed: {
