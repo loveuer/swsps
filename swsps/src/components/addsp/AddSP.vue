@@ -123,12 +123,38 @@ export default {
     },
     methods: {
         nameSuggestion: function(inputedStr, cb) {
-            let mock_nameSuggestions = [{value:'name_123'},{value:'name_234'},{value:'name_345'},{value:'name_456'}];
-            cb(mock_nameSuggestions);
+            if (inputedStr.length < 3) {
+                cb([]);
+                return;
+            };
+            this.$http.get("/api/sps/autocomplete/name/" + inputedStr)
+                .then(resp => {
+                    let data = [];
+                    for(let i of resp.data) {
+                        data.push({value:i});
+                    };
+                    cb(data);
+                })
+                .catch(err => {
+                    console.log(err.response);
+                });
         },
         pnSuggestion: function(inputedStr, cb) {
-            let mock_pnSuggestions = [{value:'pn_123'},{value:'pn_234'},{value:'pn_345'},{value:'pn_456'}];
-            cb(mock_pnSuggestions);
+            if (inputedStr.length < 4) {
+                cb([]);
+                return;
+            };
+            this.$http.get("/api/sps/autocomplete/pn/" + inputedStr)
+                .then(resp => {
+                    let data = [];
+                    for(let i of resp.data) {
+                        data.push({value:i});
+                    };
+                    cb(data);
+                })
+                .catch(err => {
+                    console.log(err.response);
+                });
         },
         handleUploadImg: function() {
             if (this.newsp.img1 && this.newsp.img2) {
