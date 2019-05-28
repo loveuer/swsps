@@ -56,7 +56,8 @@ export default {
             this.$http.post("/api/user/login", `username=${this.username}&password=${this.password}`)
                 .then(resp => {
                     if (resp.data.id !== 0) {
-                        this.$store.commit("setUser", resp.data);
+                        this.$store.commit("setUser", resp.data.user);
+                        this.setCookie("sessid", resp.data.sessid, 60);
                         this.$router.push("/");
                     } else {
                         this.password = '';
@@ -70,6 +71,14 @@ export default {
                     console.log(err.response);
                     return
                 });
+        },
+        setCookie: function(cname, cvalue, expire_min) {
+            var d = new Date();
+            d.setTime(d.getTime() + (expire_min*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            // var expires = "expires=" + d.toLocaleString();
+            console.log(expires);
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         },
     },
 };

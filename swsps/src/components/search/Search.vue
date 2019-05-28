@@ -79,7 +79,11 @@ export default {
                     };
                 })
                 .catch(err => {
-                    console.log(err.response);
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push("/login");
+                            break;
+                    };
                 });
             cb(suggestions);
             return;
@@ -103,7 +107,11 @@ export default {
                     this.searchedSps = resp.data;
                 })
                 .catch(err => {
-                    console.log(err.response);
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push("/login");
+                            break;
+                    };
                 });
         },
         searchSelectEvent: function() {

@@ -64,7 +64,11 @@ export default {
                     };
                 })
                 .catch(err => {
-                    console.log(err.response);
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push("/login");
+                            break;
+                    };
                 });
             cb(suggestions);            
             return;

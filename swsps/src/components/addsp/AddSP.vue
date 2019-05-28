@@ -229,7 +229,13 @@ export default {
                     return;
                 };
                 this.$router.push(`/onesp/${resp.data}`);
-            }).catch(err => { console.log(err.response) });
+            }).catch(err => {
+                switch (err.response.status) {
+                    case 401:
+                        this.$router.push("/login");
+                        break;
+                };
+            });
         },
     },
     computed: {

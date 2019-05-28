@@ -23,7 +23,7 @@
                 <template slot="title">　{{ this.$store.state.user.realname }}　</template>
                 <el-menu-item index="/user/imf">我的信息</el-menu-item>
                 <el-menu-item index="/user/chgpswd">修改密码</el-menu-item>
-                <el-menu-item index="/user/logout">退出登录</el-menu-item>
+                <el-menu-item index="#logout" @click="logout">退出登录</el-menu-item>
             </el-submenu>
         </el-menu>
     </div>
@@ -35,18 +35,40 @@ export default {
         path: String,
     },
     methods: {
-        "handleSelect": function(index) {
+        handleSelect: function(index) {
             if (index === "/" && this.$route.path === "/") {
                 console.log("back to 公司主页");
                 window.location = "http://safetywing.net:8084";
             };
             return;
         },
+        logout: function() {
+            this.setCookie("sessid", "", 0);
+        },
+        setCookie: function(cname, cvalue, expire_min) {
+            var d = new Date();
+            d.setTime(d.getTime() + (expire_min*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        },
     },
-    created() {
-        // if (this.$store.state.user.id === 0) {
-        //     this.$router.push("/login");
-        // };
+    mounted() {
+        if (this.$store.state.user.id === 0) {
+            this.$http.get("/api/user/get/username")
+                .then(resp => {
+
+                })
+                .catch(err => {
+                    switch(err.response.status){
+                        case 401:
+                            this.$http.router.push("/login");
+                            break;
+                        case 500:
+                            this.$message({showClose: true, message: '服务器发生未知错误, 重试或联系管理员', type: 'warning',});
+                            break;
+                    }
+                });
+        };
     }
 };
 </script>

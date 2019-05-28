@@ -49,7 +49,7 @@ export default {
         },
     },
     mounted() {
-        this.$http.get("/api/sphis/0")
+        this.$http.get("/api/sphis/0", {withCredentials: true})
             .then(resp => {
                 let count = 1;
                 for(let h of resp.data) {
@@ -63,7 +63,12 @@ export default {
                 };
             })
             .catch(err => {
-                console.log(err.response);
+                console.log(err);
+                switch (err.response.status) {
+                    case 401:
+                        this.$router.push("/login");
+                        break;
+                };
             });
     },
 };

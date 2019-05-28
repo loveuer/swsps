@@ -14,6 +14,7 @@ const store = new Vuex.Store({
         setUser: function(state, newUser) {
             state.user = newUser;
         },
+        
     }, // commit to state
 });
 

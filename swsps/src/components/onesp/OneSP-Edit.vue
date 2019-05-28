@@ -186,7 +186,7 @@ export default {
                 uploadData.append('img2', document.querySelector('#input-img2').files[0]);
             };
             console.log(uploadData);
-            this.$http.post('/api/sps/edit', uploadData, {
+            this.$http.post('/api/sps/update', uploadData, {
                 method: 'post',
                 headers: {'Content-Type': 'multipart/form-data'},
                 onUploadProgress: function(event) {
@@ -194,7 +194,13 @@ export default {
                 },
             }).then( resp => {
                 console.log('upload resp: ', resp);
-            }).catch(err => { console.log(err.response) });
+            }).catch(err => {
+                switch (err.response.status) {
+                    case 401:
+                        this.$router.push("/login");
+                        break;
+                };
+            });
         },
     },
     computed: {
