@@ -60,7 +60,7 @@
                                 <el-input-number v-model="newsp.num" :min="0"></el-input-number>
                             </el-form-item>
                             <el-form-item label="备注">
-                                <el-input type="textarea" style="width:400px;" :rows="3"></el-input>
+                                <el-input type="textarea" style="width:400px;" :rows="3" v-model="newsp.comment"></el-input>
                             </el-form-item>
                             <el-form-item label="图片(最多两张)">
                                 <el-button type="primary" size="small" @click="handleUploadImg">点击上传</el-button>

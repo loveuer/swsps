@@ -33,6 +33,11 @@ const routes = [
         component: () => import ("./components/addsp/AddSP.vue"),
     },
     {
+        path: "/sphis",
+        name: "sphis",
+        component: () => import ("./components/sphis/SPHis.vue"),
+    },
+    {
         path: '/test',
         name: 'test',
         component: () => import ('./components/LightBox.vue'),

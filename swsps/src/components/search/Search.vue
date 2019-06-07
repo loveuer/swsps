@@ -26,6 +26,7 @@
                     <el-table
                         :data="searchedSps"
                         style="font-size:14px;width:100%;cursor:pointer"
+                        :row-class-name="tableRowClassName"
                         @row-click="handleRowClick"
                     >
                         <el-table-column type="expand">
@@ -102,7 +103,7 @@ export default {
             this.$router.replace("/search/" + this.search_key);
         },
         get_sps_by_key: function() {
-            this.$http.get(`/api/search/${this.search_key}`)
+            this.$http.get(`/api/sps/search/${this.search_key}`)
                 .then(resp => {
                     this.searchedSps = resp.data;
                 })
@@ -120,6 +121,11 @@ export default {
         handleRowClick: function(row) {
             this.$router.push(`/onesp/${row.id}`);
         },
+        tableRowClassName: function(row) {
+            if (row.row.status === '废弃') {
+                return 'danger-row';
+            };
+        },
     },
     mounted() {
         if (this.$route.params.key !== "") {
@@ -133,10 +139,16 @@ export default {
 };
 </script>
 
-<style scoped>
-.search-main {
+<style>
+.search-main { 
     width: 100%;
     display: flex;
     justify-content: center;
+}
+.el-table .danger-row {
+    background: oldlace;
+}
+.el-table .success-row {
+    background: #5ca833;
 }
 </style>

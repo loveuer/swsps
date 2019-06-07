@@ -13,12 +13,14 @@
                         :key="index"
                         :name="index">
                         <template slot="title" class="his-title">
-                            <div style="width:120px;text-indent:5px;">{{ his.date }}</div>
+                            <div style="width:100px;text-indent:5px;">{{ his.date }}</div>
                             <div style="width:100px;">{{ his.time }}</div>
-                            <div style="width:100px;">{{ his.auth }}</div>
-                            <div style="width:100px;">{{ his.short }}</div>
+                            <div style="width:200px;overflow: hidden;">{{ his.name }}</div>
+                            <div style="width:200px;overflow: hidden;">{{ his.pn }}</div>
+                            <div style="width:100px;">{{ his.short }}</div><br>
                         </template>
                         <div style="text-indent:5px;">
+                            <div>人　员 　　:　　{{ his.auth }}</div>
                             <div>数　量 变化:　　{{ his.amount_chg }}
                                 <el-tooltip class="item" effect="dark" content="点击查看备件" placement="top">
                                     <i class="el-icon-more" style="float:right;padding:0 8px 0 10px;cursor:pointer;" @click="meetSps(his.id)"></i>
@@ -45,11 +47,11 @@ export default {
     },
     methods: {
         meetSps(spid){
-            console.log("meet sps index: ", spid);
+            this.$router.push("/onesp/" + spid);
         },
     },
     mounted() {
-        this.$http.get("/api/sphis/0", {withCredentials: true})
+        this.$http.get("/api/sphis/all/0", {withCredentials: true})
             .then(resp => {
                 let count = 1;
                 for(let h of resp.data) {
@@ -77,5 +79,8 @@ export default {
 <style scoped>
 .his-title {
     display: flex;
+}
+.his-title > div {
+    margin-right: 10px;
 }
 </style>

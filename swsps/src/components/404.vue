@@ -1,7 +1,16 @@
 <template>
     <div id="container">
-        <h1>oops!~~~</h1>
-        <el-button @click="meetHome">返回主页</el-button>
+        <div class="notfound">
+            <div>
+                <h1>404 ! oops~~~</h1>
+            </div>
+            <div>
+                <h3>page not found</h3>
+            </div>
+            <div>
+                <el-button @click="meetHome">返回主页</el-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -14,3 +23,19 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.notfound {
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.notfound > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+ 

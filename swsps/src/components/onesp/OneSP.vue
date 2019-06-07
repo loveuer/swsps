@@ -42,7 +42,7 @@ export default {
         
     },
     mounted() {
-        this.$http.get(`/api/onesp/${this.$route.params.spid}`)
+        this.$http.get(`/api/sps/one/${this.$route.params.spid}`)
             .then(resp => {
                 this.dealRespData(resp.data);
             })

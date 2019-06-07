@@ -20,17 +20,6 @@
                 </div>
             </div>
             <div class="one-row">
-                <div class="label">原模拟机</div>
-                <div class="input">
-                    <el-select v-model="editsp.orgsim" style="width:600px;">
-                        <el-option label="5978" value="5978"></el-option>
-                        <el-option label="5989" value="5989"></el-option>
-                        <el-option label="5008" value="5008"></el-option>
-                        <el-option label="5015" value="5015"></el-option>
-                    </el-select>
-                </div>
-            </div>
-            <div class="one-row">
                 <div class="label">现模拟机</div>
                 <div class="input">
                     <el-select v-model="editsp.nowsim" style="width:600px;">
@@ -173,7 +162,6 @@ export default {
             uploadData.append('name', this.editsp.name);
             uploadData.append('pn', this.editsp.pn);
             uploadData.append('sn', this.editsp.sn);
-            uploadData.append('orgsim', this.editsp.orgsim);
             uploadData.append('nowsim', this.editsp.nowsim);
             uploadData.append('pos', this.editsp.pos);
             uploadData.append('status', this.editsp.status);

@@ -16,8 +16,9 @@
             </el-menu-item>
             <el-menu-item index="/search">搜索备件</el-menu-item>
             <el-menu-item index="/addsp">新增备件</el-menu-item>
-            <el-menu-item index="/history">备件历史</el-menu-item>
+            <el-menu-item index="/sphis">备件历史</el-menu-item>
             <el-menu-item index="/status">备件状态</el-menu-item>
+            <el-menu-item index="#admin" @click="showNotDoneWarning">后台管理</el-menu-item>
             <el-menu-item style="float:right;" index="/login" v-if="this.$store.state.user.id === 0">　登 录　</el-menu-item>
             <el-submenu v-if="this.$store.state.user.id !== 0" style="float:right;" index="/user">
                 <template slot="title">　{{ this.$store.state.user.realname }}　</template>
@@ -44,6 +45,7 @@ export default {
         },
         logout: function() {
             this.setCookie("sessid", "", 0);
+            this.$router.push("/login");
         },
         setCookie: function(cname, cvalue, expire_min) {
             var d = new Date();
@@ -51,20 +53,26 @@ export default {
             var expires = "expires="+ d.toUTCString();
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         },
+        showNotDoneWarning: function() {
+            this.$message({showClose:true,type:'warning',message:'功能开发中...'});
+        },
     },
     mounted() {
         if (this.$store.state.user.id === 0) {
-            this.$http.get("/api/user/get/username")
+            this.$http.get("/api/user/get/realname/bysession")
                 .then(resp => {
-
+                    let user = {id: 1, realname: resp.data.realname};
+                    this.$store.commit('setUser', user);
                 })
-                .catch(err => {
+                .catch(err => { 
+                    console.log(err);
                     switch(err.response.status){
                         case 401:
                             this.$http.router.push("/login");
                             break;
                         case 500:
                             this.$message({showClose: true, message: '服务器发生未知错误, 重试或联系管理员', type: 'warning',});
+                            this.$router.push("/login");
                             break;
                     }
                 });
