@@ -57,11 +57,11 @@ export default {
         },
         getSearchSuggestions(str, cb) {
             let suggestions = [];
-            this.$http.get(`/api/user/searchhis/${this.$store.state.user.id}`)
+            this.$http.get(`/api/user/searchhismost`)
                 .then(resp => {
-                    for (let s of resp.data) {
-                        suggestions.push({value:s.searchkey});
-                    };
+                    resp.data.forEach(one => {
+                        suggestions.push({value:one.key});
+                    });
                 })
                 .catch(err => {
                     switch (err.response.status) {

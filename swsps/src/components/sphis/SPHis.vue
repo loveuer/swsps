@@ -20,15 +20,49 @@
             <div class="sphis-content">
                 <div>
                     <el-card v-for="(item, index) of dealed_sphis" :key="index" shadow="hover" style="margin-top:25px;margin-left:50px;">
-                        <div slot="header" class="clearfix">
-                            <span>{{ item.date }}</span>
-                            <span style="margin-left:10px;">{{ item.time }}</span>
-                            <span style="margin-left:20px;width:80px;display:inline-block;">{{ item.auth }}</span>
-                            <span style="margin-left:20px;display:inline-block;width:200px;">{{ item.last_pos }}</span>
+                        <div slot="header" class="clearfix onehis-header">
+                            <div style="width:90px;">{{ item.date }}</div>
+                            <div style="width:80px;">{{ item.time }}</div>
+                            <div style="width:70px;">{{ item.auth }}</div>
+                            <div style="width:300px;" v-bind:title="'NAME: ' + item.name">{{ item.name }}</div>
+                            <div style="width:200px;margin-left:30px;" v-bind:title="'P/N: ' + item.pn">{{ item.pn }}</div>
+                            <div style="margin-left:auto">
+                                <el-tooltip class="item" effect="dark" content="点击查看该备件" placement="top">
+                                    <i class="el-icon-share" style="cursor:pointer;" @click="meetsp(item.spid)"></i>
+                                </el-tooltip>
+                            </div>
                         </div>
                         <div>
-                            <div>{{ item.amount_chg }}</div>
-                            <div>{{ item.comment }}</div>
+                            <div class="onehis-oneline">
+                                <div class="oneline-label">数　量变化</div>
+                                <div class="oneline-main">
+                                    {{ item.amount_chg }}
+                                </div>
+                            </div>
+                            <div class="onehis-oneline">
+                                <div class="oneline-label">状　态变化</div>
+                                <div class="oneline-main">
+                                    <div style="width:120px;">{{ item.last_sts }}</div>
+                                    <i class="el-icon-right" style="width:60px;"></i>
+                                    <div>{{ item.next_sts }}</div>
+                                </div>
+                            </div>
+                            <div class="onehis-oneline">
+                                <div class="oneline-label">位　置变化</div>
+                                <div class="oneline-main">
+                                    <div style="width:120px;" v-bind:title="item.last_pos">{{ item.last_pos }}</div>
+                                    <i class="el-icon-right" style="width:60px;"></i>
+                                    <div>{{ item.next_pos }}</div>
+                                </div>
+                            </div>
+                            <div class="onehis-oneline">
+                                <div class="oneline-label">模拟机变化</div>
+                                <div class="oneline-main">
+                                    <div style="width:120px;">{{ item.last_sim }}</div>
+                                    <i class="el-icon-right" style="width:60px;"></i>
+                                    <div>{{ item.next_sim }}</div>
+                                </div>
+                            </div>
                         </div>
                     </el-card>
                 </div>
@@ -101,6 +135,9 @@ export default {
                     };
                 });
         },
+        meetsp: function(spid) {
+            this.$router.push("/onesp/" + spid);
+        },
 
     },
     computed: {
@@ -155,5 +192,31 @@ export default {
 }
 .sphis-content > div {
     width: 70%;
+}
+.onehis-header {
+    display: flex;
+    align-items: center;
+}
+.onehis-header > div {
+    font-size: 0.9rem;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.onehis-oneline {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+.onehis-oneline:nth-child(n+2) {
+    margin-top: 10px;
+}
+.oneline-label {
+    width: 120px;
+}
+.oneline-main {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
 }
 </style>
