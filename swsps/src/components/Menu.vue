@@ -53,12 +53,31 @@ export default {
             var expires = "expires="+ d.toUTCString();
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         },
+        getCookie: function(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        },
         showNotDoneWarning: function() {
             this.$message({showClose:true,type:'warning',message:'功能开发中...'});
         },
     },
     mounted() {
         if (this.$store.state.user.id === 0) {
+            if (this.getCookie('sessid') === "") {
+                this.$router.push('/login');
+                return;
+            };
             this.$http.get("/api/user/get/realname/bysession")
                 .then(resp => {
                     let user = {id: 1, realname: resp.data.realname};
@@ -68,7 +87,7 @@ export default {
                     console.log(err);
                     switch(err.response.status){
                         case 401:
-                            this.$http.router.push("/login");
+                            this.$router.push("/login");
                             break;
                         case 500:
                             this.$message({showClose: true, message: '服务器发生未知错误, 重试或联系管理员', type: 'warning',});

@@ -22,9 +22,9 @@
                 <!-- 经常搜索的10个备件信息 -->
                 <div class="mostsearch-notify">搜索次数最多:</div>
                 <el-table :data="mostSearchedSps" style="font-size:12px;width:100%;cursor:pointer;" @row-click="handleRowClick">
-                    <el-table-column prop="name" label="Name" width="300"></el-table-column>
-                    <el-table-column prop="pn" label="P/N" width="300"></el-table-column>
-                    <el-table-column prop="amount" label="数量" width="50"></el-table-column>
+                    <el-table-column prop="name" label="Name" width="300" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column prop="pn" label="P/N" width="300" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column prop="nowsim" label="现模拟机" width="90"></el-table-column>
                 </el-table>
             </div>
         </el-card>
@@ -57,7 +57,7 @@ export default {
         },
         getSearchSuggestions(str, cb) {
             let suggestions = [];
-            this.$http.get(`/api/user/searchhismost`)
+            this.$http.get(`/api/user/searchhis/most`)
                 .then(resp => {
                     resp.data.forEach(one => {
                         suggestions.push({value:one.key});
@@ -66,9 +66,15 @@ export default {
                 .catch(err => {
                     switch (err.response.status) {
                         case 401:
-                            this.$router.push("/login");
+                            this.$router.push('/login');
                             break;
-                    };
+                        case 500:
+                            this.$message({showClose: true, message: "服务器发生未知错误", type: "warning"});
+                            break;
+                        default:
+                            console.log(err.response);
+                            break;
+                };
                 });
             cb(suggestions);            
             return;
@@ -78,18 +84,23 @@ export default {
         },
     },
     mounted() {
-        this.mostSearchedSps = [
-            {id:199, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:121, name:'MCDU - MULTI FUNCTION CTRL DISP UNIT', pn:'F4023-ASM0CDU-000', amount:'3'},
-            {id:122, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:123, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:124, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:125, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:126, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:127, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:128, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-            {id:129, name:'MFD assembly', pn:'60001STM073-501', amount:'7'},
-        ];
+        this.$http.get("/api/sps/clicked/most")
+            .then(resp => {
+                this.mostSearchedSps = resp.data;
+            })
+            .catch(err => {
+                switch (err.response.status) {
+                    case 401:
+                        this.$router.push('/login');
+                        break;
+                    case 500:
+                        this.$message({showClose: true, message: "服务器发生未知错误", type: "warning"});
+                        break;
+                    default:
+                        console.log(err.response);
+                        break;
+                };
+            })
     },
 };
 </script>

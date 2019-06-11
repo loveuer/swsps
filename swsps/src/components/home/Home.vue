@@ -4,16 +4,8 @@
         <div style="width:100%;height:30px;zoom:100%;"></div>
         <div class="home-container">
             <div>
-                <div>
-                    <div>
-                        <home-search></home-search>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <home-history></home-history>
-                    </div>
-                </div>
+                <home-search></home-search>
+                <home-history style="margin-left:30px;max-width:900px;"></home-history>
             </div>
         </div>
     </div>
@@ -51,13 +43,6 @@ export default {
 .home-container > div {
     width: 95%;
     display: flex;
-}
-.home-container > div > div {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-}
-.home-container > div > div > div {
-    width: 90%;
+    margin-right: 30px;
 }
 </style>

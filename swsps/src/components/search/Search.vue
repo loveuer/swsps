@@ -21,6 +21,38 @@
                     <span style="margin-left:20px;">
                         <el-button type="primary" @click="doSearch">搜索</el-button>
                     </span>
+                    <span style="margin-left:50px;">
+                        <el-checkbox v-model="foldResult">折叠结果</el-checkbox>
+                    </span>
+                    <span style="margin-left:50px;">
+                        <el-popover
+                            trigger="hover"
+                            placement="bottom"
+                            width="400"
+                        >
+                            <div class="pop-filter">
+                                <div class="filter-side">
+                                    <div style="width:100%;height:30px;">模拟机</div>
+                                    <div style="width:100%;"><el-checkbox v-model="filter.sim5978">5978</el-checkbox></div>
+                                    <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sim5989">5989</el-checkbox></div>
+                                    <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sim5008">5008</el-checkbox></div>
+                                    <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sim5015">5015</el-checkbox></div>
+                                </div>
+                                <div class="filter-side">
+                                    <div style="width:100%;height:30px;">状态</div>
+                                    <div style="width:100%"><el-checkbox v-model="filter.sts_bj">备件</el-checkbox></div>
+                                    <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sts_sy">使用</el-checkbox></div>
+                                    <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sts_wx">维修</el-checkbox></div>
+                                    <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sts_fq">废弃</el-checkbox></div>
+                                </div>
+                                <div style="width:50%;text-align:center;margin-top:10px;">
+                                    <el-button size="small">恢复默认</el-button>
+                                </div>
+                            </div>
+                            <el-button slot="reference" size="small">过滤器</el-button>
+                        </el-popover>
+                    </span>
+                    
                 </div>
                 <div style="width:100%;">
                     <el-table
@@ -66,6 +98,18 @@ import SpsMenu from "../Menu.vue";
 export default {
     data() {
         return {
+            foldResult: false,
+            filter: {
+                default: true,
+                sim5978: true,
+                sim5989: true,
+                sim5008: true,
+                sim5015: true,
+                sts_bj: true,
+                sts_sy: true,
+                sts_wx: true,
+                sts_fq: false,
+            },
             search_key: "",
             searchedSps: []
         };
@@ -73,16 +117,19 @@ export default {
     methods: {
         getSearchSuggestions(str, cb) {
             let suggestions = [];
-            this.$http.get("/api/user/searchhismost")
+            this.$http.get("/api/user/searchhis/last")
                 .then(resp => {
                     for(let h of resp.data) {
-                        suggestions.push({value:h.key});
+                        suggestions.push({value:h});
                     };
                 })
                 .catch(err => {
                     switch (err.response.status) {
                         case 401:
                             this.$router.push("/login");
+                            break;
+                        default:
+                            console.log(err.response);
                             break;
                     };
                 });
@@ -99,10 +146,15 @@ export default {
                 });
                 return;
             };
+            
             this.get_sps_by_key();
+            console.log(this.search_key);
             this.$router.replace("/search/" + this.search_key);
         },
         get_sps_by_key: function() {
+            if (!this.search_key) {
+                return;
+            };
             this.$http.get(`/api/sps/search/${this.search_key}`)
                 .then(resp => {
                     this.searchedSps = resp.data;
@@ -150,5 +202,14 @@ export default {
 }
 .el-table .success-row {
     background: #5ca833;
+}
+.pop-filter {
+    width:100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.filter-side {
+    width:49%;
+    text-align: center;
 }
 </style>

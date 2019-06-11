@@ -23,13 +23,13 @@
                             <div>人　员 　　:　　{{ his.auth }}</div>
                             <div>数　量 变化:　　{{ his.amount_chg }}
                                 <el-tooltip class="item" effect="dark" content="点击查看备件" placement="top">
-                                    <i class="el-icon-share" style="float:right;padding:0 8px 0 10px;cursor:pointer;" @click="meetSps(his.id)"></i>
+                                    <i class="el-icon-share" style="float:right;padding:0 8px 0 10px;cursor:pointer;" @click="meetSps(his.spid)"></i>
                                 </el-tooltip>
                             </div>
                             <div>模拟机 变化:　　{{ his.last_sim }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.next_sim }}</div>
                             <div>状　态 变化:　　{{ his.last_sts }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.next_sts }}</div>
                             <div>位　置 变化:　　{{ his.last_pos }} <i class="el-icon-right" style="padding:0 10px 0 10px;"></i> {{ his.next_pos }}</div>
-                            <div>备　注 　　:　　{{ his.comment }}</div>
+                            <div style="overflow: hidden;white-space: nowrap;" v-bind:title="his.comment">记　录 　　:　　{{ his.comment }}</div>
                         </div>
                     </el-collapse-item>
                 </el-collapse>

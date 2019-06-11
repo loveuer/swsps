@@ -63,8 +63,19 @@
                                     <div>{{ item.next_sim }}</div>
                                 </div>
                             </div>
+                            <div class="onehis-oneline">
+                                <div class="oneline-label">记　　　录</div>
+                                <div class="oneline-main">
+                                    <el-tooltip class="item" effect="dark" :content="item.comment" placement="top">
+                                        <div>{{ item.comment }}</div>
+                                    </el-tooltip>
+                                </div>
+                            </div>
                         </div>
                     </el-card>
+                    <div style="margin-left:50px;margin-top:30px;">
+                        <el-button icon="el-icon-arrow-down" type="primary" @click="getMoreHis">显示更多</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,7 +149,23 @@ export default {
         meetsp: function(spid) {
             this.$router.push("/onesp/" + spid);
         },
-
+        getMoreHis: function() {
+            this.$http.get('/api/sphis/all/' + this.sphis.length)
+                .then(resp => {
+                    this.sphis = this.sphis.concat(resp.data);
+                })
+                .catch(err => {
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push('/login');
+                            break;
+                    
+                        default:
+                            console.log(err.response);
+                            break;
+                    }
+                });
+        },
     },
     computed: {
         dealed_sphis: function() {
@@ -218,5 +245,7 @@ export default {
     align-items: center;
     overflow: hidden;
     white-space: nowrap;
+    flex: 1;
+    text-overflow: ellipsis;
 }
 </style>

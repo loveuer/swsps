@@ -60,6 +60,12 @@
                     <el-input v-model="editsp.comment" type="textarea" :rows="3" style="width:600px;"></el-input>
                 </div>
             </div>
+            <div class="row-comment">
+                <div class="comment-label">记录</div>
+                <div class="input">
+                    <el-input v-model="recoder" type="textarea" :rows="3" style="width:600px;" placeholder="该次备件更改的 备注 或者 记录"></el-input>
+                </div>
+            </div>
             <div class="row-imgs">
                 <div class="imgs-label">图片</div>
                 <div class="imgs-zone">
@@ -119,6 +125,7 @@ export default {
     data() {
         return {
             editsp: {},
+            recoder: '',
         };
     },
     props: {
@@ -163,10 +170,12 @@ export default {
             uploadData.append('pn', this.editsp.pn);
             uploadData.append('sn', this.editsp.sn);
             uploadData.append('nowsim', this.editsp.nowsim);
+            uploadData.append('orgsim', this.editsp.orgsim);
             uploadData.append('pos', this.editsp.pos);
             uploadData.append('status', this.editsp.status);
             uploadData.append('amount', this.editsp.amount);
             uploadData.append('comment', this.editsp.comment);
+            uploadData.append('recoder', this.recoder);
             if (this.imgshow.img1) {
                 uploadData.append('img1', document.querySelector('#input-img1').files[0]);
             };
@@ -178,14 +187,24 @@ export default {
                 method: 'post',
                 headers: {'Content-Type': 'multipart/form-data'},
                 onUploadProgress: function(event) {
-                    console.log(event.loaded / event.total);
+                    // console.log(event.loaded / event.total);
                 },
             }).then( resp => {
-                console.log('upload resp: ', resp);
+                if (resp.data === 'Done') {
+                    this.$router.go(0);
+                } else {
+                    this.$message({showClose:true, message:'发生未知错误, 即将刷新页面', type:'warning'});
+                    setTimeout(() => {
+                        this.router.go(0);
+                    }, 2000);
+                };
             }).catch(err => {
                 switch (err.response.status) {
                     case 401:
                         this.$router.push("/login");
+                        break;
+                    default:
+                        console.log(err.response);
                         break;
                 };
             });
