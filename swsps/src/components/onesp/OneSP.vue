@@ -30,10 +30,10 @@ export default {
         dealRespData: function(data) {
             let sp = data;
             if (sp.img1 !== 'None') {
-                sp.img1 = `http://118.114.243.128:8820${sp.img1}`;
+                sp.img1 = `http://${window.location.host}${sp.img1}`;
             };
             if (sp.img2 !== 'None') {
-                sp.img2 = `http://118.114.243.128:8820${sp.img2}`;
+                sp.img2 = `http://${window.location.host}${sp.img2}`;
             };
             this.sp = sp;
         },
@@ -53,6 +53,7 @@ export default {
                         break;
                 };
             });
+        console.log(this.$route);
     },
     components: {
         "sps-menu": SpsMenu,

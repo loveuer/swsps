@@ -46,7 +46,7 @@
                                     <div style="width:100%;margin-top:5px;"><el-checkbox v-model="filter.sts_fq">废弃</el-checkbox></div>
                                 </div>
                                 <div style="width:50%;text-align:center;margin-top:10px;">
-                                    <el-button size="small">恢复默认</el-button>
+                                    <el-button size="small" @click="filter2Default">恢复默认</el-button>
                                 </div>
                             </div>
                             <el-button slot="reference" size="small">过滤器</el-button>
@@ -56,7 +56,7 @@
                 </div>
                 <div style="width:100%;">
                     <el-table
-                        :data="searchedSps"
+                        :data="filteredSPS"
                         style="font-size:14px;width:100%;cursor:pointer"
                         :row-class-name="tableRowClassName"
                         @row-click="handleRowClick"
@@ -99,20 +99,32 @@ export default {
     data() {
         return {
             foldResult: false,
-            filter: {
-                default: true,
-                sim5978: true,
-                sim5989: true,
-                sim5008: true,
-                sim5015: true,
-                sts_bj: true,
-                sts_sy: true,
-                sts_wx: true,
-                sts_fq: false,
-            },
+            filter: {sim5978: true, sim5989: true, sim5008: true, sim5015: true, sts_bj: true, sts_sy: true, sts_wx: true, sts_fq: false},
             search_key: "",
             searchedSps: []
         };
+    },
+    computed: {
+        'filteredSPS': function() {
+            let newsps = this.searchedSps.filter(one => {
+                if (this.filterArray.sim.includes(one.nowsim) && this.filterArray.sts.includes(one.status)) {
+                    return one;
+                }
+            });
+            return newsps;
+        },
+        'filterArray': function() {
+            let fltary = {sim: [], sts: []};
+            if (this.filter.sim5978) {fltary.sim.push('5978')};
+            if (this.filter.sim5989) {fltary.sim.push('5989')};
+            if (this.filter.sim5008) {fltary.sim.push('5008')};
+            if (this.filter.sim5015) {fltary.sim.push('5015')};
+            if (this.filter.sts_bj) {fltary.sts.push('备件')};
+            if (this.filter.sts_sy) {fltary.sts.push('使用')};
+            if (this.filter.sts_wx) {fltary.sts.push('维修')};
+            if (this.filter.sts_fq) {fltary.sts.push('废弃')};
+            return fltary;
+        },
     },
     methods: {
         getSearchSuggestions(str, cb) {
@@ -177,6 +189,9 @@ export default {
             if (row.row.status === '废弃') {
                 return 'danger-row';
             };
+        },
+        filter2Default: function() {
+            this.filter = {sim5978: true, sim5989: true, sim5008: true, sim5015: true, sts_bj: true, sts_sy: true, sts_wx: true, sts_fq: false};
         },
     },
     mounted() {

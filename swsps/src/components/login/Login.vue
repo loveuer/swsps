@@ -77,7 +77,6 @@ export default {
             d.setTime(d.getTime() + (expire_min*60*1000));
             var expires = "expires="+ d.toUTCString();
             // var expires = "expires=" + d.toLocaleString();
-            console.log(expires);
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         },
     },
