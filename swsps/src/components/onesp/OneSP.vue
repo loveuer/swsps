@@ -30,10 +30,10 @@ export default {
         dealRespData: function(data) {
             let sp = data;
             if (sp.img1 !== 'None') {
-                sp.img1 = `http://${window.location.host}${sp.img1}`;
+                sp.img1 = `http://${window.location.host}/static/sp_img/${sp.img1}`;
             };
             if (sp.img2 !== 'None') {
-                sp.img2 = `http://${window.location.host}${sp.img2}`;
+                sp.img2 = `http://${window.location.host}/static/sp_img/${sp.img2}`;
             };
             this.sp = sp;
         },

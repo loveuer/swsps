@@ -112,7 +112,7 @@
             <div style="display:flex;width:100%;margin-top:30px;">
                 <div style="width:150px;"></div>
                 <div style="width:100%;">
-                    <el-button type="primary" @click="comfirmEdit">确认</el-button> 
+                    <el-button type="primary" @click="comfirmEdit" :loading="updating">确认</el-button> 
                     <el-button @click="cancelEdit">取消</el-button>
                 </div>
             </div>
@@ -126,6 +126,7 @@ export default {
         return {
             editsp: {},
             recoder: '',
+            updating: false,
         };
     },
     props: {
@@ -164,6 +165,7 @@ export default {
             this.$emit('chgmod', 'sp-imf');
         },
         comfirmEdit: function() {
+            this.updating = true;
             let uploadData = new FormData();
             uploadData.append('id', this.editsp.id);
             uploadData.append('name', this.editsp.name);
@@ -204,7 +206,9 @@ export default {
                         this.$router.push("/login");
                         break;
                     default:
+                        this.$message({showClose:true, message:'发生未知错误, 即将刷新页面', type:'warning'});
                         console.log(err.response);
+                        this.updating = false;
                         break;
                 };
             });

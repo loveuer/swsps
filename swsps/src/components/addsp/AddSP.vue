@@ -100,7 +100,7 @@
                                 </div>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="success" @click="doUpload">新增备件</el-button>
+                                <el-button type="success" @click="doUpload" :loading="uploading">新增备件</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -119,6 +119,7 @@ export default {
         return {
             newsp: { name: '', pn: '', sn: '', orgsim: '', nowsim: '', pos: '', status: '', num: 0, comment: '', img1: null, img2: null, },
             sims: [{index:1, sim:'5978'}, {index:2, sim:'5989'}, {index:3, sim:'5008'}, {index:4, sim:'5015'}],
+            uploading: false,
         };
     },
     methods: {
@@ -197,6 +198,7 @@ export default {
                 })
         },
         doUpload: function() {
+            this.uploading = true;
             let uploadData = new FormData();
             uploadData.append('name', this.newsp.name);
             uploadData.append('pn', this.newsp.pn);
@@ -233,6 +235,11 @@ export default {
                 switch (err.response.status) {
                     case 401:
                         this.$router.push("/login");
+                        break;
+                    default:
+                        console.log(err.response);
+                        this.$message({showClose: true, message: "发生未知错误, 请联系管理员", type: "warning"});
+                        this.uploading = false;
                         break;
                 };
             });

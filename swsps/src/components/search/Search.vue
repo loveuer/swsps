@@ -55,36 +55,8 @@
                     
                 </div>
                 <div style="width:100%;">
-                    <el-table
-                        :data="filteredSPS"
-                        style="font-size:14px;width:100%;cursor:pointer"
-                        :row-class-name="tableRowClassName"
-                        @row-click="handleRowClick"
-                    >
-                        <el-table-column type="expand">
-                            <template slot-scope="props">
-                                <el-form label-position="left" class="demo-table-expand" label-width="100px">
-                                    <el-form-item label="原模拟机" style="height:30px;">
-                                        <span>{{ props.row.orgsim }}</span>
-                                    </el-form-item>
-                                    <el-form-item label="位　　置" style="height:30px;">
-                                        <span>{{ props.row.pos }}</span>
-                                    </el-form-item>
-                                    <el-form-item label="状　　态" style="height:30px;">
-                                        <span>{{ props.row.status }}</span>
-                                    </el-form-item>
-                                    <el-form-item label="备　　注" style="height:30px;">
-                                        <span>{{ props.row.comment }}</span>
-                                    </el-form-item>
-                                </el-form>
-                            </template>
-                        </el-table-column>
-                            <el-table-column prop="name" label="Name" min-width="300"></el-table-column>
-                            <el-table-column prop="pn" label="P/N" min-width="250"></el-table-column>
-                            <el-table-column prop="sn" label="S/N" min-width="200"></el-table-column>
-                            <el-table-column prop="nowsim" label="模拟机" min-width="75"></el-table-column>
-                            <el-table-column prop="amount" label="数量" min-width="75"></el-table-column>
-                    </el-table>
+                    <ext-table :sps="filteredSPS" v-if="!foldResult"></ext-table>
+                    <folded-table :sps="filteredSPS" v-if="foldResult"></folded-table>
                 </div>
             </el-card>
         </div>
@@ -94,6 +66,8 @@
 
 <script>
 import SpsMenu from "../Menu.vue";
+import foldedTable from "./Search_fold.vue";
+import extTable from "./Search_ext.vue";
 
 export default {
     data() {
@@ -182,14 +156,7 @@ export default {
         searchSelectEvent: function() {
             this.doSearch();
         },
-        handleRowClick: function(row) {
-            this.$router.push(`/onesp/${row.id}`);
-        },
-        tableRowClassName: function(row) {
-            if (row.row.status === '废弃') {
-                return 'danger-row';
-            };
-        },
+        
         filter2Default: function() {
             this.filter = {sim5978: true, sim5989: true, sim5008: true, sim5015: true, sts_bj: true, sts_sy: true, sts_wx: true, sts_fq: false};
         },
@@ -201,7 +168,9 @@ export default {
         };
     },
     components: {
-        "sps-menu": SpsMenu
+        "sps-menu": SpsMenu,
+        "folded-table": foldedTable,
+        "ext-table": extTable,
     }
 };
 </script>
@@ -212,12 +181,7 @@ export default {
     display: flex;
     justify-content: center;
 }
-.el-table .danger-row {
-    background: oldlace;
-}
-.el-table .success-row {
-    background: #5ca833;
-}
+
 .pop-filter {
     width:100%;
     display: flex;
