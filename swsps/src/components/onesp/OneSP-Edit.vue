@@ -109,11 +109,14 @@
                     </div>
                 </div>
             </div>
-            <div style="display:flex;width:100%;margin-top:30px;">
-                <div style="width:150px;"></div>
+            <div class="row-imgs">
+                <div class="imgs-label"></div>
                 <div style="width:100%;">
-                    <el-button type="primary" @click="comfirmEdit" :loading="updating">确认</el-button> 
-                    <el-button @click="cancelEdit">取消</el-button>
+                    <div style="width:600px;display:flex;">
+                        <el-button type="primary" @click="comfirmEdit" :loading="updating">确认</el-button> 
+                        <el-button @click="cancelEdit">取消</el-button>
+                        <el-button @click="deletesps" type="danger" style="margin-left:auto;">删除</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,6 +136,36 @@ export default {
         onesp: Object,
     },
     methods: {
+        deletesps: function() {
+            this.$confirm('此操作将永久删除该备件, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'})
+                .then(() => {
+                    this.$http.delete('/api/sps/one/' + this.onesp.id)
+                        .then(resp => {
+                            if (resp.data === 'Done') {
+                                this.$message({showClose:true,message:'删除备件成功',type:'warning'});
+                                setTimeout(() => {
+                                    this.$router.push('/');
+                                }, 800);
+                            }
+                        })
+                        .catch(err => {
+                            switch (err.response.status) {
+                                case 401:
+                                    this.$router.push('/login');
+                                    break;
+                                case 500:
+                                    this.$message({showClose:true,message:'删除备件出错, 请稍后再试',type:'warning'});
+                                    break;                            
+                                default:
+                                    console.log(err.response);
+                                    break;
+                            }
+                        });
+                })
+                .catch(() => {
+                    this.$message({showClose:true,message:'已取消删除',type:'info'});
+                });
+        },
         cancelEdit: function() {
             this.$emit('chgmod', 'sp-imf');
         },

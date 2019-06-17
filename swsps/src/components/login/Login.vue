@@ -25,7 +25,7 @@
                         <div>
                             <el-row>
                                 <el-button type="primary" @click="dologin">登录</el-button>
-                                <el-button>注册</el-button>
+                                <el-button @click="sorryfornotwork">注册</el-button>
                             </el-row>
                         </div>
                     </div>
@@ -46,6 +46,9 @@ export default {
     methods: {
         meetHome() {
             this.$router.push('/');
+        },
+        sorryfornotwork: function() {
+            this.$message({showClose: true, message: '暂不支持', type: 'warning',});
         },
         dologin() {
             if (!this.username || !this.password) {
