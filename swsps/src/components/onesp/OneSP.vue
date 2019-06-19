@@ -15,6 +15,7 @@
 import SpsMenu from "../Menu.vue";
 import SPImf from "./OneSP-Imf.vue";
 import SPEdit from './OneSP-Edit.vue';
+import SPHis from './OneSP-His.vue';
 
 export default {
     data() {
@@ -59,6 +60,7 @@ export default {
         "sps-menu": SpsMenu,
         'sp-imf': SPImf,
         'sp-edit': SPEdit,
+        'sp-his': SPHis,
     },
 };
 </script>

@@ -45,8 +45,8 @@
                 </div>
             </div>
             <div style="display:flex;margin-top:30px;">
-                <!-- <div style="width:150px;height:100%;"></div> -->
                 <el-button type="primary" @click="editsp">编辑</el-button>
+                <el-button type="primary" @click="showsphis">历史</el-button>
             </div>
         </div>
         <div v-if="show_lightbox">
@@ -69,6 +69,9 @@ export default {
         onesp: Object,
     },
     methods: {
+        showsphis: function() {
+            this.$emit('chgmod', 'sp-his');
+        },
         handle_lb: function(which) {
             this.lbimg.img = this.imfsp[which];
             this.lbimg.alt = this.imfsp.name;

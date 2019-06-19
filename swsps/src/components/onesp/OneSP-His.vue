@@ -54,11 +54,12 @@
                 </div>
             </div>
         </el-card>
-        <div>
-            <div>
-                <el-button type="primary" size="small">更多</el-button>
+        <div style="width:100%;height:50px;display:flex;justify-content: center;">
+            <div style="width:80%;margin-top:30px;">
+                <el-button type="primary" size="small" @click="morehis">更多</el-button>
             </div>
         </div>
+        <div style="width:100%;height:100px;zoom:100%;"></div>
     </div>
 </template>
 
@@ -77,6 +78,25 @@ export default {
         backtoimf: function() {
             this.$emit('chgmod', 'sp-imf');
         },
+        morehis: function() {
+            this.$http.get(`/api/sphis/one/${this.onesp.id}/${this.sphis.length}`)
+                .then(resp => {
+                    this.sphis = this.sphis.concat(resp.data);
+                })
+                .catch(err => {
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push('/login');
+                            break;
+                        case 500:
+                            this.$message({showClose:true, message:'获取更多数据失败', type:'warning'});
+                            break;
+                        default:
+                            console.log(err.response);
+                            break;
+                    }
+                });
+        },
     },
     computed: {
         dealed_sphis: function() {
@@ -94,7 +114,6 @@ export default {
     mounted() {
         this.$http.get(`/api/sphis/one/${this.onesp.id}/0`)
             .then(resp => {
-                console.log(resp.data);
                 this.sphis = resp.data;
             })
             .catch(err => {

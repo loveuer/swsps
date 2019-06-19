@@ -17,7 +17,7 @@
             <el-menu-item index="/search">搜索备件</el-menu-item>
             <el-menu-item index="/addsp">新增备件</el-menu-item>
             <el-menu-item index="/sphis">备件历史</el-menu-item>
-            <el-menu-item index="/status">备件状态</el-menu-item>
+            <el-menu-item index="#status" @click="showNotDoneWarning">备件状态</el-menu-item>
             <el-menu-item index="#admin" @click="showNotDoneWarning">后台管理</el-menu-item>
             <el-menu-item style="float:right;" index="/login" v-if="this.$store.state.user.id === 0">　登 录　</el-menu-item>
             <el-submenu v-if="this.$store.state.user.id !== 0" style="float:right;" index="/user">
