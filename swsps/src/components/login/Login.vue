@@ -24,7 +24,7 @@
                         </div>
                         <div>
                             <el-row>
-                                <el-button type="primary" @click="dologin">登录</el-button>
+                                <el-button type="primary" @click="dologin" :loading="logining">登录</el-button>
                                 <el-button @click="sorryfornotwork">注册</el-button>
                             </el-row>
                         </div>
@@ -41,6 +41,7 @@ export default {
         return {
             username: '',
             password: '',
+            logining: false,
         };
     },
     methods: {
@@ -48,7 +49,7 @@ export default {
             this.$router.push('/');
         },
         sorryfornotwork: function() {
-            this.$message({showClose: true, message: '暂不支持', type: 'warning',});
+            this.$message({showClose: true, message: '已支持用事务管理的账户登录', type: 'info',});
         },
         dologin() {
             if (!this.username || !this.password) {
@@ -56,6 +57,7 @@ export default {
                 this.$message({showClose: true, message: '用户名和密码不能为空', type: 'warning',});
                 return;
             };
+            this.logining = true;
             this.$http.post("/api/user/login", `username=${this.username}&password=${this.password}`)
                 .then(resp => {
                     if (resp.data.id !== 0) {
@@ -64,13 +66,15 @@ export default {
                         this.$router.push("/");
                     } else {
                         this.password = '';
+                        this.logining = false;
                         this.$message({showClose: true, message: '用户名和密码不匹配', type: 'warning',});
                         return;
                     }
                 })
                 .catch(err => {
                     this.password = '';
-                    this.$message({showClose: true, message: '发生未知错误', type: 'warning',});
+                    this.logining = false;
+                    this.$message({showClose: true, message: '发生未知错误, 请刷新页面重试', type: 'warning',});
                     console.log(err.response);
                     return
                 });
@@ -82,6 +86,9 @@ export default {
             // var expires = "expires=" + d.toLocaleString();
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         },
+    },
+    mounted() {
+        this.sorryfornotwork();
     },
 };
 </script>
