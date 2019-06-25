@@ -3,7 +3,7 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <el-tooltip class="item" effect="dark" content="查看全部历史" placement="top">
-                    <el-link href="/history/all" style="font-size:16px;font-weight:bold;">备件历史</el-link>
+                    <el-link href="/sphis" style="font-size:16px;font-weight:bold;">备件历史</el-link>
                 </el-tooltip>
             </div>
             <div>

@@ -125,11 +125,7 @@ export default {
         doSearch: function() {
             this.$refs.searchkey_input.close();
             if (this.search_key === "") {
-                this.$message({
-                    showClose: true,
-                    message: "搜索关键字不能为空",
-                    type: "warning"
-                });
+                this.$message({showClose: true,message: "搜索关键字不能为空",type: "warning"});
                 return;
             };
             
@@ -143,7 +139,12 @@ export default {
             };
             this.$http.get(`/api/sps/search/${this.search_key}`)
                 .then(resp => {
-                    this.searchedSps = resp.data;
+                    if (resp.data instanceof Array) {
+                        this.searchedSps = resp.data;
+                    } else {
+                        this.$message({showClose: true,message: "发生错误,请重试",type: "warning"});
+                        console.log("wrong resp data type: ", typeof(resp.data));
+                    };
                 })
                 .catch(err => {
                     switch (err.response.status) {

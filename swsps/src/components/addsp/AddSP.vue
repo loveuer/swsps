@@ -197,8 +197,37 @@ export default {
                     document.querySelector('#newsp-img2').value = '';
                 })
         },
+        check_upload_data: function() {
+            if (this.newsp.name === "") {
+                return false;
+            };
+            if (this.newsp.pn === "") {
+                return false;
+            };
+            if (this.newsp.sn === "") {
+                return false;
+            };
+            if (this.newsp.orgsim === "") {
+                return false;
+            };
+            if (this.newsp.nowsim === "") {
+                return false;
+            };
+            if (this.newsp.pos === "") {
+                return false;
+            };
+            if (this.newsp.status === "") {
+                return false;
+            };
+            return true;
+        },
         doUpload: function() {
             this.uploading = true;
+            if (!this.check_upload_data()) {
+                this.$message({showClose: true, message: "信息不完整", type: "warning"});
+                this.uploading = false;
+                return;
+            };
             let uploadData = new FormData();
             uploadData.append('name', this.newsp.name);
             uploadData.append('pn', this.newsp.pn);

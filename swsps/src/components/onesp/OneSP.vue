@@ -54,7 +54,6 @@ export default {
                         break;
                 };
             });
-        console.log(this.$route);
     },
     components: {
         "sps-menu": SpsMenu,

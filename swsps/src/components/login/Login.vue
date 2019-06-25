@@ -18,7 +18,7 @@
                             </el-input>
                         </div>
                         <div>
-                            <el-input v-model="password" show-password>
+                            <el-input v-model="password" show-password @keypress.enter.native="dologin">
                                 <i slot="prefix" class="el-input__icon el-icon-lock"></i>
                             </el-input>
                         </div>
