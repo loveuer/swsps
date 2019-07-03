@@ -72,11 +72,21 @@ export default {
                     }
                 })
                 .catch(err => {
+                    switch (err.response.status) {
+                        case 502:
+                            this.$message({showClose: true, message: '后台服务已停止,请通知管理员恢复', type: 'warning',});
+                            break;
+                        case 400:
+                            this.$message({showClose: true, message: '用户名和密码不匹配', type: 'warning',});
+                            break;
+                        default:
+                            this.$message({showClose: true, message: '发生未知错误, 请刷新页面重试', type: 'warning',});
+                            break;
+                    };
                     this.password = '';
                     this.logining = false;
-                    this.$message({showClose: true, message: '发生未知错误, 请刷新页面重试', type: 'warning',});
                     console.log(err.response);
-                    return
+                    return;
                 });
         },
         setCookie: function(cname, cvalue, expire_min) {
