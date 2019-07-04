@@ -15,6 +15,9 @@
 </template>
 
 <script>
+import lb from "lightbox2";
+import jq from "jquery";
+
 export default {
     data() {
         return {
@@ -40,7 +43,10 @@ export default {
 
     },
     mounted() {
-        
+        window.$ = jq;
+    },
+    beforeDestroy() {
+        window.$ = null;
     },
 }
 </script>

@@ -37,10 +37,16 @@
                 <div>图片</div>
                 <div class="imgs-zone">
                     <div class="one-img">
-                        <img :src="imfsp.img1" @click="handle_lb('img1')">
+                        <!-- <img :src="imfsp.img1" @click="handle_lb('img1')"> -->
+                        <a :href="imfsp.img1" data-lightbox="onesp-image" data-title="image-1">
+                            <img :src="imfsp.img1">
+                        </a>
                     </div>
                     <div class="one-img">
-                        <img :src="imfsp.img2" @click="handle_lb('img2')">
+                        <!-- <img :src="imfsp.img2" @click="handle_lb('img2')"> -->
+                        <a :href="imfsp.img2" data-lightbox="onesp-image" data-title="image-2">
+                            <img :src="imfsp.img2">
+                        </a>
                     </div>
                 </div>
             </div>
@@ -56,7 +62,9 @@
 </template>
 
 <script>
-import lightbox from "../LightBox.vue";
+require ("lightbox2");
+import "lightbox2/dist/css/lightbox.min.css";
+import jq from "jquery";
 
 export default {
     data() {
@@ -91,21 +99,24 @@ export default {
         imfsp: function() {
             let deepcopysp = JSON.parse(JSON.stringify(this.onesp));
             if (deepcopysp.img1 === 'None') {
-                // deepcopysp.img1 = 'http://118.114.243.128:8820/static/sp_img/None.jpg';
+                // deepcopysp.img1 = 'http://192.168.0.19:8820/static/sp_img/None.jpg';
                 deepcopysp.img1 = `http://${window.location.host}/static/sp_img/None.jpg`;
             };
             if (deepcopysp.img2 === 'None') {
-                // deepcopysp.img2 = 'http://118.114.243.128:8820/static/sp_img/None.jpg';
+                // deepcopysp.img2 = 'http://192.168.0.19:8820/static/sp_img/None.jpg';
                 deepcopysp.img2 = `http://${window.location.host}/static/sp_img/None.jpg`;
             };
             return deepcopysp;
         }
     },
-    mounted() {
-        
+    created() {
+        window.$ = jq;
+    },
+    beforeDestroy() {
+        window.$ = null;
     },
     components: {
-        'light-box': lightbox,
+        // 'light-box': lightbox,
     },
 };
 </script>
@@ -180,7 +191,7 @@ export default {
     border: 1px solid rgba(131, 208, 242, 1);
     box-shadow: 0 0 5px rgba(131, 208, 242, 1);
 }
-.one-img > img {
+.one-img img {
     height: 180px;
     width: auto;
     border-radius: 5px;
