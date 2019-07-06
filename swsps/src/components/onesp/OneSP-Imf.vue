@@ -99,12 +99,12 @@ export default {
         imfsp: function() {
             let deepcopysp = JSON.parse(JSON.stringify(this.onesp));
             if (deepcopysp.img1 === 'None') {
-                // deepcopysp.img1 = 'http://192.168.0.19:8820/static/sp_img/None.jpg';
-                deepcopysp.img1 = `http://${window.location.host}/static/sp_img/None.jpg`;
+                deepcopysp.img1 = 'http://192.168.0.19:8820/static/sp_img/None.jpg';
+                // deepcopysp.img1 = `http://${window.location.host}/static/sp_img/None.jpg`;
             };
             if (deepcopysp.img2 === 'None') {
-                // deepcopysp.img2 = 'http://192.168.0.19:8820/static/sp_img/None.jpg';
-                deepcopysp.img2 = `http://${window.location.host}/static/sp_img/None.jpg`;
+                deepcopysp.img2 = 'http://192.168.0.19:8820/static/sp_img/None.jpg';
+                // deepcopysp.img2 = `http://${window.location.host}/static/sp_img/None.jpg`;
             };
             return deepcopysp;
         }
