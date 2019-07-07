@@ -59,7 +59,7 @@ export default {
                         break;
                     };
                     h.date = h.time.split("T")[0];
-                    h.time = h.time.split("T")[1].split("+")[0];
+                    h.time = h.time.split("T")[1].slice(0,8);
                     this.last10histories.push(h);
                     count++;
                 };

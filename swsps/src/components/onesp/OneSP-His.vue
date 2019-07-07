@@ -102,7 +102,7 @@ export default {
         dealed_sphis: function() {
             let newsphis = [];
             for(let h of this.sphis) {
-                newsphis.push({name:h.name, pn:h.pn, sn:h.sn, date:h.time.split('T')[0], time:h.time.split('T')[1].split('+')[0],
+                newsphis.push({name:h.name, pn:h.pn, sn:h.sn, date:h.time.split('T')[0], time:h.time.split('T')[1].slice(0,8),
                     auth:h.auth, last_pos:h.last_pos, next_pos:h.next_pos,
                     last_sim:h.last_sim, next_sim:h.next_sim,
                     last_sts:h.last_sts, next_sts:h.next_sts,

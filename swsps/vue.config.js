@@ -93,8 +93,8 @@ module.exports = {
         // proxy: 'http://127.0.0.1:8000/', // 配置跨域处理,只有一个代理
         proxy: {
           '/api': {
-            // target: 'http://192.168.0.19:9119',
-            target: 'http://182.138.191.41:8989',
+            target: 'http://127.0.0.1:8111',
+            // target: 'http://182.138.191.41:8989',
             // target: '<url>',
             ws: true,
             changeOrigin: true

@@ -131,13 +131,23 @@ export default {
             this.$http.get("/api/sps/autocomplete/name/" + inputedStr)
                 .then(resp => {
                     let data = [];
-                    for(let i of resp.data) {
-                        data.push({value:i});
+                    if (resp.data) {
+                        for(let i of resp.data) {
+                            data.push({value: i.name});
+                        };
                     };
                     cb(data);
                 })
                 .catch(err => {
-                    console.log(err.response);
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push("/login");
+                            break;
+                    
+                        default:
+                            console.log(err.response);
+                            break;
+                    };
                 });
         },
         pnSuggestion: function(inputedStr, cb) {
@@ -148,13 +158,23 @@ export default {
             this.$http.get("/api/sps/autocomplete/pn/" + inputedStr)
                 .then(resp => {
                     let data = [];
-                    for(let i of resp.data) {
-                        data.push({value:i});
+                    if (resp.data) {
+                        for(let i of resp.data) {
+                            data.push({value:i.pn});
+                        };
                     };
                     cb(data);
                 })
                 .catch(err => {
-                    console.log(err.response);
+                    switch (err.response.status) {
+                        case 401:
+                            this.$router.push("/login");
+                            break;
+                    
+                        default:
+                            console.log(err.response);
+                            break;
+                    };
                 });
         },
         handleUploadImg: function() {
@@ -251,7 +271,7 @@ export default {
                     // console.log(event.loaded / event.total);
                 },
             }).then( resp => {
-                if (!parseInt(resp.data) || parseInt(resp.data) === 0) {
+                if (resp.data.id === 0) {
                     this.$message({showClose: true, message: "发生未知错误, 请联系管理员", type: "warning"});
                     let emptysp = { name: '', pn: '', sn: '', orgsim: '', nowsim: '', pos: '', status: '', num: 0, comment: '', img1: null, img2: null, };
                     this.newsp = emptysp;
@@ -259,7 +279,7 @@ export default {
                     document.querySelector('#newsp-img2').value = '';
                     return;
                 };
-                this.$router.push(`/onesp/${resp.data}`);
+                this.$router.push(`/onesp/${resp.data.id}`);
             }).catch(err => {
                 switch (err.response.status) {
                     case 401:
