@@ -1,5 +1,8 @@
 <template>
     <div class="container">
+        <div style="width:100%;">
+            <sps-menu :path="'/status'"></sps-menu>
+        </div>
         <div id="echarts-zone"></div>
     </div>
 </template>
@@ -58,15 +61,43 @@ var mockdata = {
         fixing: [
             {name:'f_5015_01', pn:'pn_f', sn:'sn_f', amount:1},
         ],
-        abandon: [],
+        abandon: [], 
     },
 };
 import echars from "echarts";
+import spsMenu from "../Menu.vue";
 
 export default {
+    data() {
+        return {
+            mainCharts: null,
+            req: null,
+        };
+    },
+    
+    components: {
+        'sps-menu': spsMenu,
+    },
     mounted() {
-
-        var mainCharts = echars.init(document.getElementById("echarts-zone"));
+        this.$http.get("/api/sps/status")
+            .then(resp => {
+                this.req = resp.data;
+            })
+            .catch(err => {
+                switch(err.response.status) {
+                    case 401:
+                        this.router.push("/login");
+                        break;
+                    case 500:
+                        this.$message({showClose: true, message: '服务器发生故障', type: 'warning',});
+                        console.log(err.response);
+                        break;
+                    default:
+                        console.log(err.response);
+                        break;
+                };
+            });
+        this.mainCharts = echars.init(document.getElementById("echarts-zone"));
         var mainOption = {
             color: ['#67C23A', '#409EFF', '#E6A23C', '#F56C6C'],
             tooltip: {
@@ -74,7 +105,13 @@ export default {
                 axisPointer: {type: 'shadow'}
             },
             legend: {
-                data: ['spare', 'using', 'fixing', 'abandon'],
+                data: ['备件', '使用', '维修', '废弃'],
+                selected: {
+                    '备件': false,
+                    '使用': true,
+                    '维修': true,
+                    '废弃': true,
+                },
             },
             toolbox: {
                 show: true,
@@ -104,32 +141,36 @@ export default {
             ],
             series: [
                 {
-                    name: 'spare',
+                    name: '备件',
                     type: 'bar',
                     barGap: 0,
                     data: [1234, 1132, 675, 893],
                 },
                 {
-                    name: 'using',
+                    name: '使用',
                     type: 'bar',
                     barGap: 0,
                     data: [16, 12, 4, 9],
                 },
                 {
-                    name: 'fixing',
+                    name: '维修',
                     type: 'bar',
                     barGap: 0,
                     data: [3, 2, 0, 1],
                 },
                 {
-                    name: 'abandon',
+                    name: '废弃',
                     type: 'bar',
                     barGap: 0,
                     data: [4, 8, 0, 0],
                 },
             ]
         };
-        mainCharts.setOption(mainOption);
+        this.mainCharts.setOption(mainOption);
+
+        this.mainCharts.on('click', function(params) {
+            console.log(params);
+        });
     },
 };
 </script>
@@ -140,10 +181,13 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 #echarts-zone {
     width: 800px;
     height: 400px;
     background-color: #efefef;
+    margin-top: 50px;
+    border-radius: 5px;
 }
 </style>
