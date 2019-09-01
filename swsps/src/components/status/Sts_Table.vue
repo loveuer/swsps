@@ -3,19 +3,20 @@
         <el-table
             ref="filterTable"
             :data="showingList"
-            style="width:100%"
+            style="width:100%;font-size:0.75em;cursor:pointer;"
             v-loading="false"
+            @row-click="meetTheSP"
         >
             <el-table-column
                 prop="name"
                 label="Name"
-                width="200"
+                width="350"
             >
             </el-table-column>
             <el-table-column
                 prop="pn"
                 label="P/N"
-                width="200"
+                width="300"
             >
             </el-table-column>
             <el-table-column
@@ -39,6 +40,7 @@
             >
             </el-table-column>
         </el-table>
+        <div style="width:100%;height:100px;zoom:100%;"></div>
     </div>
 </template>
 
@@ -50,6 +52,9 @@ export default {
     methods: {
         fliterStatus(value, row) {
             return row.status === value;
+        },
+        'meetTheSP': function(row) {
+            this.$router.push(`/onesp/${row.id}`);
         },
     },
     computed: {
