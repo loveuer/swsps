@@ -5,8 +5,10 @@
             <font>Salary</font>
         </div>
         <div class="upload-zone" >
-            <el-button type="primary" size="small" @click="handlerChooseFile">上传文件</el-button>
-            <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="excel" @change="UploadExcel">
+            <div>
+                <el-button type="primary" size="small" @click="handlerChooseFile">上传文件</el-button>
+                <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="excel" @change="UploadExcel">
+            </div>
         </div>
         <div class="showfile-zone" >
             <div>
@@ -24,8 +26,37 @@
                 </div>
             </div>
         </div>
+        <div class="operation-zone">
+            <div>
+                <el-tooltip class="item" effect="light" :content="'点击发送　' + this.filename" placement="top">
+                    <el-button type="success" size="large" circle icon="el-icon-video-play"></el-button>
+                </el-tooltip>
+            </div>
+        </div>
         <div class="message-zone">
-            <el-alert :title="messagebox.title" :type="messagebox.type" style="max-width:700px;" center :closable='false'></el-alert>
+            <el-alert :title="messagebox.title" :type="messagebox.type" style="max-width:700px;" center :closable='false' effect="dark"></el-alert>
+        </div>
+        <div class="process-zone">
+            <div>
+                <div class="process-header">
+                    <el-alert :closable="false" title="2019年06月工资条 共计094行" type="info" center></el-alert>
+                </div>
+            </div>
+            <div>
+                <div class="process-last">
+                    <el-alert :closable="false" title="21:43:23 - Line 43 - 余丹丹" type="success" center></el-alert>
+                </div>
+            </div>
+            <div>
+                <div class="process-more">
+                    <el-alert :closable="false" type="success" center style="cursor:pointer;">
+                        <i class="el-icon-more-outline"></i>
+                    </el-alert>
+                </div>
+            </div>
+            <dir>
+                <div class="process-showall"></div>
+            </dir>
         </div>
     </div>
 </template>
@@ -156,7 +187,7 @@ export default {
         }  
     },
     mounted() {
-        this.messagebox.title = this.messagebox.title +'(链接服务器...)';
+        this.messagebox.title = this.messagebox.title +'(正在链接服务器...)';
         this.getRunningStatus();
     },
 }
@@ -176,19 +207,28 @@ div.title-zone {
     width: 100%;
     height: 100%;
     margin-top: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
+}
+@font-face {
+    font-family: 'hack';
+    src: url('~/assets/fonts/Hack-Regular.ttf');
 }
 div.title-zone font {
     font-size: 40px;
     font-weight: bold;
-    font-family: monospace;
+    font-family: 'hack';
 }
-.container.upload-zone {
+.upload-zone {
     height: 100px;
     width: 100%;
-    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.upload-zone > div {
+
 }
 #excel {
     display: none;
@@ -243,5 +283,31 @@ div.title-zone font {
     display: none;
     align-items: center;
     justify-content: center;
+}
+.operation-zone {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.process-zone {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.process-zone > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.process-header, .process-last, .process-more, .process-showall {
+    width: 500px;
+    max-width: 90%; 
+    margin-top: 5px;
 }
 </style>
