@@ -4,18 +4,18 @@
             <font>Auto</font>
             <font>Salary</font>
         </div>
-        <div class="upload-zone" >
+        <div class="upload-zone" v-show="filename === ''">
             <div>
                 <el-button type="primary" size="small" @click="handlerChooseFile">上传文件</el-button>
                 <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="excel" @change="UploadExcel">
             </div>
         </div>
-        <div class="showfile-zone" >
+        <div class="showfile-zone" v-show="filename !== ''">
             <div>
                 <div class="fileflag-zone">
                     <svg viewBox="0 0 1498 1024" version="1.1"  p-id="5204"  width="14" height="14" style="transform: rotate(-45deg);margin-top:10px;"><path d="M618.396098 1024L0 403.605854l140.862439-141.861464 477.533659 479.531708L1357.674146 0 1498.536585 140.862439l-880.140487 883.137561z" p-id="5205" fill="#ffffff"></path></svg>
                 </div>
-                <div class="fileflag-delete">
+                <div class="fileflag-delete" @click="deleteChosed">
                     <svg viewBox="0 0 1024 1024" version="1.1" p-id="3697" width="12" height="12"><path d="M886.528 908.032c-28.096 28.096-73.856 28.096-102.016 0L138.304 261.824c-28.096-28.16-28.16-73.856 0-102.016 28.032-28.16 73.792-28.16 102.08 0l646.144 646.144C914.624 834.24 914.752 879.872 886.528 908.032L886.528 908.032zM885.76 261.504 239.616 907.648c-28.224 28.224-73.92 28.224-102.08 0-28.16-28.096-28.16-73.728 0.064-102.016L783.744 159.552c28.224-28.16 73.984-28.16 102.016-0.064C913.984 187.648 913.856 233.344 885.76 261.504L885.76 261.504z" p-id="3698" fill="#888"></path></svg>
                 </div>
                 <div>
@@ -26,17 +26,20 @@
                 </div>
             </div>
         </div>
-        <div class="operation-zone">
+        <div class="operation-zone" v-show="filename !== ''">
             <div>
-                <el-tooltip class="item" effect="light" :content="'点击发送　' + this.filename" placement="top">
-                    <el-button type="success" size="large" circle icon="el-icon-video-play"></el-button>
+                <el-tooltip class="item" effect="light" :content="'点击发送　' + this.filename" placement="top" v-show="!runningStatus">
+                    <el-button type="success" size="large" circle icon="el-icon-video-play" @click="startScript"></el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="light" content="点击暂停发送" placement="top" v-show="runningStatus">
+                    <el-button type="danger" size="large" circle icon="el-icon-video-pause"></el-button>
                 </el-tooltip>
             </div>
         </div>
         <div class="message-zone">
             <el-alert :title="messagebox.title" :type="messagebox.type" style="max-width:700px;" center :closable='false' effect="dark"></el-alert>
         </div>
-        <div class="process-zone">
+        <div class="process-zone" v-show="runningStatus">
             <div>
                 <div class="process-header">
                     <el-alert :closable="false" title="2019年06月工资条 共计094行" type="info" center></el-alert>
@@ -49,9 +52,11 @@
             </div>
             <div>
                 <div class="process-more">
-                    <el-alert :closable="false" type="success" center style="cursor:pointer;">
-                        <i class="el-icon-more-outline"></i>
-                    </el-alert>
+                    <el-tooltip class="item" effect="light" content="点击显示全部" placement="top">
+                        <el-alert :closable="false" type="success" center style="cursor:pointer;">
+                            <i class="el-icon-more-outline"></i>
+                        </el-alert>
+                    </el-tooltip>
                 </div>
             </div>
             <dir>
@@ -66,7 +71,7 @@ export default {
     data() {
         return {
             connection: true,
-            filename: "2019年06月工资表.xlsx",
+            filename: "",
             runningStatus: false,
             doneLine: 2,
             messagebox: {
@@ -106,25 +111,25 @@ export default {
                 method: 'post',
                 headers: {'Content-Type': 'multipart/form-data'},
             }).then(resp => {
-                if(resp.data) {
+                if(resp.data.result) {
                     // upload file success
-                    this.filename = uploaded.name;
-                    this.$confirm('文件上传成功! 是否执行auto salary?', '提示', {
-                        confirmButtonText: '确认',
-                        cancelButtonText: '取消',
-                        type: 'warning',
-                    }).then(() => {
-                        this.startScript();
-                    }).catch(() => {
-                        // 取消执行
-                    });
+                    let f = resp.data.filename;
+                    this.filename = f.split("/")[f.split("/").length-1];
+                    this.messagebox.title = '上传文件成功, 准备执行...';
+                    this.messagebox.type = 'success';
+                    console.log(this.filename);
                 }
             }).catch(err => {
                 console.log(err.response);
-                this.$message({type:'error', showClose:true, message: ':( 上传文件失败了~'});
+                this.messagebox.title = '上传文件失败了, 刷新重试';
+                this.messagebox.type = 'error';
             }).finally(() => {
                 document.querySelector("#excel").value = null;
             });
+        },
+        deleteChosed() {
+            this.filename = '';
+            document.querySelector('#excel').value = null;
         },
         getRunningStatus() {
             this.$http.get("/api/salary/status").then(resp => {
@@ -146,6 +151,7 @@ export default {
         startScript() {
             this.$http.post(`/api/salary/start/${this.filename}/${this.doneLine}`).then(resp => {
                 if (resp.data) {
+                    console.log(resp);
                     this.messagebox.title = '执行任务成功,开始发送...'
                     this.messagebox.type = 'success';
                     this.runningStatus = true;
@@ -211,6 +217,7 @@ div.title-zone {
     display: flex;
     justify-content: center;
 }
+
 @font-face {
     font-family: 'hack';
     src: url('~/assets/fonts/Hack-Regular.ttf');
