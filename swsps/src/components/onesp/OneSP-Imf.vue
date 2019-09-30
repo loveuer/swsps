@@ -29,9 +29,9 @@
                 <div>数量</div>
                 <div>{{ imfsp.amount }}</div>
             </div>
-            <div class="onesp-row">
+            <div class="row-comment">
                 <div>备注</div>
-                <div>{{ imfsp.comment }}</div>
+                <div v-html="imfsp.comment.replace(/\r?\n/g,'<br/>')"></div>
             </div>
             <div class="onesp-imgs">
                 <div>图片</div>
@@ -149,6 +149,25 @@ export default {
 }
 .onesp-row > div:first-child {
     width: 150px;
+    color: #666;
+    text-indent: 5px;
+    font-size: 0.85rem;
+    font-family: hack;
+    font-weight: bold;
+}
+.row-comment {
+    width: 100%;
+    display: flex;
+    line-height: 50px;
+    min-height: 50px;
+    border-bottom: 1px solid #e8e8e8;
+}
+.row-comment:hover {
+    background-color: #e8e8e8;
+    border-bottom: 1px solid rgba(131, 208, 242, 1);
+}
+.row-comment > div:first-child {
+     width: 150px;
     color: #666;
     text-indent: 5px;
     font-size: 0.85rem;

@@ -212,6 +212,8 @@ export default {
         });
     },
     cancelEdit: function() {
+      this.img_deleted.img1 = false;
+      this.img_deleted.img2 = false;
       this.$emit("chgmod", "sp-imf");
     },
     handleUploadBtnClick: function() {
@@ -283,7 +285,7 @@ export default {
       }
       let file2 = document.querySelector("#input-img2");
       if (file2.value) {
-        uploadData.append('img2', file2.files[0]);
+        uploadData.append("img2", file2.files[0]);
       }
       console.log(uploadData);
       this.$http

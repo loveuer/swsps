@@ -94,7 +94,7 @@ module.exports = {
         proxy: {
           '/api': {
             // target: 'http://192.168.31.99:8111',
-            target: 'http://182.138.121.162:8111',
+            target: 'http://118.113.72.5:8111',
             // target: '<url>',
             ws: true,
             changeOrigin: true
